@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  namespace_ark: MyString
+  url_base: MyString
+  pid: MyString
+  view_thumbnail: MyString
+  view_object: MyString
+  noid: MyString
+  namespace_id: MyString
+
+two:
+  namespace_ark: MyString
+  url_base: MyString
+  pid: MyString
+  view_thumbnail: MyString
+  view_object: MyString
+  noid: MyString
+  namespace_id: MyString
