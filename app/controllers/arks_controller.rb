@@ -42,10 +42,9 @@ class ArksController < ApplicationController
   def create
     @ark = Ark.new(params[:ark])
     #pid = Noid::Minter.new(:template => '.reeddeeddk').mint
-    pid = IdService.mint(params[:ark][:namespace_ark])
+    pid = IdService.mint(params[:ark][:namespace_id])
     @ark.pid = pid
     @ark.noid = IdService.getid(pid)
-    @ark.namespace_id = IdService.getNamespace(pid)
     @ark.view_object = ""
     @ark.view_thumbnail = "/thumbnail"
 
