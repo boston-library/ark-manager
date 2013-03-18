@@ -60,6 +60,15 @@ class ArksController < ApplicationController
     end
   end
 
+  def object_in_view
+    puts "in object in view with pid: "  + params[:pid]
+  end
+
+  def thumbnail
+    puts "in object in thumbnail with pid: "  + params[:pid]
+    redirect_to "http://www.rubyonrails.org"
+  end
+
   # PUT /arks/1
   # PUT /arks/1.json
   def update
