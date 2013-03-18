@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130315143536) do
+ActiveRecord::Schema.define(:version => 20130318173528) do
 
   create_table "arks", :force => true do |t|
     t.string   "namespace_ark"
@@ -21,9 +21,11 @@ ActiveRecord::Schema.define(:version => 20130315143536) do
     t.string   "view_object"
     t.string   "noid"
     t.string   "namespace_id"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
     t.string   "model_type"
+    t.string   "local_original_identifier"
+    t.string   "local_original_identifier_type"
   end
 
 end
