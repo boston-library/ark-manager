@@ -46,7 +46,7 @@ class ArksController < ApplicationController
     @ark.pid = pid
     @ark.noid = IdService.getid(pid)
     @ark.view_object = ""
-    @ark.view_thumbnail = "/thumbnail"
+    @ark.view_thumbnail = "/preview/"
 
 
     respond_to do |format|
@@ -66,7 +66,10 @@ class ArksController < ApplicationController
 
   def thumbnail
     puts "in object in thumbnail with pid: "  + params[:pid]
-    redirect_to "http://www.rubyonrails.org"
+    @ark = Ark.find(:noid=>params[:noid])
+
+
+    redirect_to @ark.url_base + @ark.view_thumbnail + @ark.namespace_id + ":" + @ark.noid
   end
 
   # PUT /arks/1
