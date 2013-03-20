@@ -65,11 +65,10 @@ class ArksController < ApplicationController
   end
 
   def thumbnail
-    puts "in object in thumbnail with pid: "  + params[:pid]
-    @ark = Ark.find(:noid=>params[:noid])
+    @ark = Ark.where(:noid=>params[:noid])
 
 
-    redirect_to @ark.url_base + @ark.view_thumbnail + @ark.namespace_id + ":" + @ark.noid
+    redirect_to @ark[0].url_base + @ark[0].view_thumbnail + @ark[0].namespace_id + ":" + @ark[0].noid
   end
 
   # PUT /arks/1
