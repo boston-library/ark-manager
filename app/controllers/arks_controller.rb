@@ -40,13 +40,17 @@ class ArksController < ApplicationController
   # POST /arks
   # POST /arks.json
   def create
-    @ark = Ark.new(params[:ark])
-    #pid = Noid::Minter.new(:template => '.reeddeeddk').mint
-    pid = IdService.mint(params[:ark][:namespace_id])
-    @ark.pid = pid
-    @ark.noid = IdService.getid(pid)
-    @ark.view_object = ""
-    @ark.view_thumbnail = "/preview/"
+    @ark = Ark.where(:local_original_identifier=>params[:ark][:local_original_identifier], :local_original_identifier=>params[:ark][:local_original_identifier_type])
+    if @ark.length == 1
+      @ark = @ark[0]
+    else
+      @ark = Ark.new(params[:ark])
+      pid = IdService.mint(params[:ark][:namespace_id])
+      @ark.pid = pid
+      @ark.noid = IdService.getid(pid)
+      @ark.view_object = ""
+      @ark.view_thumbnail = "/preview/"
+    end
 
 
     respond_to do |format|
