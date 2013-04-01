@@ -48,7 +48,7 @@ class ArksController < ApplicationController
       pid = IdService.mint(params[:ark][:namespace_id])
       @ark.pid = pid
       @ark.noid = IdService.getid(pid)
-      @ark.view_object = ""
+      @ark.view_object = "/catalog/"
       @ark.view_thumbnail = "/preview/"
     end
 
@@ -65,7 +65,9 @@ class ArksController < ApplicationController
   end
 
   def object_in_view
-    puts "in object in view with pid: "  + params[:pid]
+    @ark = Ark.where(:noid=>params[:noid])
+    redirect_to @ark[0].url_base + @ark[0].view_object + @ark[0].namespace_id + ":" + ark[0].noid
+    #puts "in object in view with pid: "  + params[:pid]
   end
 
   def thumbnail
