@@ -66,7 +66,7 @@ class ArksController < ApplicationController
 
   def object_in_view
     @ark = Ark.where(:noid=>params[:noid])
-    redirect_to @ark[0].url_base + @ark[0].view_object + @ark[0].namespace_id + ":" + ark[0].noid
+    redirect_to @ark[0].url_base + @ark[0].view_object + @ark[0].namespace_id + ":" + @ark[0].noid
     #puts "in object in view with pid: "  + params[:pid]
   end
 
