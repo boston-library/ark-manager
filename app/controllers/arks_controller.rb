@@ -41,7 +41,7 @@ class ArksController < ApplicationController
   # POST /arks.json
   def create
     @ark = Ark.where(:local_original_identifier=>params[:ark][:local_original_identifier], :local_original_identifier_type=>params[:ark][:local_original_identifier_type])
-    if @ark.length == 1
+    if @ark.length == 1 && params[:ark][:local_original_identifier] != nil && params[:ark][:local_original_identifier] != ""
       @ark = @ark[0]
     else
       @ark = Ark.new(params[:ark])
