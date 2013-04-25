@@ -48,7 +48,7 @@ class ArksController < ApplicationController
       pid = IdService.mint(params[:ark][:namespace_id])
       @ark.pid = pid
       @ark.noid = IdService.getid(pid)
-      @ark.view_object = "/catalog/"
+      @ark.view_object = "/search/"
       @ark.view_thumbnail = "/preview/"
     end
 
