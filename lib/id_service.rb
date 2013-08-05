@@ -1,6 +1,7 @@
 
 class IdService
   @@minter = Noid::Minter.new(:template => '.reeddeeddk')
+  @semaphore = Mutex.new
 
   #@@namespace = ScholarSphere::Application.config.id_namespace
 
@@ -10,12 +11,14 @@ class IdService
     return @@minter.valid? noid
   end
   def self.mint(namespace = nil)
-    while true
-      pid = self.next_id(namespace)
-      break
-      # unless ActiveRecord::Base.exists?(pid)
+    @semaphore.synchronize do
+      while true
+        pid = self.next_id(namespace)
+        return pid unless Ark.exists?(:pid=>pid)
+        #TODO: Check again fedora and update to - https://github.com/projecthydra/sufia/blob/a0d7571410a9c33b279da2c3221399a82fd9f6a7/sufia-models/lib/sufia/models/id_service.rb
+      end
     end
-    return pid
+
   end
 
   def self.getid(pid)
