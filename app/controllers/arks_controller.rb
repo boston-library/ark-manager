@@ -40,7 +40,12 @@ class ArksController < ApplicationController
   # POST /arks
   # POST /arks.json
   def create
-    @ark = Ark.where(:local_original_identifier=>params[:ark][:local_original_identifier], :local_original_identifier_type=>params[:ark][:local_original_identifier_type])
+    if params[:ark][:parent_pid]
+      @ark = Ark.where(:local_original_identifier=>params[:ark][:local_original_identifier], :local_original_identifier_type=>params[:ark][:local_original_identifier_type], :parent_pid=>params[:ark][:parent_pid])
+    else
+      @ark = Ark.where(:local_original_identifier=>params[:ark][:local_original_identifier], :local_original_identifier_type=>params[:ark][:local_original_identifier_type])
+    end
+
     if @ark.length == 1 && params[:ark][:local_original_identifier] != nil && params[:ark][:local_original_identifier] != ""
       @ark = @ark[0]
     else
@@ -50,6 +55,7 @@ class ArksController < ApplicationController
       @ark.noid = IdService.getid(pid)
       @ark.view_object = "/search/"
       @ark.view_thumbnail = "/preview/"
+      @ark.parent_pid = params[:ark][:parent_pid]
     end
 
 

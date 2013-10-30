@@ -42,3 +42,7 @@ gem "therubyracer", "~> 0.10.0"
 
 # To use debugger
 # gem 'debugger'
+
+gem 'active-fedora', :git => 'https://github.com/projecthydra/active_fedora.git', :branch => '6.5-stable'
+gem 'hydra-head', '6.3.4'
+
