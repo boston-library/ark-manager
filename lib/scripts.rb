@@ -1,39 +1,51 @@
 class Scripts
-  def self.fixToNewFormat
+  def self.fixToNewFormatCollection
     arks = Ark.all
     arks.each do |ark|
       if ark.model_type == 'Bplmodels::Collection'
-        pid_part = ark.local_original_identifier.split(' ').first
-        ark.parent_pid = pid_part
-        ark.local_original_identifier =  ark.local_original_identifier.slice((ark.local_original_identifier.index(' '))+1..ark.local_original_identifier.length)
-        ark.local_original_identifier_type = 'Institution Collection Name'
+        if ark.local_original_identifier.split(' ').length > 1
+          pid_part = ark.local_original_identifier.split(' ').first
+          ark.parent_pid = pid_part
+          ark.local_original_identifier =  ark.local_original_identifier.slice((ark.local_original_identifier.index(' '))+1..ark.local_original_identifier.length)
+          ark.local_original_identifier_type = 'Institution Collection Name'
 
-        puts 'Collection Object'
-        puts ark.parent_pid
-        puts ark.local_original_identifier
-        puts ark.local_original_identifier_type
+          puts 'Collection Object'
+          puts ark.parent_pid
+          puts ark.local_original_identifier
+          puts ark.local_original_identifier_type
+        end
+      end
+    end
+  end
 
-        #ark.save!
+  def self.fixToNewFormatObject
+    arks = Ark.all
+    arks.each do |ark|
+      if ark.model_type == 'Bplmodels::Collection'
+
       elsif ark.model_type == 'Bplmodels::File'
         #Fixed after everything else in another script
       elsif ark.model_type == 'Bplmodels::Institution'
         #Do nothing
       else
-        pid_part = ark.local_original_identifier_type.split(' ').first
-        ark.parent_pid = pid_part
-        ark.local_original_identifier = ark.local_original_identifier_type.slice((ark.local_original_identifier_type.index(' '))+1..ark.local_original_identifier_type.length)
+        if ark.local_original_identifier_type.split(' ').length > 1
+          pid_part = ark.local_original_identifier_type.split(' ').first
+          ark.parent_pid = pid_part
+          ark.local_original_identifier = ark.local_original_identifier_type.slice((ark.local_original_identifier_type.index(' '))+1..ark.local_original_identifier_type.length)
 
-        puts 'Regular Object'
-        puts ark.parent_pid
-        puts ark.local_original_identifier
-        puts ark.local_original_identifier_type
-        #ark.save!
+          puts 'Regular Object'
+          puts ark.parent_pid
+          puts ark.local_original_identifier
+          puts ark.local_original_identifier_type
+          #ark.save!
+        end
+
       end
     end
   end
 
 
-  def self.fixFilesToNewFormat
+  def self.fixToNewFormatFiles
     arks = Ark.all
     arks.each do |ark|
       if ark.model_type == 'Bplmodels::File'
