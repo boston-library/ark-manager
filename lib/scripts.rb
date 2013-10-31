@@ -128,9 +128,18 @@ class Scripts
               ark.destroy
             else
               puts ark.pid
-              ark.parent_pid = object.collection.pid
+              if test.collection == nil
+                test.image_files.first.delete
+                test = ActiveFedora::Base.find(ark.pid).adapt_to_cmodel
+                test.delete
+                ark.destroy
+              else
+                ark.parent_pid = object.collection.pid
+                ark.save!
+              end
 
-              ark.save!
+
+
             end
 
           elsif ark.local_original_identifier_type.split(' ').length > 1
