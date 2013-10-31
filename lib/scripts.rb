@@ -13,11 +13,19 @@ class Scripts
           puts ark.parent_pid
           puts ark.local_original_identifier
           puts ark.local_original_identifier_type
+
+          #ark.save!
+        else
+          puts '------------Bad Ark---------------'
+          puts ark.local_original_identifier
+          puts ark.local_original_identifier_type
+          puts ark.pid
         end
       end
     end
   end
 
+  #Bug with Dspace objects? May need to test on production.
   def self.fixToNewFormatObject
     arks = Ark.all
     arks.each do |ark|
@@ -38,6 +46,11 @@ class Scripts
           puts ark.local_original_identifier
           puts ark.local_original_identifier_type
           #ark.save!
+        else
+          puts '------------Bad Ark---------------'
+          puts ark.local_original_identifier
+          puts ark.local_original_identifier_type
+          puts ark.pid
         end
 
       end
