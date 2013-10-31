@@ -115,19 +115,25 @@ class Scripts
 
           elsif ark.local_original_identifier_type == 'TESTING'
             ark.destroy
+          elsif ark.local_original_identifier_type == 'field'
+            ark.local_original_identifier_type =  ark.parent_pid + ' ' + ark.local_original_identifier_type
+
+            begin
+              object = ActiveFedora::Base.find(ark.pid).adapt_to_cmodel
+            rescue
+              ark.destroy
+            end
+
+            if object == nil
+              ark.destroy
+            else
+              ark.parent_pid = object.collection.pid
+              ark.save!
+            end
+
           elsif ark.local_original_identifier_type.split(' ').length > 1
             pid_part = ark.local_original_identifier_type.split(' ').first
             if pid_part.include?(':') && pid_part.length == 22
-              ark.parent_pid = pid_part
-              ark.local_original_identifier_type = ark.local_original_identifier_type.slice((ark.local_original_identifier_type.index(' '))+1..ark.local_original_identifier_type.length)
-
-              #puts 'Regular Object'
-              #puts ark.parent_pid
-              #puts ark.local_original_identifier
-              #puts ark.local_original_identifier_type
-              #puts ark.pid
-              ark.save!
-            else
               ark.parent_pid = pid_part
               ark.local_original_identifier_type = ark.local_original_identifier_type.slice((ark.local_original_identifier_type.index(' '))+1..ark.local_original_identifier_type.length)
 
