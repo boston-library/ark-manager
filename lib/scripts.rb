@@ -3,6 +3,13 @@ class Scripts
     arks = Ark.all
     arks.each do |ark|
       if ark.model_type == 'Bplmodels::Collection'
+        begin
+          collection_object = Bplmodels::Collection.find(ark.pid)
+        rescue
+          puts '-Collection object doesnt exist-'
+          puts ark.pid
+
+        end
         if ark.local_original_identifier.split(' ').length > 1
           pid_part = ark.local_original_identifier.split(' ').first
           ark.parent_pid = pid_part
@@ -15,9 +22,13 @@ class Scripts
           puts ark.local_original_identifier_type
           puts ark.pid
 
+          if collection_object.label !=    ark.local_original_identifier
+            puts '-------DANGER-------DANGER------DANGER'
+            ark.pid
+          end
+
           #ark.save!
         elsif ark.local_original_identifier.include?('hdl')
-          collection_object = Bplmodels::Collection.find(ark.pid)
           parent_object= collection_object.institutions
           ark.parent_pid = parent_object.pid
           ark.local_original_identifier = collection_object.label
@@ -28,6 +39,11 @@ class Scripts
           puts ark.local_original_identifier
           puts ark.local_original_identifier_type
           puts ark.pid
+
+          if collection_object.label !=    ark.local_original_identifier
+            puts '-------DANGER-------DANGER------DANGER'
+            ark.pid
+          end
 
           #Dpsace Collections - seems fine?
         else
