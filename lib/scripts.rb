@@ -15,6 +15,7 @@ class Scripts
         if collection_object == nil
           ark.destroy
         else
+          puts ark.pid
           parent_object= collection_object.institutions
           ark.parent_pid = parent_object.pid
           ark.local_original_identifier = collection_object.label
