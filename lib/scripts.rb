@@ -16,7 +16,7 @@ class Scripts
           puts ark.pid
 
           #ark.save!
-        elsif ark.local_original_identifier.contains?('hdl')
+        elsif ark.local_original_identifier.include?('hdl')
           #Dpsace Collections - seems fine?
         else
           puts '------------Bad Ark---------------'
