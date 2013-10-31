@@ -83,21 +83,31 @@ class Scripts
 
       elsif ark.model_type == 'Bplmodels::File'
         #Fixed after everything else in another script
+      elsif ark.model_type == 'Bplmodels::ImageFile'
+        #Fixed after everything else in another script
       elsif ark.model_type == 'Bplmodels::Institution'
         #Do nothing
       else
-        begin
-          object = ActiveFedora::Base.find(ark.pid)
-        rescue
-          ark.delete!
+        #begin
+          #object = ActiveFedora::Base.find(ark.pid)
+        #rescue
+          #ark.destroy
 
-        end
+        #end
 
-        if object == nil
-          ark.delete!
-        else
+        #if object == nil
+          #ark.destroy
+        #else
+          if ark.local_original_identifier_type == 'DSpace Handle'
+            object = ActiveFedora::Base.find(ark.pid).adapt_to_cmodel
+            ark.parent_pid = object.collection.pid
+            #ark.save!
 
-          if ark.local_original_identifier_type.split(' ').length > 1
+          elsif ark.local_original_identifier_type == 'TESTING'
+            ark.destroy
+
+
+          elsif ark.local_original_identifier_type.split(' ').length > 1
             pid_part = ark.local_original_identifier_type.split(' ').first
             ark.parent_pid = pid_part
             ark.local_original_identifier_type = ark.local_original_identifier_type.slice((ark.local_original_identifier_type.index(' '))+1..ark.local_original_identifier_type.length)
@@ -114,7 +124,7 @@ class Scripts
             puts ark.local_original_identifier_type
             puts ark.pid
           end
-        end
+        #end
 
       end
     end
@@ -124,7 +134,7 @@ class Scripts
   def self.fixToNewFormatFiles
     arks = Ark.all
     arks.each do |ark|
-      if ark.model_type == 'Bplmodels::File'
+      if ark.model_type == 'Bplmodels::ImageFile'
         local_id_of_parent = ark.local_original_identifier.split(' ').first
         local_id_type_of_parent =  ark.local_original_identifier_type.split(' ').first
         parent_record = Ark.where(:local_original_identifier=>local_id_of_parent, :local_id_type_of_parent=>local_id_type_of_parent)
