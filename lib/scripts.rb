@@ -17,6 +17,18 @@ class Scripts
 
           #ark.save!
         elsif ark.local_original_identifier.include?('hdl')
+          collection_object = Bplmodels::Collection.find(ark.pid)
+          parent_object= collection_object.institutions.first
+          ark.parent_pid = parent_object.pid
+          ark.local_original_identifier = collection_object.label
+          ark.local_original_identifier_type = 'Institution Collection Name'
+
+          puts '---HDL OBJECT---'
+          puts ark.parent_pid
+          puts ark.local_original_identifier
+          puts ark.local_original_identifier_type
+          puts ark.pid
+
           #Dpsace Collections - seems fine?
         else
           puts '------------Bad Ark---------------'
