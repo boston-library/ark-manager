@@ -10,48 +10,56 @@ class Scripts
           puts ark.pid
 
         end
-        if ark.local_original_identifier.split(' ').length > 1
-          pid_part = ark.local_original_identifier.split(' ').first
-          ark.parent_pid = pid_part
-          ark.local_original_identifier =  ark.local_original_identifier.slice((ark.local_original_identifier.index(' '))+1..ark.local_original_identifier.length)
-          ark.local_original_identifier_type = 'Institution Collection Name'
-
-          puts 'Collection Object'
-          puts ark.parent_pid
-          puts ark.local_original_identifier
-          puts ark.local_original_identifier_type
+        if collection_object == nil
+          puts '-Collection object doesnt exist-'
           puts ark.pid
-
-          if collection_object.label !=    ark.local_original_identifier
-            puts '-------DANGER-------DANGER------DANGER'
-            ark.pid
-          end
-
-          #ark.save!
-        elsif ark.local_original_identifier.include?('hdl')
-          parent_object= collection_object.institutions
-          ark.parent_pid = parent_object.pid
-          ark.local_original_identifier = collection_object.label
-          ark.local_original_identifier_type = 'Institution Collection Name'
-
-          puts '---HDL OBJECT---'
-          puts ark.parent_pid
-          puts ark.local_original_identifier
-          puts ark.local_original_identifier_type
-          puts ark.pid
-
-          if collection_object.label !=    ark.local_original_identifier
-            puts '-------DANGER-------DANGER------DANGER'
-            ark.pid
-          end
-
-          #Dpsace Collections - seems fine?
         else
-          puts '------------Bad Ark---------------'
-          puts ark.local_original_identifier
-          puts ark.local_original_identifier_type
-          puts ark.pid
+          if ark.local_original_identifier.split(' ').length > 1
+            pid_part = ark.local_original_identifier.split(' ').first
+            ark.parent_pid = pid_part
+            ark.local_original_identifier =  ark.local_original_identifier.slice((ark.local_original_identifier.index(' '))+1..ark.local_original_identifier.length)
+            ark.local_original_identifier_type = 'Institution Collection Name'
+
+            puts 'Collection Object'
+            puts ark.parent_pid
+            puts ark.local_original_identifier
+            puts ark.local_original_identifier_type
+            puts ark.pid
+
+            if collection_object.label !=    ark.local_original_identifier
+              puts '-------DANGER-------DANGER------DANGER'
+              ark.pid
+            end
+
+            #ark.save!
+          elsif ark.local_original_identifier.include?('hdl')
+            parent_object= collection_object.institutions
+            ark.parent_pid = parent_object.pid
+            ark.local_original_identifier = collection_object.label
+            ark.local_original_identifier_type = 'Institution Collection Name'
+
+            puts '---HDL OBJECT---'
+            puts ark.parent_pid
+            puts ark.local_original_identifier
+            puts ark.local_original_identifier_type
+            puts ark.pid
+
+            if collection_object.label !=    ark.local_original_identifier
+              puts '-------DANGER-------DANGER------DANGER'
+              ark.pid
+            end
+
+            #Dpsace Collections - seems fine?
+          else
+            puts '------------Bad Ark---------------'
+            puts ark.local_original_identifier
+            puts ark.local_original_identifier_type
+            puts ark.pid
+          end
         end
+
+
+
       end
     end
   end
