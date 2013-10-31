@@ -2,7 +2,7 @@ class Scripts
   def self.fixToNewFormatCollection
     arks = Ark.all
     arks.each do |ark|
-      if ark.model_type == 'Bplmodels::Collection'
+      if ark.model_type == 'Bplmodels::Collection' && ark.pid != ''
         collection_object = nil
 
         begin
@@ -100,12 +100,13 @@ class Scripts
           if ark.local_original_identifier_type.split(' ').length > 1
             pid_part = ark.local_original_identifier_type.split(' ').first
             ark.parent_pid = pid_part
-            ark.local_original_identifier = ark.local_original_identifier_type.slice((ark.local_original_identifier_type.index(' '))+1..ark.local_original_identifier_type.length)
+            ark.local_original_identifier_type = ark.local_original_identifier_type.slice((ark.local_original_identifier_type.index(' '))+1..ark.local_original_identifier_type.length)
 
             puts 'Regular Object'
             puts ark.parent_pid
             puts ark.local_original_identifier
             puts ark.local_original_identifier_type
+            ark.pid
             #ark.save!
           else
             puts '------------Bad Ark---------------'
