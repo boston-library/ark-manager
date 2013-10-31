@@ -8,12 +8,12 @@ class Scripts
         begin
           collection_object = Bplmodels::Collection.find(ark.pid)
         rescue
-          ark.delete!
+          ark.destroy
 
         end
 
         if collection_object == nil
-          ark.delete!
+          ark.destroy
         else
           parent_object= collection_object.institutions
           ark.parent_pid = parent_object.pid
