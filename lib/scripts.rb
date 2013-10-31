@@ -106,7 +106,7 @@ class Scripts
             puts ark.parent_pid
             puts ark.local_original_identifier
             puts ark.local_original_identifier_type
-            ark.pid
+            puts ark.pid
             #ark.save!
           else
             puts '------------Bad Ark---------------'
