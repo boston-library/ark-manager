@@ -3,6 +3,8 @@ class Scripts
     arks = Ark.all
     arks.each do |ark|
       if ark.model_type == 'Bplmodels::Collection'
+        collection_object = nil
+
         begin
           collection_object = Bplmodels::Collection.find(ark.pid)
         rescue
@@ -11,7 +13,7 @@ class Scripts
 
         end
         if collection_object == nil
-          puts '-Collection object doesnt exist-'
+          puts '-Collection object doesnt exist-2'
           puts ark.pid
         else
           if ark.local_original_identifier.split(' ').length > 1
