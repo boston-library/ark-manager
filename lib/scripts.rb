@@ -127,7 +127,9 @@ class Scripts
             if object == nil
               ark.destroy
             else
+              puts ark.pid
               ark.parent_pid = object.collection.pid
+
               ark.save!
             end
 
