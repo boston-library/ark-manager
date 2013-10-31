@@ -13,8 +13,11 @@ class Scripts
           puts ark.parent_pid
           puts ark.local_original_identifier
           puts ark.local_original_identifier_type
+          puts ark.pid
 
           #ark.save!
+        elsif ark.local_original_identifier.contains?('hdl')
+          #Dpsace Collections - seems fine?
         else
           puts '------------Bad Ark---------------'
           puts ark.local_original_identifier
