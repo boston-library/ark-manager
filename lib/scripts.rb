@@ -18,7 +18,7 @@ class Scripts
           #ark.save!
         elsif ark.local_original_identifier.include?('hdl')
           collection_object = Bplmodels::Collection.find(ark.pid)
-          parent_object= collection_object.institutions.first
+          parent_object= collection_object.institutions
           ark.parent_pid = parent_object.pid
           ark.local_original_identifier = collection_object.label
           ark.local_original_identifier_type = 'Institution Collection Name'
