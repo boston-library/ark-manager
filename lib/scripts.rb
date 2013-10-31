@@ -101,23 +101,21 @@ class Scripts
           if ark.local_original_identifier_type == 'DSpace Handle'
             object = ActiveFedora::Base.find(ark.pid).adapt_to_cmodel
             ark.parent_pid = object.collection.pid
-            #ark.save!
+            ark.save!
 
           elsif ark.local_original_identifier_type == 'TESTING'
             ark.destroy
-
-
           elsif ark.local_original_identifier_type.split(' ').length > 1
             pid_part = ark.local_original_identifier_type.split(' ').first
             ark.parent_pid = pid_part
             ark.local_original_identifier_type = ark.local_original_identifier_type.slice((ark.local_original_identifier_type.index(' '))+1..ark.local_original_identifier_type.length)
 
-            puts 'Regular Object'
-            puts ark.parent_pid
-            puts ark.local_original_identifier
-            puts ark.local_original_identifier_type
-            puts ark.pid
-            #ark.save!
+            #puts 'Regular Object'
+            #puts ark.parent_pid
+            #puts ark.local_original_identifier
+            #puts ark.local_original_identifier_type
+            #puts ark.pid
+            ark.save!
           else
             puts '------------Bad Ark---------------'
             puts ark.local_original_identifier
