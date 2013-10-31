@@ -8,14 +8,21 @@ class Scripts
         begin
           collection_object = Bplmodels::Collection.find(ark.pid)
         rescue
-          puts '-Collection object doesnt exist-'
-          puts ark.pid
+          ark.delete!
 
         end
+
         if collection_object == nil
-          puts '-Collection object doesnt exist-2'
-          puts ark.pid
+          ark.delete!
         else
+          parent_object= collection_object.institutions
+          ark.parent_pid = parent_object.pid
+          ark.local_original_identifier = collection_object.label
+          ark.local_original_identifier_type = 'Institution Collection Name'
+          ark.save!
+
+
+=begin
           if ark.local_original_identifier.split(' ').length > 1
             pid_part = ark.local_original_identifier.split(' ').first
             ark.parent_pid = pid_part
@@ -58,6 +65,7 @@ class Scripts
             puts ark.local_original_identifier_type
             puts ark.pid
           end
+=end
         end
 
 
@@ -77,21 +85,33 @@ class Scripts
       elsif ark.model_type == 'Bplmodels::Institution'
         #Do nothing
       else
-        if ark.local_original_identifier_type.split(' ').length > 1
-          pid_part = ark.local_original_identifier_type.split(' ').first
-          ark.parent_pid = pid_part
-          ark.local_original_identifier = ark.local_original_identifier_type.slice((ark.local_original_identifier_type.index(' '))+1..ark.local_original_identifier_type.length)
+        begin
+          object = ActiveFedora::Base.find(ark.pid)
+        rescue
+          ark.delete!
 
-          puts 'Regular Object'
-          puts ark.parent_pid
-          puts ark.local_original_identifier
-          puts ark.local_original_identifier_type
-          #ark.save!
+        end
+
+        if object == nil
+          ark.delete!
         else
-          puts '------------Bad Ark---------------'
-          puts ark.local_original_identifier
-          puts ark.local_original_identifier_type
-          puts ark.pid
+
+          if ark.local_original_identifier_type.split(' ').length > 1
+            pid_part = ark.local_original_identifier_type.split(' ').first
+            ark.parent_pid = pid_part
+            ark.local_original_identifier = ark.local_original_identifier_type.slice((ark.local_original_identifier_type.index(' '))+1..ark.local_original_identifier_type.length)
+
+            puts 'Regular Object'
+            puts ark.parent_pid
+            puts ark.local_original_identifier
+            puts ark.local_original_identifier_type
+            #ark.save!
+          else
+            puts '------------Bad Ark---------------'
+            puts ark.local_original_identifier
+            puts ark.local_original_identifier_type
+            puts ark.pid
+          end
         end
 
       end
