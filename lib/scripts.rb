@@ -168,24 +168,48 @@ class Scripts
     end
   end
 
-
+  #DSPACE records?
   def self.fixToNewFormatFiles
     arks = Ark.all
     arks.each do |ark|
       if ark.model_type == 'Bplmodels::ImageFile'
-        local_id_of_parent = ark.local_original_identifier.split(' ').first
-        local_id_type_of_parent =  ark.local_original_identifier_type.split(' ').first
-        parent_record = Ark.where(:local_original_identifier=>local_id_of_parent, :local_id_type_of_parent=>local_id_type_of_parent)
+        if ark.local_original_identifier_type == 'TESTING'
+          begin
+            object = ActiveFedora::Base.find(ark.pid).adapt_to_cmodel
+            object.delete
+          rescue
 
-        ark.parent_pid = parent_record.pid
-        ark.local_original_identifier = Bplmodels::File.find(ark.pid).workflowMetadata.item_source.ingest_filepath.split('/').last
-        ark.local_original_identifier_type = 'File'
+          end
+          ark.destroy
 
-        puts 'File Object'
-        puts ark.parent_pid
-        puts ark.local_original_identifier
-        puts ark.local_original_identifier_type
+        else
+          puts 'File Object'
+          puts ark.parent_pid
+          puts ark.local_original_identifier
+          puts ark.local_original_identifier_type
+
+          begin
+            object = ActiveFedora::Base.find(ark.pid).adapt_to_cmodel
+          rescue
+            ark.destroy
+          end
+
+          if object.blank?
+            ark.destroy
+          else
+            top_level_object = object.object
+            if top_level_object.blank?
+              object.delete
+              ark.destroy
+            else
+              ark.parent_pid = top_level_object.pid
+              ark.local_original_identifier = top_level_object.workflowMetadata.item_source.ingest_filepath.split('/').last
+              ark.local_original_identifier_type = 'File Name'
+              ark.save!
+            end
+
         #ark.save!
+        end
       end
     end
 
