@@ -207,8 +207,9 @@ class Scripts
               ark.local_original_identifier_type = 'File Name'
               ark.save!
             end
+          end
 
-        #ark.save!
+          #ark.save!
         end
       end
     end
