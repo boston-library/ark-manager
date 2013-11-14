@@ -215,4 +215,31 @@ class Scripts
     end
 
   end
+
+  def fixFileArks
+    image_files = Bplmodels::ImageFile.all
+    image_files.each do |image_file|
+
+      top_level_object = image_file.object
+      if top_level_object.blank?
+        image_file.workflowMetadata.marked_for_deletion = 'true'
+        image_file.workflowMetadata.marked_for_deletion.reason = 'no top level object'
+      else
+        ark = Ark.new
+        ark.namespace_ark = '50959'
+        ark.url_base = 'https://search.digitalcommonwealth.org'
+        ark.parent_pid = top_level_object.pid
+        ark.pid = image_file.pid
+        ark.noid = image_file.pid.split(':').last
+        ark.namespace_id = image_file.pid.split(':').first
+        ark.model_type = 'Bplmodels::ImageFile'
+        ark.view_thumbnail = '/preview/'
+        ark.view_object = '/search/'
+        ark.local_original_identifier = top_level_object.workflowMetadata.item_source.ingest_filepath.split('/').last
+        ark.local_original_identifier_type = 'File Name'
+
+      end
+    end
+
+  end
 end
