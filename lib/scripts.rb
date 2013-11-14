@@ -223,7 +223,7 @@ class Scripts
       top_level_object = image_file.object
       if top_level_object.blank?
         image_file.workflowMetadata.marked_for_deletion = 'true'
-        image_file.workflowMetadata.marked_for_deletion.reason = 'no top level object'
+        image_file.workflowMetadata.marked_for_deletion(0).reason = 'no top level object'
         image_file.save
       else
         dup_test = Ark.where(:pid=>image_file.pid)
