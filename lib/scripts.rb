@@ -217,34 +217,37 @@ class Scripts
   end
 
   def fixFileArks
-    image_files = Bplmodels::ImageFile.all
-    image_files.each do |image_file|
 
-      top_level_object = image_file.object
-      if top_level_object.blank?
-        image_file.workflowMetadata.marked_for_deletion = 'true'
-        image_file.workflowMetadata.marked_for_deletion(0).reason = 'no top level object'
-        image_file.save
-      else
-        dup_test = Ark.where(:pid=>image_file.pid)
-        if dup_test.length < 1
-          ark = Ark.new
-          ark.namespace_ark = '50959'
-          ark.url_base = 'https://search.digitalcommonwealth.org'
-          ark.parent_pid = top_level_object.pid
-          ark.pid = image_file.pid
-          ark.noid = image_file.pid.split(':').last
-          ark.namespace_id = image_file.pid.split(':').first
-          ark.model_type = 'Bplmodels::ImageFile'
-          ark.view_thumbnail = '/preview/'
-          ark.view_object = '/search/'
-          ark.local_original_identifier = top_level_object.workflowMetadata.item_source.ingest_filepath.split('/').last
-          ark.local_original_identifier_type = 'File Name'
-          ark.save
+    Bplmodels::ImageFile.find_in_batches('*:*') do |group|
+      group.each { |image|
+        image_file = Bplmodels::ImageFile.find(:pid=>image['id']).first
+
+        top_level_object = image_file.object
+        if top_level_object.blank?
+          image_file.workflowMetadata.marked_for_deletion = 'true'
+          image_file.workflowMetadata.marked_for_deletion(0).reason = 'no top level object'
+          image_file.save
+        else
+          dup_test = Ark.where(:pid=>image_file.pid)
+          if dup_test.length < 1
+            ark = Ark.new
+            ark.namespace_ark = '50959'
+            ark.url_base = 'https://search.digitalcommonwealth.org'
+            ark.parent_pid = top_level_object.pid
+            ark.pid = image_file.pid
+            ark.noid = image_file.pid.split(':').last
+            ark.namespace_id = image_file.pid.split(':').first
+            ark.model_type = 'Bplmodels::ImageFile'
+            ark.view_thumbnail = '/preview/'
+            ark.view_object = '/search/'
+            ark.local_original_identifier = top_level_object.workflowMetadata.item_source.ingest_filepath.split('/').last
+            ark.local_original_identifier_type = 'File Name'
+            ark.save
+          end
         end
 
+      }
 
-      end
     end
 
   end
