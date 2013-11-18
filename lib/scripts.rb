@@ -216,13 +216,13 @@ class Scripts
 
   end
 
-  def fixFileArks
+  def self.fixFileArks
 
     Bplmodels::ImageFile.find_in_batches('*:*') do |group|
       group.each { |image|
         image_file = Bplmodels::ImageFile.find(:pid=>image['id']).first
 
-        top_level_object = image_file.object
+        top_level_object = image_file.object.first
         if top_level_object.blank?
           image_file.workflowMetadata.marked_for_deletion = 'true'
           image_file.workflowMetadata.marked_for_deletion(0).reason = 'no top level object'
