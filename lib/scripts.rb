@@ -220,14 +220,15 @@ class Scripts
 
     Bplmodels::ImageFile.find_in_batches('*:*') do |group|
       group.each { |image|
-        image_file = Bplmodels::ImageFile.find(:pid=>image['id']).first
+        image_file = Bplmodels::ImageFile.find(image['id'])
 
-        top_level_object = image_file.object.first
+        top_level_object = image_file.object
         if top_level_object.blank?
           image_file.workflowMetadata.marked_for_deletion = 'true'
           image_file.workflowMetadata.marked_for_deletion(0).reason = 'no top level object'
           image_file.save
         else
+          puts top_level_object.pid
           dup_test = Ark.where(:pid=>image_file.pid)
           if dup_test.length < 1
             ark = Ark.new
