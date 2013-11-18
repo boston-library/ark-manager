@@ -229,6 +229,9 @@ class Scripts
           image_file.save
         else
           puts top_level_object.pid
+          puts top_level_object.descMetadata.title_info.main_title
+          puts top_level_object.workflowMetadata.dsid
+          puts
           dup_test = Ark.where(:pid=>image_file.pid)
           if dup_test.length < 1
             ark = Ark.new
