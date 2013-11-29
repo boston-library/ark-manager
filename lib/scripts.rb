@@ -251,5 +251,31 @@ class Scripts
 
     end
 
+
+  end
+
+  def self.sanityCheckObjects
+
+    Bplmodels::SimpleObjectBase.find_in_batches('*:*') do |group|
+      group.each { |image|
+        object = ActiveFedora::Base.find(image['id']).adapt_to_cmodel
+
+        top_level_object = object.collection
+
+        if top_level_object.blank?
+          object.workflowMetadata.marked_for_deletion = 'true'
+          object.workflowMetadata.marked_for_deletion(0).reason = 'no top level object'
+          object.save
+        else
+          dup_test = Ark.where(:pid=>object.pid)
+          if dup_test.length < 1
+            object.workflowMetadata.marked_for_deletion = 'false'
+            object.workflowMetadata.marked_for_deletion(0).reason = 'ARK MISSING!!!'
+          end
+        end
+
+      }
+
+    end
   end
 end
