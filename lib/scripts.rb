@@ -271,6 +271,33 @@ class Scripts
           if dup_test.length < 1
             object.workflowMetadata.marked_for_deletion = 'false'
             object.workflowMetadata.marked_for_deletion(0).reason = 'ARK MISSING!!!'
+            object.save
+          end
+        end
+
+      }
+
+    end
+  end
+
+
+  def self.sanityCheckCollections
+
+    Bplmodels::Collection.find_in_batches('*:*') do |group|
+      group.each { |image|
+        collection = ActiveFedora::Base.find(image['id']).adapt_to_cmodel
+
+        bottom_level_objects = collection.objects
+
+        if bottom_level_objects.blank? || bottom_level_objects.size < 10
+          collection.workflowMetadata.marked_for_deletion = 'true'
+          collection.workflowMetadata.marked_for_deletion(0).reason = 'no bottom level objects or very few...'
+          collection.save
+        else
+          dup_test = Ark.where(:pid=>collection.pid)
+          if dup_test.length < 1
+            collection.workflowMetadata.marked_for_deletion = 'false'
+            collection.workflowMetadata.marked_for_deletion(0).reason = 'ARK MISSING!!!'
           end
         end
 
