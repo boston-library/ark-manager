@@ -1,8 +1,8 @@
 ArkHandler::Application.routes.draw do
   resources :arks
 
-  match '/:ark/:namespace/:noid/thumbnail' => 'arks#thumbnail', :as => 'thumbnail', :constraints => {:ark => /ark:/}
-  match '/:ark/:namespace/:noid' => 'arks#object_in_view', :as => 'object_in_view', :constraints => {:ark => /ark:/}
+  match '/:ark/:namespace/:noid/thumbnail' => 'arks#thumbnail', :as => 'thumbnail', :constraints => {:ark => /ark:/}, via: [:get, :post]
+  match '/:ark/:namespace/:noid' => 'arks#object_in_view', :as => 'object_in_view', :constraints => {:ark => /ark:/}, via: [:get, :post]
 
 
   # The priority is based upon order of creation:
