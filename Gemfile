@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.13'
+gem 'rails', '4.0.3'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -47,3 +47,4 @@ gem 'active-fedora', :git => 'https://github.com/projecthydra/active_fedora.git'
 gem 'hydra-head', '6.3.4'
 gem 'bplmodels', :git => 'https://github.com/boston-library/bplmodels.git'
 
+gem 'protected_attributes'

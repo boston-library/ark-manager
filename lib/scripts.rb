@@ -305,4 +305,24 @@ class Scripts
 
     end
   end
+
+  def self.sanityCheckObjects
+    ActiveFedora::Base.find_in_batches('-is_member_of_collection_ssim'=>'[* TO *]','active_fedora_model_ssi'=>'Bplmodels::OAIObject') do |group|
+      group.each { |object_id|
+        puts object_id['id']
+        breakhere
+        #object = ActiveFedora::Base.find(object_id['id']).adapt_to_cmodel
+
+        #top_level_object = object.collection
+
+        #if top_level_object.blank?
+
+          #object.delete
+
+        #end
+
+      }
+
+    end
+  end
 end
