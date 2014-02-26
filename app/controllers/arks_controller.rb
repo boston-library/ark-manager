@@ -70,6 +70,12 @@ class ArksController < ApplicationController
     end
   end
 
+  def delete_ark
+    @ark = Ark.where(:noid=>params[:ark][:pid])
+    @ark.deleted = true
+    @ark.save
+  end
+
 
   def object_in_view
     @ark = Ark.where(:noid=>params[:noid])
@@ -79,8 +85,6 @@ class ArksController < ApplicationController
 
   def thumbnail
     @ark = Ark.where(:noid=>params[:noid])
-
-
     redirect_to @ark[0].url_base + @ark[0].view_thumbnail + @ark[0].namespace_id + ":" + @ark[0].noid
   end
 

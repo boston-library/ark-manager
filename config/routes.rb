@@ -4,6 +4,8 @@ ArkHandler::Application.routes.draw do
   match '/:ark/:namespace/:noid/thumbnail' => 'arks#thumbnail', :as => 'thumbnail', :constraints => {:ark => /ark:/}, via: [:get, :post]
   match '/:ark/:namespace/:noid' => 'arks#object_in_view', :as => 'object_in_view', :constraints => {:ark => /ark:/}, via: [:get, :post]
 
+  match '/delete_ark' => 'arks#delete_ark', :as => 'delete_ark', via: [:post]
+
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

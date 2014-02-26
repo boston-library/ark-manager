@@ -14,7 +14,7 @@ class IdService
     @semaphore.synchronize do
       while true
         pid = self.next_id(namespace)
-        return pid unless Ark.exists?(:pid=>pid)
+        return pid unless Ark.exists?(:noid=>getid(pid))
         #TODO: Check again fedora and update to - https://github.com/projecthydra/sufia/blob/a0d7571410a9c33b279da2c3221399a82fd9f6a7/sufia-models/lib/sufia/models/id_service.rb
       end
     end

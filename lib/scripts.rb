@@ -254,6 +254,9 @@ class Scripts
 
   end
 
+  #Four extra photographic arks.
+  #2000 extra file arks.
+  #1000 extra non-photographic print arks.
   def self.sanityCheckObjects
 
     Bplmodels::SimpleObjectBase.find_in_batches('*:*') do |group|
@@ -279,6 +282,7 @@ class Scripts
 
     end
   end
+
 
 
   def self.sanityCheckCollections
