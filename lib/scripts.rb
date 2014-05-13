@@ -345,8 +345,8 @@ class Scripts
 
 
 
-    if object_id_array != 268
-      raise 'error ' + object_id_array.to_s
+    if object_id_array.length != 268
+      raise 'error ' + object_id_array.length.to_s + object_id_array.to_s
     end
 
     object_id_array.each do |object_id|
