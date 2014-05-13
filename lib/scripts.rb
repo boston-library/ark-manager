@@ -339,30 +339,33 @@ class Scripts
         pid = solr_objects['id']
         object_id_array << pid
 
-        if object_id_array != 268
-          raise 'error ' + object_id_array.to_s
-        end
-
-        object_id_array.each do |object_id|
-          object = Bplmodels::ObjectBase.find(object_id).adapt_to_cmodel
-
-          ark_object = Ark.where(:pid=>object_id).first
-          ark_object.destroy
-
-          Bplmodels::File.find_in_batches('is_file_of_ssim'=>"info:fedora/#{object.pid}") do |group|
-            group.each { |solr_file|
-              file = Bplmodels::File.find(solr_file['id']).adapt_to_cmodel
-              file.delete
-              ark_object = Ark.where(:pid=>solr_file['id']).first
-              ark_object.destroy
-            }
-          end
-
-          object.reload
-          object.delete
-        end
 
       }
+    end
+
+
+
+    if object_id_array != 268
+      raise 'error ' + object_id_array.to_s
+    end
+
+    object_id_array.each do |object_id|
+      object = Bplmodels::ObjectBase.find(object_id).adapt_to_cmodel
+
+      ark_object = Ark.where(:pid=>object_id).first
+      ark_object.destroy
+
+      Bplmodels::File.find_in_batches('is_file_of_ssim'=>"info:fedora/#{object.pid}") do |group|
+        group.each { |solr_file|
+          file = Bplmodels::File.find(solr_file['id']).adapt_to_cmodel
+          file.delete
+          ark_object = Ark.where(:pid=>solr_file['id']).first
+          ark_object.destroy
+        }
+      end
+
+      object.reload
+      object.delete
     end
   end
 end
