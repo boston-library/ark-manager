@@ -333,7 +333,7 @@ class Scripts
   def self.removeFaulkner
     object_id_array = []
 
-    Bplmodels::ObjectBase.find_in_batches('is_member_of_collection_ssim'=>"info:fedora/commonwealth:m613mx61z") do |collection_group|
+    Bplmodels::ObjectBase.find_in_batches('is_member_of_collection_ssim'=>'info:fedora/commonwealth:m613mx61z') do |collection_group|
       collection_group.each { |solr_objects|
 
         pid = solr_objects['id']
