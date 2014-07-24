@@ -43,3 +43,10 @@ gem 'hydra-head', '7.0.1'
 gem 'active-fedora', '7.0.4'
 gem 'bplmodels', :git => 'https://github.com/boston-library/bplmodels.git'
 #gem 'bplmodels', :git => 'https://github.com/boston-library/bplmodels.git', :ref => '4cbd775e53'
+
+gem 'hydra-derivatives'
+
+gem 'equivalent-xml', '0.4.2'
+gem 'rdf-microdata', '1.1.1.1'
+gem 'xml-simple', '1.1.3'
+gem 'rdf-rdfa', '1.1.3.1'
