@@ -525,7 +525,7 @@ class Scripts
 
 
           ##### UPDATE DERIVATIVES ####
-          if main_object.item_status.processing.blank?
+          if main_object.workflowMetadata.item_status.processing.blank?
             main_object.workflowMetadata.item_status.processing = "derivatives"
             main_object.workflowMetadata.item_status.processing_comment = "Awaiting Derivative Creation"
             main_object.save
