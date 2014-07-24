@@ -493,7 +493,7 @@ class Scripts
 
           end
 
-          if main_object.workflowMetadata.item_source(0).ingest_filepath.length == files.length
+          if main_object.workflowMetadata.item_source(0).ingest_filepath.length != files.size
             new_logger.error "Note that main object didn't have a full file source tree: " + main_object.pid
           end
 
