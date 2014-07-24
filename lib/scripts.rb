@@ -485,7 +485,7 @@ class Scripts
               end
             end
 
-
+            the_file.save
 
             #if the_file.workflowMetadata.item_status.blank?
             #the_file.workflowMetadata.item_status.state = "published"
@@ -533,6 +533,8 @@ class Scripts
             main_object.save
             main_object.derivative_service("true")
           end
+
+          main_object.save
 
 
         end
