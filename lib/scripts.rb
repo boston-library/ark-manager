@@ -386,7 +386,7 @@ class Scripts
 
     new_logger.error "Object array was: " + object_id_array.length
 
-    if object_id_array.length < 100000 || object_id_array.length > 125000
+    if object_id_array.length < 800 || object_id_array.length > 950
       puts 'Only a size of ' + object_id_array.length
       raise 'Not enough objects (or too many) found ' + object_id_array.length
     else
