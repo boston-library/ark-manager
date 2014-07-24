@@ -384,11 +384,11 @@ class Scripts
       }
     end
 
-    new_logger.error "Object array was: " + object_id_array.length
+    new_logger.error "Object array was: " + object_id_array.length.to_s
 
     if object_id_array.length < 800 || object_id_array.length > 950
-      puts 'Only a size of ' + object_id_array.length
-      raise 'Not enough objects (or too many) found ' + object_id_array.length
+      puts 'Only a size of ' + object_id_array.length.to_s
+      raise 'Not enough objects (or too many) found ' + object_id_array.length.to_s
     else
       object_id_array.each do |pid|
         new_logger.error "Processing for PID: " + pid
