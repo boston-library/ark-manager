@@ -1,4 +1,5 @@
 class Scripts
+  
   def self.fixToNewFormatCollection
     arks = Ark.all
     arks.each do |ark|
@@ -367,5 +368,177 @@ class Scripts
       object.reload
       object.delete
     end
+
+  end
+
+
+  #POSSIBLE KNOWN BUG: Multiple files in item origin
+  def self.updateAllObject
+    new_logger = Logger.new('log/scripts_log')
+    new_logger.level = Logger::ERROR
+
+    object_id_array = []
+    Bplmodels::ObjectBase.find_in_batches('*:*') do |group|
+      group.each { |solr_object|
+        object_id_array << solr_object['id']
+      }
+    end
+
+    new_logger.error "Object array was: " + object_id_array.length
+
+    if object_id_array.length < 100000 || object_id_array.length > 125000
+      puts 'Only a size of ' + object_id_array.length
+      raise 'Not enough objects (or too many) found ' + object_id_array.length
+    else
+      object_id_array.each do |pid|
+        new_logger.error "Processing for PID: " + pid
+        main_object = ActiveFedora::Base.find(pid).adapt_to_cmodel
+
+        if main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_OAIObject")
+          #OAI Migration Stuff
+          main_object.workflowMetadata.insert_oai_defaults
+          ark_info = Ark.where(:pid=>pid)
+          if(ark_info.length > 1)
+            #LOG HERE?
+            new_logger.error "More than 1 ARK found for main object " + pid
+          elsif ark_info.blank?
+            new_logger.error "No ARKS found for main object " + pid
+          else
+            ark_info = ark_info.first
+            main_object.workflowMetadata.item_ark_info.ark_id = ark_info.local_original_identifier
+            main_object.workflowMetadata.item_ark_info.ark_type = ark_info.local_original_identifier_type
+            main_object.workflowMetadata.item_ark_info.ark_parent_pid = ark_info.parent_pid
+          end
+
+          main_object.save
+
+        else
+
+          ##### UPDATE ARKS #######
+          ark_info = Ark.where(:pid=>pid)
+          if(ark_info.length > 1)
+            new_logger.error "More than 1 ARK found for main object " + pid
+          elsif ark_info.blank?
+            new_logger.error "No ARKS found for main object " + pid
+          else
+            ark_info = ark_info.first
+            main_object.workflowMetadata.item_ark_info.ark_id = ark_info.local_original_identifier
+            main_object.workflowMetadata.item_ark_info.ark_type = ark_info.local_original_identifier_type
+            main_object.workflowMetadata.item_ark_info.ark_parent_pid = ark_info.parent_pid
+          end
+
+          ##### UPDATE WORKFLOW ####
+          if main_object.workflowMetadata.source.blank?
+            main_object.workflowMetadata.item_source.ingest_filepath.each do |this_file|
+              main_object.workflowMetadata.insert_file_source(this_file, this_file.split('/').last, 'productionMaster')
+            end
+
+          end
+
+
+          files = main_object.files
+          files.each_with_index do |the_file, file_index|
+            the_file = the_file.adapt_to_cmodel
+
+            if the_file.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_ImageFile")
+              if the_file.accessMaster.versionable == true
+                the_file.accessMaster.versionable = false
+                the_file.save
+              end
+            end
+
+            ark_file_info = Ark.where(:pid=>the_file.pid)
+
+            if(ark_file_info.length > 1)
+              new_logger.error "More than 1 ARK found for file object " + the_file.pid
+            elsif ark_file_info.blank?
+              new_logger.error "No ARKS found for file object " + the_file.pid
+            else
+              if(the_file.productionMaster.label == 'productionMaster datastream')
+                the_file.productionMaster.label = ark_file_info.local_original_identifier.gsub('.tif', '').gsub('.jpg', '').gsub('.mp3', '').gsub('.wav', '').gsub('.pdf', '').gsub('.txt', '')
+                if the_file.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_ImageFile")
+                  the_file.accessMaster.label = the_file.productionMaster.label
+                end
+                the_file.thumbnail300.label = the_file.productionMaster.label
+              else
+                the_file.productionMaster.label = the_file.productionMaster.label.gsub('.tif', '').gsub('.jpg', '').gsub('.mp3', '').gsub('.wav', '')
+                if the_file.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_ImageFile")
+                  the_file.accessMaster.label = the_file.productionMaster.label
+                end
+                the_file.thumbnail300.label = the_file.productionMaster.label
+              end
+
+              if the_file.workflowMetadata.item_ark_info.blank?
+                the_file.workflowMetadata.item_ark_info.ark_id = ark_file_info.local_original_identifier
+                the_file.workflowMetadata.item_ark_info.ark_type = ark_file_info.local_original_identifier_type
+                the_file.workflowMetadata.item_ark_info.ark_parent_pid = ark_file_info.parent_pid
+              end
+            end
+
+            if the_file.workflowMetadata.source.blank?
+              main_object.workflowMetadata.item_source.each do |item_source|
+                if item_source.ingest_filepath.include?(ark_file_info.local_original_identifier)
+                  the_file.workflowMetadata.insert_file_source(item_source.ingest_filepath, item_source.ingest_filepath.split('/').last, 'productionMaster')
+                end
+              end
+
+            end
+
+            #if the_file.workflowMetadata.item_status.blank?
+            #the_file.workflowMetadata.item_status.state = "published"
+            #the_file.workflowMetadata.item_status.state_comment = "Added metadata via update script on " + Time.new.year.to_s + "/" + Time.new.month.to_s + "/" + Time.new.day.to_s
+            #end
+
+
+          end
+
+          if main_object.workflowMetadata.item_source(0).ingest_filepath.length == files.length
+            new_logger.error "Note that main object didn't have a full file source tree: " + main_object.pid
+          end
+
+
+
+          all_complex_objects = []
+          all_complex_objects << "info:fedora/afmodel:Bplmodels_Book"
+          all_complex_objects << "info:fedora/afmodel:Bplmodels_Manuscript"
+          all_complex_objects << "info:fedora/afmodel:Bplmodels_Newspaper"
+          all_complex_objects << "info:fedora/afmodel:Bplmodels_Scrapbook"
+          all_complex_objects << "info:fedora/afmodel:Bplmodels_SoundRecording"
+
+
+
+
+          if main_object.relationships(:has_model).any? { |model| all_complex_objects.include?(model) }
+            if main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_Book") && !main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_ComplexObject")
+              main_object.convert_to(Bplmodels::Book)
+            elsif main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_Manuscript") && !main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_ComplexObject")
+              main_object.convert_to(Bplmodels::Manuscript)
+            elsif main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_Newspaper") && !main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_ComplexObject")
+              main_object.convert_to(Bplmodels::Newspaper)
+            elsif main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_Scrapbook") && !main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_ComplexObject")
+              main_object.convert_to(Bplmodels::Scrapbook)
+            elsif main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_SoundRecording") && !main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_ComplexObject")
+              main_object.convert_to(Bplmodels::SoundRecording)
+            end
+          end
+
+
+          ##### UPDATE DERIVATIVES ####
+          if main_object.item_status.processing.blank?
+            main_object.workflowMetadata.item_status.processing = "derivatives"
+            main_object.workflowMetadata.item_status.processing_comment = "Awaiting Derivative Creation"
+            main_object.save
+            main_object.derivative_service("true")
+          end
+
+
+        end
+      end
+
+    end
+
+
+
+
   end
 end
