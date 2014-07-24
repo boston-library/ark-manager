@@ -392,6 +392,7 @@ class Scripts
     else
       object_id_array.each do |pid|
         new_logger.error "Processing for PID: " + pid
+        puts "Processing for PID: " + pid
         main_object = ActiveFedora::Base.find(pid).adapt_to_cmodel
 
         if main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_OAIObject")
@@ -476,9 +477,9 @@ class Scripts
             end
 
             if the_file.workflowMetadata.source.blank?
-              main_object.workflowMetadata.item_source.each do |item_source|
-                if item_source.ingest_filepath.include?(ark_file_info.local_original_identifier)
-                  the_file.workflowMetadata.insert_file_source(item_source.ingest_filepath, item_source.ingest_filepath.split('/').last, 'productionMaster')
+              main_object.workflowMetadata.item_source.ingest_filepath.each do |item_source|
+                if item_source.include?(ark_file_info.local_original_identifier)
+                  the_file.workflowMetadata.insert_file_source(item_source, item_source.split('/').last, 'productionMaster')
                 end
               end
 
