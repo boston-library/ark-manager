@@ -43,5 +43,3 @@ gem 'active-fedora', :git => 'https://github.com/projecthydra/active_fedora.git'
 gem 'hydra-head', '6.3.4'
 #gem 'bplmodels', :git => 'https://github.com/boston-library/bplmodels.git'
 gem 'bplmodels', :git => 'https://github.com/boston-library/bplmodels.git', :ref => '4cbd775e53'
-
-gem 'protected_attributes'

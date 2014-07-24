@@ -49,6 +49,23 @@ class ArksController < ApplicationController
     if @ark.length == 1 && params[:ark][:local_original_identifier] != nil && params[:ark][:local_original_identifier] != ""
       @ark = @ark[0]
     else
+      pid = IdService.mint(params[:ark][:namespace_id])
+      ark_parameters = {}
+      ark_parameters[:ark] = {}
+      ark_parameters[:ark][:local_original_identifier] = params[:ark][:local_original_identifier]
+      ark_parameters[:ark][:local_original_identifier_type] = params[:ark][:local_original_identifier_type]
+      ark_parameters[:ark][:namespace_ark] = params[:ark][:namespace_ark]
+      ark_parameters[:ark][:namespace_id] = params[:ark][:namespace_id]
+      ark_parameters[:ark][:url_base] = params[:ark][:url_base]
+      ark_parameters[:ark][:model_type] = params[:ark][:model_type]
+      ark_parameters[:ark][:pid] = pid
+      ark_parameters[:ark][:noid] = IdService.getid(pid)
+      ark_parameters[:ark][:view_object] = "/search/"
+      ark_parameters[:ark][:view_thumbnail] = "/preview/"
+      ark_parameters[:ark][:parent_pid] = params[:ark][:parent_pid]
+
+      @ark = Ark.new(ark_params(ark_parameters))
+=begin
       @ark = Ark.new(params[:ark])
       pid = IdService.mint(params[:ark][:namespace_id])
       @ark.pid = pid
@@ -56,6 +73,7 @@ class ArksController < ApplicationController
       @ark.view_object = "/search/"
       @ark.view_thumbnail = "/preview/"
       @ark.parent_pid = params[:ark][:parent_pid]
+=end
     end
 
 
@@ -114,5 +132,9 @@ class ArksController < ApplicationController
       format.html { redirect_to arks_url }
       format.json { head :no_content }
     end
+  end
+
+  def ark_params(hashed_params)
+    hashed_params.require(:ark).permit(:local_original_identifier, :local_original_identifier_type, :namespace_ark, :namespace_id, :url_base, :model_type, :pid, :noid, :view_object, :view_thumbnail, :parent_pid)
   end
 end
