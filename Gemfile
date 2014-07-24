@@ -39,7 +39,7 @@ gem "therubyracer", "~> 0.10.0"
 # To use debugger
 # gem 'debugger'
 
-gem 'active-fedora', :git => 'https://github.com/projecthydra/active_fedora.git', :branch => '6.5-stable'
-gem 'hydra-head', '6.3.4'
+gem 'hydra-head', '7.0.1'
+gem 'active-fedora', '7.0.4'
 gem 'bplmodels', :git => 'https://github.com/boston-library/bplmodels.git'
 #gem 'bplmodels', :git => 'https://github.com/boston-library/bplmodels.git', :ref => '4cbd775e53'
