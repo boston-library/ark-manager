@@ -378,7 +378,7 @@ class Scripts
     new_logger.level = Logger::ERROR
 
     object_id_array = []
-    Bplmodels::ObjectBase.find_in_batches('*:*') do |group|
+    Bplmodels::ObjectBase.find_in_batches('has_model_ssim'=>"info:fedora/afmodel:Bplmodels_ObjectBase") do |group|
       group.each { |solr_object|
         object_id_array << solr_object['id']
       }
