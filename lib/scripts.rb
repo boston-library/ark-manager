@@ -474,16 +474,18 @@ class Scripts
                 the_file.workflowMetadata.item_ark_info.ark_type = ark_file_info.local_original_identifier_type
                 the_file.workflowMetadata.item_ark_info.ark_parent_pid = ark_file_info.parent_pid
               end
-            end
 
-            if the_file.workflowMetadata.source.blank?
-              main_object.workflowMetadata.item_source.ingest_filepath.each do |item_source|
-                if item_source.include?(ark_file_info.local_original_identifier)
-                  the_file.workflowMetadata.insert_file_source(item_source, item_source.split('/').last, 'productionMaster')
+              if the_file.workflowMetadata.source.blank?
+                main_object.workflowMetadata.item_source.ingest_filepath.each do |item_source|
+                  if item_source.include?(ark_file_info.local_original_identifier)
+                    the_file.workflowMetadata.insert_file_source(item_source, item_source.split('/').last, 'productionMaster')
+                  end
                 end
-              end
 
+              end
             end
+
+
 
             #if the_file.workflowMetadata.item_status.blank?
             #the_file.workflowMetadata.item_status.state = "published"
