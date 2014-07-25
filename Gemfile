@@ -47,6 +47,7 @@ gem 'bplmodels', :git => 'https://github.com/boston-library/bplmodels.git'
 gem 'hydra-derivatives'
 gem 'typhoeus'
 
+
 gem 'equivalent-xml', '0.4.2'
 gem 'rdf-microdata', '1.1.1.1'
 gem 'xml-simple', '1.1.3'

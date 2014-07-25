@@ -378,7 +378,15 @@ class Scripts
     new_logger.level = Logger::ERROR
 
     object_id_array = []
+=begin
     Bplmodels::ObjectBase.find_in_batches('has_model_ssim'=>"info:fedora/afmodel:Bplmodels_ObjectBase") do |group|
+      group.each { |solr_object|
+        object_id_array << solr_object['id']
+      }
+    end
+=end
+
+    ActiveFedora::Base.find_in_batches("*:*") do |group|
       group.each { |solr_object|
         object_id_array << solr_object['id']
       }
@@ -386,7 +394,7 @@ class Scripts
 
     new_logger.error "Object array was: " + object_id_array.length.to_s
 
-    if object_id_array.length < 26000 || object_id_array.length > 27000
+    if object_id_array.length > 100000000 #object_id_array.length < 26000 || object_id_array.length > 27000
       puts 'Only a size of ' + object_id_array.length.to_s
       raise 'Not enough objects (or too many) found ' + object_id_array.length.to_s
     else
@@ -395,7 +403,50 @@ class Scripts
         puts "Processing for PID: " + pid
         main_object = ActiveFedora::Base.find(pid).adapt_to_cmodel
 
-        if main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_OAIObject")
+        #Fix test obhects....
+        if main_object.class.name == "ActiveFedora::Base" || main_object.class.name == "Bplmodels::SimpleObjectBase"
+          main_object = main_object.adapt_to(Bplmodels::SimpleObjectBase)
+
+          model_type = main_object.descMetadata.genre_basic.first
+          instantiate_type = Bplmodels::SimpleObjectBase
+          case model_type.downcase
+            when 'photographs'
+              instantiate_type = Bplmodels::PhotographicPrint
+            when 'prints', 'drawings', 'paintings', 'posters'
+              instantiate_type = Bplmodels::NonPhotographicPrint
+            when 'maps'
+              instantiate_type = Bplmodels::Map
+            when 'documents'
+              instantiate_type = Bplmodels::Document
+            when 'ephemera'
+              instantiate_type = Bplmodels::Ephemera
+            when 'objects'
+              instantiate_type = Bplmodels::Object
+            when 'periodicals'
+              instantiate_type = Bplmodels::Periodical
+            when 'cards'
+              instantiate_type = Bplmodels::Card
+            when 'manuscripts'
+              instantiate_type = Bplmodels::Manuscript
+            when 'albums'
+              instantiate_type = Bplmodels::Scrapbook
+            when 'sound recordings'
+              instantiate_type = Bplmodels::SoundRecording
+            when 'books'
+              instantiate_type = Bplmodels::Book
+            when 'newspapers'
+              instantiate_type = Bplmodels::Newspaper
+          end
+
+          main_object = main_object.convert_to(instantiate_type)
+          main_object.save
+        end
+
+        if main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_File") || main_object.relationships(:has_model).include?("info:fedora/fedora-system:ContentModel-3.0")
+
+
+
+        elsif main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_OAIObject")
           #OAI Migration Stuff
           main_object.workflowMetadata.insert_oai_defaults
           ark_info = Ark.where(:pid=>pid)
@@ -457,11 +508,32 @@ class Scripts
             else
               ark_file_info = ark_file_info.first
               if(the_file.productionMaster.label == 'productionMaster datastream')
-                the_file.productionMaster.dsLabel = ark_file_info.local_original_identifier.gsub('.tif', '').gsub('.jpg', '').gsub('.mp3', '').gsub('.wav', '').gsub('.pdf', '').gsub('.txt', '')
-                if the_file.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_ImageFile")
-                  the_file.accessMaster.dsLabel = the_file.productionMaster.label
+                if ark_file_info.local_original_identifier.include?('/')
+                  main_object.workflowMetadata.item_source.ingest_filepath.each do |item_source|
+                    if item_source.include?(ark_file_info.local_original_identifier.gsub(' File', ''))
+                      the_file.productionMaster.dsLabel = item_source.split('/').last.gsub('.tif', '').gsub('.jpg', '').gsub('.mp3', '').gsub('.wav', '').gsub('.pdf', '').gsub('.txt', '')
+                      if the_file.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_ImageFile")
+                        the_file.accessMaster.dsLabel = the_file.productionMaster.label
+                      end
+                      the_file.thumbnail300.dsLabel = the_file.productionMaster.label
+                    end
+                  end
+
+                  if the_file.productionMaster.label == 'productionMaster datastream' && main_object.workflowMetadata.item_source.ingest_filepath.length == 1
+                    the_file.productionMaster.dsLabel = main_object.workflowMetadata.item_source.ingest_filepath.first.split('/').last.gsub('.tif', '').gsub('.jpg', '').gsub('.mp3', '').gsub('.wav', '').gsub('.pdf', '').gsub('.txt', '')
+                    if the_file.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_ImageFile")
+                      the_file.accessMaster.dsLabel = the_file.productionMaster.label
+                    end
+                    the_file.thumbnail300.dsLabel = the_file.productionMaster.label
+                  end
+                else
+                  the_file.productionMaster.dsLabel = ark_file_info.local_original_identifier.gsub('.tif', '').gsub('.jpg', '').gsub('.mp3', '').gsub('.wav', '').gsub('.pdf', '').gsub('.txt', '')
+                  if the_file.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_ImageFile")
+                    the_file.accessMaster.dsLabel = the_file.productionMaster.label
+                  end
+                  the_file.thumbnail300.dsLabel = the_file.productionMaster.label
                 end
-                the_file.thumbnail300.dsLabel = the_file.productionMaster.label
+
               else
                 the_file.productionMaster.dsLabel = the_file.productionMaster.label.gsub('.tif', '').gsub('.jpg', '').gsub('.mp3', '').gsub('.wav', '')
                 if the_file.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_ImageFile")
@@ -478,7 +550,7 @@ class Scripts
 
               if the_file.workflowMetadata.source.blank?
                 main_object.workflowMetadata.item_source.ingest_filepath.each do |item_source|
-                  if item_source.include?(ark_file_info.local_original_identifier)
+                  if item_source.include?(the_file.productionMaster.label)
                     the_file.workflowMetadata.insert_file_source(item_source, item_source.split('/').last, 'productionMaster')
                   end
                 end
@@ -514,15 +586,20 @@ class Scripts
 
           if main_object.relationships(:has_model).any? { |model| all_complex_objects.include?(model) }
             if main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_Book") && !main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_ComplexObject")
-              main_object.convert_to(Bplmodels::Book)
+              main_object = main_object.convert_to(Bplmodels::Book)
+              main_object.save
             elsif main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_Manuscript") && !main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_ComplexObject")
-              main_object.convert_to(Bplmodels::Manuscript)
+              main_object = main_object.convert_to(Bplmodels::Manuscript)
+              main_object.save
             elsif main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_Newspaper") && !main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_ComplexObject")
-              main_object.convert_to(Bplmodels::Newspaper)
+              main_object = main_object.convert_to(Bplmodels::Newspaper)
+              main_object.save
             elsif main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_Scrapbook") && !main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_ComplexObject")
-              main_object.convert_to(Bplmodels::Scrapbook)
+              main_object = main_object.convert_to(Bplmodels::Scrapbook)
+              main_object.save
             elsif main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_SoundRecording") && !main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_ComplexObject")
-              main_object.convert_to(Bplmodels::SoundRecording)
+              main_object = main_object.convert_to(Bplmodels::SoundRecording)
+              main_object.save
             end
           end
 
