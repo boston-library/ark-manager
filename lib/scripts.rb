@@ -378,19 +378,21 @@ class Scripts
     new_logger.level = Logger::ERROR
 
     object_id_array = []
-=begin
+
     Bplmodels::ObjectBase.find_in_batches('has_model_ssim'=>"info:fedora/afmodel:Bplmodels_ObjectBase") do |group|
       group.each { |solr_object|
         object_id_array << solr_object['id']
       }
     end
-=end
 
+
+=begin
     ActiveFedora::Base.find_in_batches("*:*") do |group|
       group.each { |solr_object|
         object_id_array << solr_object['id']
       }
     end
+=end
 
     new_logger.error "Object array was: " + object_id_array.length.to_s
 
@@ -404,6 +406,7 @@ class Scripts
         main_object = ActiveFedora::Base.find(pid).adapt_to_cmodel
 
         #Fix test obhects....
+=begin
         if main_object.class.name == "ActiveFedora::Base" || main_object.class.name == "Bplmodels::SimpleObjectBase"
           main_object = main_object.adapt_to(Bplmodels::SimpleObjectBase)
 
@@ -441,6 +444,7 @@ class Scripts
           main_object = main_object.convert_to(instantiate_type)
           main_object.save
         end
+=end
 
         if main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_File") || main_object.relationships(:has_model).include?("info:fedora/fedora-system:ContentModel-3.0") || main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_Institution") || main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_Collection")
 
@@ -507,7 +511,8 @@ class Scripts
               new_logger.error "No ARKS found for file object " + the_file.pid
             else
               ark_file_info = ark_file_info.first
-              if(the_file.productionMaster.label == 'productionMaster datastream' || the_file.productionMaster.label.include?('/'))
+              # || the_file.productionMaster.label.include?('/'))
+              if(the_file.productionMaster.label == 'productionMaster datastream')
                 if ark_file_info.local_original_identifier.include?('/')
                   main_object.workflowMetadata.item_source.ingest_filepath.each do |item_source|
                     if item_source.include?(ark_file_info.local_original_identifier.gsub(' File', ''))
