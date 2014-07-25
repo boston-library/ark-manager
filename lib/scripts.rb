@@ -455,6 +455,7 @@ class Scripts
             elsif ark_file_info.blank?
               new_logger.error "No ARKS found for file object " + the_file.pid
             else
+              ark_file_info = ark_file_info.first
               if(the_file.productionMaster.label == 'productionMaster datastream')
                 the_file.productionMaster.dsLabel = ark_file_info.local_original_identifier.gsub('.tif', '').gsub('.jpg', '').gsub('.mp3', '').gsub('.wav', '').gsub('.pdf', '').gsub('.txt', '')
                 if the_file.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_ImageFile")
