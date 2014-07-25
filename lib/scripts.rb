@@ -456,17 +456,17 @@ class Scripts
               new_logger.error "No ARKS found for file object " + the_file.pid
             else
               if(the_file.productionMaster.label == 'productionMaster datastream')
-                the_file.productionMaster.label = ark_file_info.local_original_identifier.gsub('.tif', '').gsub('.jpg', '').gsub('.mp3', '').gsub('.wav', '').gsub('.pdf', '').gsub('.txt', '')
+                the_file.productionMaster.dsLabel = ark_file_info.local_original_identifier.gsub('.tif', '').gsub('.jpg', '').gsub('.mp3', '').gsub('.wav', '').gsub('.pdf', '').gsub('.txt', '')
                 if the_file.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_ImageFile")
-                  the_file.accessMaster.label = the_file.productionMaster.label
+                  the_file.accessMaster.dsLabel = the_file.productionMaster.label
                 end
-                the_file.thumbnail300.label = the_file.productionMaster.label
+                the_file.thumbnail300.dsLabel = the_file.productionMaster.label
               else
-                the_file.productionMaster.label = the_file.productionMaster.label.gsub('.tif', '').gsub('.jpg', '').gsub('.mp3', '').gsub('.wav', '')
+                the_file.productionMaster.dsLabel = the_file.productionMaster.label.gsub('.tif', '').gsub('.jpg', '').gsub('.mp3', '').gsub('.wav', '')
                 if the_file.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_ImageFile")
-                  the_file.accessMaster.label = the_file.productionMaster.label
+                  the_file.accessMaster.dsLabel = the_file.productionMaster.label
                 end
-                the_file.thumbnail300.label = the_file.productionMaster.label
+                the_file.thumbnail300.dsLabel = the_file.productionMaster.label
               end
 
               if the_file.workflowMetadata.item_ark_info.blank?
