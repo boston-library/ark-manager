@@ -442,7 +442,7 @@ class Scripts
           main_object.save
         end
 
-        if main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_File") || main_object.relationships(:has_model).include?("info:fedora/fedora-system:ContentModel-3.0")
+        if main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_File") || main_object.relationships(:has_model).include?("info:fedora/fedora-system:ContentModel-3.0") || main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_Institution" || main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_Collection")
 
 
 
