@@ -507,7 +507,7 @@ class Scripts
               new_logger.error "No ARKS found for file object " + the_file.pid
             else
               ark_file_info = ark_file_info.first
-              if(the_file.productionMaster.label == 'productionMaster datastream')
+              if(the_file.productionMaster.label == 'productionMaster datastream' || the_file.productionMaster.label.include?('/'))
                 if ark_file_info.local_original_identifier.include?('/')
                   main_object.workflowMetadata.item_source.ingest_filepath.each do |item_source|
                     if item_source.include?(ark_file_info.local_original_identifier.gsub(' File', ''))
