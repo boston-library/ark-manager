@@ -379,24 +379,24 @@ class Scripts
 
     object_id_array = []
 
-=begin
     Bplmodels::ObjectBase.find_in_batches('has_model_ssim'=>"info:fedora/afmodel:Bplmodels_ObjectBase") do |group|
+      group.each { |solr_object|
+        object_id_array << solr_object['id']
+      }
+    end
+
+
+=begin
+    ActiveFedora::Base.find_in_batches("*:*") do |group|
       group.each { |solr_object|
         object_id_array << solr_object['id']
       }
     end
 =end
 
-
-    ActiveFedora::Base.find_in_batches("*:*") do |group|
-      group.each { |solr_object|
-        object_id_array << solr_object['id']
-      }
-    end
-
     new_logger.error "Object array was: " + object_id_array.length.to_s
 
-    if object_id_array.length > 100000000 #object_id_array.length < 26000 || object_id_array.length > 27000
+    if bject_id_array.length < 100000 || object_id_array.length > 110000
       puts 'Only a size of ' + object_id_array.length.to_s
       raise 'Not enough objects (or too many) found ' + object_id_array.length.to_s
     else
@@ -406,8 +406,8 @@ class Scripts
         main_object = ActiveFedora::Base.find(pid).adapt_to_cmodel
 
         #Fix test obhects....
-        if main_object.class.name == "ActiveFedora::Base" || main_object.class.name == "Bplmodels::SimpleObjectBase"
-          main_object = main_object.adapt_to(Bplmodels::SimpleObjectBase)
+        if main_object.class.name == "ActiveFedora::Base" || main_object.class.name == "Bplmodels::SimpleObjectBase" || main_object.class.name == "Bplmodels::ObjectBase"
+            main_object = main_object.adapt_to(Bplmodels::SimpleObjectBase)
 
           model_type = main_object.descMetadata.genre_basic.first
           instantiate_type = Bplmodels::SimpleObjectBase
