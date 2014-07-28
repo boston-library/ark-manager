@@ -518,7 +518,10 @@ class Scripts
                       if the_file.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_ImageFile")
                         the_file.accessMaster.dsLabel = the_file.productionMaster.label
                       end
-                      the_file.thumbnail300.dsLabel = the_file.productionMaster.label
+                      if the_file.thumbnail300.mimeType.present?
+                        the_file.thumbnail300.dsLabel = the_file.productionMaster.label
+                      end
+
                     end
                   end
 
@@ -527,14 +530,18 @@ class Scripts
                     if the_file.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_ImageFile")
                       the_file.accessMaster.dsLabel = the_file.productionMaster.label
                     end
-                    the_file.thumbnail300.dsLabel = the_file.productionMaster.label
+                    if the_file.thumbnail300.mimeType.present?
+                      the_file.thumbnail300.dsLabel = the_file.productionMaster.label
+                    end
                   end
                 else
                   the_file.productionMaster.dsLabel = ark_file_info.local_original_identifier.gsub('.tif', '').gsub('.jpg', '').gsub('.mp3', '').gsub('.wav', '').gsub('.pdf', '').gsub('.txt', '')
                   if the_file.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_ImageFile")
                     the_file.accessMaster.dsLabel = the_file.productionMaster.label
                   end
-                  the_file.thumbnail300.dsLabel = the_file.productionMaster.label
+                  if the_file.thumbnail300.mimeType.present?
+                    the_file.thumbnail300.dsLabel = the_file.productionMaster.label
+                  end
                 end
 
               else
@@ -542,7 +549,9 @@ class Scripts
                 if the_file.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_ImageFile")
                   the_file.accessMaster.dsLabel = the_file.productionMaster.label
                 end
-                the_file.thumbnail300.dsLabel = the_file.productionMaster.label
+                if the_file.thumbnail300.mimeType.present?
+                  the_file.thumbnail300.dsLabel = the_file.productionMaster.label
+                end
               end
 
               if the_file.workflowMetadata.item_ark_info.blank?
