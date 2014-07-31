@@ -1,4 +1,7 @@
 class ArksController < ApplicationController
+
+  skip_before_filter :verify_authenticity_token
+
   # GET /arks
   # GET /arks.json
   def index
@@ -53,8 +56,7 @@ class ArksController < ApplicationController
       logger.debug "Found a matching ark! : " + @ark.to_s
     else
       pid = IdService.mint(params[:ark][:namespace_id])
-      ark_parameters = {}
-      ark_parameters[:ark] = {}
+      ark_parameters = ActionController::Parameters.new(ark: {})
       ark_parameters[:ark][:local_original_identifier] = params[:ark][:local_original_identifier]
       ark_parameters[:ark][:local_original_identifier_type] = params[:ark][:local_original_identifier_type]
       ark_parameters[:ark][:namespace_ark] = params[:ark][:namespace_ark]
