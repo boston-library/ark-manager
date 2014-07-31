@@ -40,7 +40,9 @@ class ArksController < ApplicationController
   # POST /arks
   # POST /arks.json
   def create
+    logger.debug "Params of :ark are: " + params[:ark].to_s
     if params[:ark][:parent_pid]
+      logger.debug "Found parent pid"
       @ark = Ark.where(:local_original_identifier=>params[:ark][:local_original_identifier], :local_original_identifier_type=>params[:ark][:local_original_identifier_type], :parent_pid=>params[:ark][:parent_pid])
     else
       @ark = Ark.where(:local_original_identifier=>params[:ark][:local_original_identifier], :local_original_identifier_type=>params[:ark][:local_original_identifier_type])
@@ -48,6 +50,7 @@ class ArksController < ApplicationController
 
     if @ark.length == 1 && params[:ark][:local_original_identifier] != nil && params[:ark][:local_original_identifier] != ""
       @ark = @ark[0]
+      logger.debug "Found a matching ark! : " + @ark.to_s
     else
       pid = IdService.mint(params[:ark][:namespace_id])
       ark_parameters = {}
@@ -65,6 +68,8 @@ class ArksController < ApplicationController
       ark_parameters[:ark][:parent_pid] = params[:ark][:parent_pid]
 
       @ark = Ark.new(ark_params(ark_parameters))
+
+      logger.debug "Made a new ark! : " + @ark.to_s
 =begin
       @ark = Ark.new(params[:ark])
       pid = IdService.mint(params[:ark][:namespace_id])
@@ -83,6 +88,7 @@ class ArksController < ApplicationController
         format.json { render json: @ark.to_json, status: :created }
       else
         #format.html { render action: "new" }
+        logger.debug "Errors! : " + @ark.errors
         format.json { render json: @ark.errors, status: :unprocessable_entity }
       end
     end
