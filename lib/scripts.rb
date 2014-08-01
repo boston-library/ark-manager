@@ -509,6 +509,15 @@ class Scripts
               new_logger.error "No ARKS found for file object " + the_file.pid
             else
               ark_file_info = ark_file_info.first
+
+              #NEW SECTION TO FIX BAD ARKS
+              if ark_file_info.local_original_identifier.match(/^\-\-\-/)
+                ark_file_info.local_original_identifier = ark_file_info.local_original_identifier.gsub(/\-\-\-\n\-/, '').gsub('\---', '').gsub('\--', '').gsub(/\n\-/, '').gsub(/\n/, '').strip
+                ark_file_info.save
+              end
+
+
+
               # )
               if(the_file.productionMaster.label == 'productionMaster datastream'|| the_file.productionMaster.label.include?('/') || the_file.productionMaster.label.include?(' File'))
                 if ark_file_info.local_original_identifier.include?('/') || ark_file_info.local_original_identifier.include?(' File')
@@ -554,7 +563,7 @@ class Scripts
                 end
               end
 
-              if the_file.workflowMetadata.item_ark_info.blank?
+              if the_file.workflowMetadata.item_ark_info.blank? || (the_file.workflowMetadata.item_ark_info(0).present? && the_file.workflowMetadata.item_ark_info(0).ark_id[0].match(/^\-\-\-/))
                 the_file.workflowMetadata.item_ark_info.ark_id = ark_file_info.local_original_identifier
                 the_file.workflowMetadata.item_ark_info.ark_type = ark_file_info.local_original_identifier_type
                 the_file.workflowMetadata.item_ark_info.ark_parent_pid = ark_file_info.parent_pid
@@ -568,6 +577,20 @@ class Scripts
                 end
 
               end
+
+              if the_file.label.match(/ File$/)
+                if ark_file_info.local_original_identifier.match(/\....$/) || ark_file_info.local_original_identifier.match(/\.....$/) || ark_file_info.local_original_identifier.match(/\...$/)
+                  the_file.label = ark_file_info.local_original_identifier.split('/').last
+                elsif the_file.workflowMetadata.source.ingest_filename.present?
+                  0.upto the_file.workflowMetadata.source.length-1 do |index|
+
+                    if the_file.workflowMetadata.source(index).ingest_datastream[0] == 'productionMaster'
+                      the_file.label = the_file.workflowMetadata.source(index).ingest_filename[0]
+                    end
+                  end
+                end
+              end
+
             end
 
             the_file.save
