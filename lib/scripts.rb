@@ -331,6 +331,66 @@ class Scripts
     end
   end
 
+  def self.deleteEntireInstitution(institution_pid, deleteCollection=false, deleteInstitution=false)
+    institution = Bplmodels::Institution.find(institution_pid)
+
+    institution.collections.each do |collection_object|
+      pid = collection_object.pid
+
+      object_id_array = []
+      Bplmodels::ObjectBase.find_in_batches('is_member_of_collection_ssim'=>"info:fedora/#{pid}") do |group|
+        group.each { |object_id|
+          #object_id_array << Bplmodels::ObjectBase.find(object_id['id']).adapt_to_cmodel
+          object_id_array << object_id['id']
+        }
+      end
+
+      puts "Collection Size Was: "
+      puts object_id_array.count
+
+      #If delete is done in the loop, acts wonky as stuff being removed while looping?
+      #Maybe set batch_size to some really large number other than an array?
+      object_id_array.each do |object_id|
+        object = Bplmodels::ObjectBase.find(object_id).adapt_to_cmodel
+
+        Bplmodels::File.find_in_batches('is_file_of_ssim'=>"info:fedora/#{object.pid}") do |group|
+          group.each { |solr_file|
+            file = Bplmodels::File.find(solr_file['id']).adapt_to_cmodel
+            file.delete
+
+            ark_object = Ark.where(:pid=>solr_file['id']).first
+            ark_object.destroy
+          }
+        end
+
+        object.reload
+        object.delete
+
+        ark_object = Ark.where(:pid=>object_id).first
+        ark_object.destroy
+      end
+
+
+      if deleteCollection
+        collection = Bplmodels::Collection.find(pid)
+        collection.delete
+        ark_object = Ark.where(:pid=>pid).first
+        ark_object.destroy
+      end
+
+
+    end
+
+    if deleteInstitution
+      institution = Bplmodels::Institution.find(institution_pid)
+      institution.delete
+      ark_object = Ark.where(:pid=>institution_pid).first
+      ark_object.destroy
+    end
+    #collection = Bplmodels::Collection.find(pid)
+    #collection.delete
+  end
+
   def self.removeFaulkner
     object_id_array = []
 
@@ -512,7 +572,7 @@ class Scripts
 
               #NEW SECTION TO FIX BAD ARKS
               if ark_file_info.local_original_identifier.match(/^\-\-\-/)
-                ark_file_info.local_original_identifier = ark_file_info.local_original_identifier.gsub(/\-\-\-\n\-/, '').gsub('\---', '').gsub('\--', '').gsub(/\n\-/, '').gsub(/\n/, '').strip
+                ark_file_info.local_original_identifier = ark_file_info.local_original_identifier.gsub(/\-\-\-\n\-/, '').gsub('---', '').gsub('--', '').gsub(/\n\-/, '').gsub(/\n/, '').strip
                 ark_file_info.save
               end
 
