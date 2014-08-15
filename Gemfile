@@ -57,3 +57,5 @@ gem 'rdf-rdfa', '1.1.3.1'
 gem "resque", '~> 1.23'
 
 gem 'resque-pool', '0.3.0'
+
+gem 'nest', '~> 1.1.1'
