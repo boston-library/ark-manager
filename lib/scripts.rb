@@ -1,5 +1,3 @@
-require "app/models/background_process"
-
 class Scripts
   
   def self.fixToNewFormatCollection
