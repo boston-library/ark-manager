@@ -1,6 +1,8 @@
 ArkHandler::Application.routes.draw do
   resources :arks
 
+  mount Resque::Server.new, :at => "/resque"
+
   match '/:ark/:namespace/:noid/thumbnail' => 'arks#thumbnail', :as => 'thumbnail', :constraints => {:ark => /ark:/}, via: [:get, :post]
   match '/:ark/:namespace/:noid' => 'arks#object_in_view', :as => 'object_in_view', :constraints => {:ark => /ark:/}, via: [:get, :post]
 
