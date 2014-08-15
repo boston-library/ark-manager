@@ -4,7 +4,7 @@ class BackgroundProcess
   def self.perform(*args)
     new_logger = Logger.new('log/scripts_log')
     new_logger.level = Logger::ERROR
-    
+
     args = args.first
 
     pid = args["object_pid"]
