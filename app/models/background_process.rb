@@ -2,7 +2,6 @@ class BackgroundProcess
   @queue = :ark_generic_background_process
 
   def self.perform(*args)
-    raise "I made it to perform?"
 
     new_logger = Logger.new('log/scripts_log')
     new_logger.level = Logger::ERROR
