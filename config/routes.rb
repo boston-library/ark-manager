@@ -1,3 +1,5 @@
+require 'resque/server'
+
 ArkHandler::Application.routes.draw do
   resources :arks
 
