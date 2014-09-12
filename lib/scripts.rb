@@ -431,7 +431,6 @@ class Scripts
 
   end
 
-
   #POSSIBLE KNOWN BUG: Multiple files in item origin
   def self.updateAllObject
     new_logger = Logger.new('log/scripts_log')
@@ -479,6 +478,28 @@ class Scripts
 
 
 
+
+  end
+
+  def self.fixMissingSolrObjects
+    pid_list = ['commonwealth:cz30ps65n', 'commonwealth:k3569822c', 'commonwealth:g732dh56k', 'commonwealth:gq67jz045', 'commonwealth:f4752n42x']
+    pid_list.each do |collection_pid|
+      main_objects = Ark.where(:parent_pid=>collection_pid)
+
+      main_objects.each do |main_object|
+        file_objects = Ark.where(:parent_pid=>main_object['id'])
+        file_objects.each do |file_object|
+          file = ActiveFedora::Base.find(file_object['id']).adapt_to_cmodel
+          file.save
+        end
+
+        object = ActiveFedora::Base.find(main_object['id']).adapt_to_cmodel
+        object.save
+      end
+
+      collection = ActiveFedora::Base.find(collection_pid).adapt_to_cmodel
+      collection.save
+    end
 
   end
 end
