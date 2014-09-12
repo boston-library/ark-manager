@@ -487,13 +487,13 @@ class Scripts
       main_objects = Ark.where(:parent_pid=>collection_pid)
 
       main_objects.each do |main_object|
-        file_objects = Ark.where(:parent_pid=>main_object['id'])
+        file_objects = Ark.where(:parent_pid=>main_object['pid'])
         file_objects.each do |file_object|
-          file = ActiveFedora::Base.find(file_object['id']).adapt_to_cmodel
+          file = ActiveFedora::Base.find(file_object['pid']).adapt_to_cmodel
           file.save
         end
 
-        object = ActiveFedora::Base.find(main_object['id']).adapt_to_cmodel
+        object = ActiveFedora::Base.find(main_object['pid']).adapt_to_cmodel
         object.save
       end
 
