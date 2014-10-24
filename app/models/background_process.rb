@@ -16,7 +16,8 @@ class BackgroundProcess
 
     if main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_ImageFile")
       if main_object.accessMaster.present? && (main_object.accessMaster.versions.size > 1 || main_object.accessMaster.mimeType == 'image/jpeg2000')
-        response = Typhoeus::Request.post(DERIVATIVE_CONFIG_GLOBAL['url'] + "/processor/byfile.json", :params => {:pid=>main_object.pid, :new=>false, :environment=>Bplmodels.environment})
+
+        response = Typhoeus::Request.get(DERIVATIVE_CONFIG_GLOBAL['url'] + "/processor/byfile.json", :params => {:pid=>main_object.pid, :new=>false, :environment=>Bplmodels.environment})
 
         as_json = JSON.parse(response.body)
         if as_json['result'] == "false"
@@ -29,7 +30,7 @@ class BackgroundProcess
     elsif main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_OAIObject")
       #Update NonSort
       if main_object.descMetadata.title_info.nonSort.present?
-        0.upto self.descMetadata.title_info.length-1 do |index|
+        0.upto main_object.descMetadata.title_info.length-1 do |index|
           if main_object.descMetadata.title_info(index).nonSort.present?
             main_object.descMetadata.title_info(index).nonSort = main_object.descMetadata.title_info(index).nonSort + ' '
           end
