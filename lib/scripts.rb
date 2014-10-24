@@ -437,28 +437,30 @@ class Scripts
     new_logger.level = Logger::ERROR
 
     object_id_array = []
+=begin
 
     Bplmodels::ObjectBase.find_in_batches('has_model_ssim'=>"info:fedora/afmodel:Bplmodels_ObjectBase") do |group|
       group.each { |solr_object|
         object_id_array << solr_object['id']
       }
     end
+=end
 
 
-=begin
+
     ActiveFedora::Base.find_in_batches("*:*") do |group|
       group.each { |solr_object|
         object_id_array << solr_object['id']
       }
     end
-=end
+
 
     new_logger.error "Object array was: " + object_id_array.length.to_s
 
-    if object_id_array.length < 120000 || object_id_array.length > 130000
-      puts 'Only a size of ' + object_id_array.length.to_s
-      raise 'Not enough objects (or too many) found ' + object_id_array.length.to_s
-    else
+    #if object_id_array.length < 120000 || object_id_array.length > 130000
+      #puts 'Only a size of ' + object_id_array.length.to_s
+      #raise 'Not enough objects (or too many) found ' + object_id_array.length.to_s
+    #else
       object_id_array.each do |pid|
         result = false
         loop_exit = 0
@@ -474,7 +476,7 @@ class Scripts
         end
       end
 
-    end
+    #end
 
 
 
