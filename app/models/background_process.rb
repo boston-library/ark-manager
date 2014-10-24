@@ -1,7 +1,65 @@
 class BackgroundProcess
   @queue = :ark_generic_background_process
 
+
   def self.perform(*args)
+    new_logger = Logger.new('log/scripts_log')
+    new_logger.level = Logger::ERROR
+
+    args = args.first
+
+    pid = args["object_pid"]
+
+    new_logger.error "Processing for PID: " + pid
+    puts "Processing for PID: " + pid
+    main_object = ActiveFedora::Base.find(pid).adapt_to_cmodel
+
+    if main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_ImageFile")
+      if main_object.accessMaster.present? && (main_object.accessMaster.versions.size > 1 || main_object.accessMaster.mimeType == 'image/jpeg2000')
+        response = Typhoeus::Request.post(DERIVATIVE_CONFIG_GLOBAL['url'] + "/processor/byfile.json", :params => {:pid=>main_object.pid, :new=>false, :environment=>Bplmodels.environment})
+
+        as_json = JSON.parse(response.body)
+        if as_json['result'] == "false"
+          raise "Count not generate derivative?"
+        end
+
+      end
+    elsif main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_File")
+      #Do Nothing for files
+    elsif main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_OAIObject")
+      #Update NonSort
+      if main_object.descMetadata.title_info.nonSort.present?
+        0.upto self.descMetadata.title_info.length-1 do |index|
+          if main_object.descMetadata.title_info(index).nonSort.present?
+            main_object.descMetadata.title_info(index).nonSort = main_object.descMetadata.title_info(index).nonSort + ' '
+          end
+        end
+        main_object.save
+      else
+        #Do Nothing but update index
+        main_object.to_solr
+      end
+
+    else
+      #Update NonSort
+      if main_object.descMetadata.title_info.nonSort.present?
+        0.upto self.descMetadata.title_info.length-1 do |index|
+          if main_object.descMetadata.title_info(index).nonSort.present?
+            main_object.descMetadata.title_info(index).nonSort = main_object.descMetadata.title_info(index).nonSort + ' '
+          end
+        end
+        main_object.save
+      else
+        main_object.to_solr
+      end
+
+
+
+    end
+
+  end
+
+  def self.perform_old(*args)
 
     new_logger = Logger.new('log/scripts_log')
     new_logger.level = Logger::ERROR

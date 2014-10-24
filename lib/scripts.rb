@@ -510,4 +510,17 @@ class Scripts
     end
 
   end
+
+  def self.deleteBadPids(object_pid)
+
+    ark_identifier = Ark.where(:pid=>pid).first
+    ark_identifier.destroy
+
+    object = ActiveFedora::Base.find(pid).adapt_to_cmodel
+    object.delete
+
+  end
+
+
+
 end
