@@ -23,7 +23,9 @@ class BackgroundProcess
         if as_json['result'] == "false"
           raise "Count not generate derivative?"
         end
-
+      elsif main_object.accessMaster.blank? || main_object.accessMaster.versions[0].blank?
+        response = Typhoeus::Request.get(DERIVATIVE_CONFIG_GLOBAL['url'] + "/processor/byfile.json", :params => {:pid=>main_object.pid, :new=>false, :environment=>Bplmodels.environment})
+        as_json = JSON.parse(response.body)
       end
     elsif main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_File")
       #Do Nothing for files
@@ -31,34 +33,50 @@ class BackgroundProcess
       #Update NonSort
       if main_object.descMetadata.title_info.nonSort.present?
         0.upto main_object.descMetadata.title_info.length-1 do |index|
-          if main_object.descMetadata.title_info(index).nonSort.present?
-            main_object.descMetadata.title_info(index).nonSort = main_object.descMetadata.title_info(index).nonSort + ' '
+          if main_object.descMetadata.title_info(index).nonSort.present? && main_object.descMetadata.title_info(index).nonSort.first[main_object.descMetadata.title_info(index).nonSort.first.length-1] != ' '
+            main_object.descMetadata.title_info(index).nonSort(0, main_object.descMetadata.title_info(index).nonSort[0] + ' ')
           end
         end
-        main_object.save
-      else
-        #Do Nothing but update index
-        main_object.to_solr
+
       end
 
+      if main_object.descMetadata.use_and_reproduction(0).displayLabel.blank?
+        main_object.descMetadata.use_and_reproduction(0).displayLabel(0, 'rights')
+      end
+
+      if main_object.descMetadata.use_and_reproduction(1).displayLabel.blank?
+        main_object.descMetadata.use_and_reproduction(1).displayLabel(0, 'license')
+      end
+
+
+
+      main_object.save
     else
       #Update NonSort
       if main_object.descMetadata.title_info.nonSort.present?
-        0.upto self.descMetadata.title_info.length-1 do |index|
-          if main_object.descMetadata.title_info(index).nonSort.present?
-            main_object.descMetadata.title_info(index).nonSort = main_object.descMetadata.title_info(index).nonSort + ' '
+        0.upto main_object.descMetadata.title_info.length-1 do |index|
+          if main_object.descMetadata.title_info(index).nonSort.present? && main_object.descMetadata.title_info(index).nonSort.first[main_object.descMetadata.title_info(index).nonSort.first.length-1] != ' '
+            main_object.descMetadata.title_info(index).nonSort(0, main_object.descMetadata.title_info(index).nonSort[0] + ' ')
           end
         end
-        main_object.save
-      else
-        main_object.to_solr
+
       end
 
+      if main_object.descMetadata.use_and_reproduction(0).displayLabel.blank?
+        main_object.descMetadata.use_and_reproduction(0).displayLabel(0, 'rights')
+      end
 
+      if main_object.descMetadata.use_and_reproduction(1).displayLabel.blank?
+        main_object.descMetadata.use_and_reproduction(1).displayLabel(0, 'license')
+      end
+
+      main_object.save
 
     end
 
   end
+
+
 
   def self.perform_old(*args)
 
