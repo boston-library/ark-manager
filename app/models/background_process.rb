@@ -15,7 +15,7 @@ class BackgroundProcess
     main_object = ActiveFedora::Base.find(pid).adapt_to_cmodel
 
     if main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_ImageFile")
-      if main_object.accessMaster.present? && (main_object.accessMaster.versions.size > 1 || main_object.accessMaster.mimeType == 'image/jpeg2000')
+      if main_object.accessMaster.blank? || (main_object.accessMaster.present? && (main_object.accessMaster.versions.size > 1 || main_object.accessMaster.mimeType == 'image/jpeg2000'))
 
         response = Typhoeus::Request.get(DERIVATIVE_CONFIG_GLOBAL['url'] + "/processor/byfile.json", :params => {:pid=>main_object.pid, :new=>false, :environment=>Bplmodels.environment})
 
@@ -31,13 +31,32 @@ class BackgroundProcess
       #Do Nothing for files
     elsif main_object.relationships(:has_model).include?("info:fedora/afmodel:Bplmodels_OAIObject")
       #Update NonSort
+=begin
       if main_object.descMetadata.title_info.nonSort.present?
         0.upto main_object.descMetadata.title_info.length-1 do |index|
-          if main_object.descMetadata.title_info(index).nonSort.present? && main_object.descMetadata.title_info(index).nonSort.first[main_object.descMetadata.title_info(index).nonSort.first.length-1] != ' '
-            main_object.descMetadata.title_info(index).nonSort(0, main_object.descMetadata.title_info(index).nonSort[0] + ' ')
+          if main_object.descMetadata.mods(0).title_info(index).nonSort.present? && main_object.descMetadata.mods(0).title_info(index).nonSort.first[main_object.descMetadata.mods(0).title_info(index).nonSort.first.length-1] != ' '
+            main_object.descMetadata.mods(0).title_info(index).nonSort(0, main_object.descMetadata.mods(0).title_info(index).nonSort[0] + ' ')
           end
         end
 
+      end
+=end
+
+      if main_object.descMetadata.title_info.nonSort.present?
+        if main_object.descMetadata.title_info.nonSort.first[main_object.descMetadata.title_info.nonSort.first.length-1] == ' '
+
+          0.upto main_object.descMetadata.versions[1].mods(0).title_info.length-1 do |index|
+            if main_object.descMetadata.versions[1].mods(0).title_info(index).nonSort.present? && main_object.descMetadata.versions[1].mods(0).title_info(index).nonSort.first[main_object.descMetadata.versions[1].mods(0).title_info(index).nonSort.first.length-1] != ' '
+              main_object.descMetadata.mods(0).title_info(index).nonSort(0, main_object.descMetadata.versions[1].mods(0).title_info(index).nonSort[0] + ' ')
+            end
+          end
+        else
+          0.upto main_object.descMetadata.mods(0).title_info.length-1 do |index|
+            if main_object.descMetadata.mods(0).title_info(index).nonSort.present? && main_object.descMetadata.mods(0).title_info(index).nonSort.first[main_object.descMetadata.mods(0).title_info(index).nonSort.first.length-1] != ' '
+              main_object.descMetadata.mods(0).title_info(index).nonSort(0, main_object.descMetadata.mods(0).title_info(index).nonSort[0] + ' ')
+            end
+          end
+        end
       end
 
       if main_object.descMetadata.use_and_reproduction(0).displayLabel.blank?
@@ -54,12 +73,20 @@ class BackgroundProcess
     else
       #Update NonSort
       if main_object.descMetadata.title_info.nonSort.present?
-        0.upto main_object.descMetadata.title_info.length-1 do |index|
-          if main_object.descMetadata.title_info(index).nonSort.present? && main_object.descMetadata.title_info(index).nonSort.first[main_object.descMetadata.title_info(index).nonSort.first.length-1] != ' '
-            main_object.descMetadata.title_info(index).nonSort(0, main_object.descMetadata.title_info(index).nonSort[0] + ' ')
+        if main_object.descMetadata.title_info.nonSort.first[main_object.descMetadata.title_info.nonSort.first.length-1] == ' '
+
+          0.upto main_object.descMetadata.versions[1].mods(0).title_info.length-1 do |index|
+            if main_object.descMetadata.versions[1].mods(0).title_info(index).nonSort.present? && main_object.descMetadata.versions[1].mods(0).title_info(index).nonSort.first[main_object.descMetadata.versions[1].mods(0).title_info(index).nonSort.first.length-1] != ' '
+              main_object.descMetadata.mods(0).title_info(index).nonSort(0, main_object.descMetadata.versions[1].mods(0).title_info(index).nonSort[0] + ' ')
+            end
+          end
+        else
+          0.upto main_object.descMetadata.mods(0).title_info.length-1 do |index|
+            if main_object.descMetadata.mods(0).title_info(index).nonSort.present? && main_object.descMetadata.mods(0).title_info(index).nonSort.first[main_object.descMetadata.mods(0).title_info(index).nonSort.first.length-1] != ' '
+              main_object.descMetadata.mods(0).title_info(index).nonSort(0, main_object.descMetadata.mods(0).title_info(index).nonSort[0] + ' ')
+            end
           end
         end
-
       end
 
       if main_object.descMetadata.use_and_reproduction(0).displayLabel.blank?
