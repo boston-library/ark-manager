@@ -121,7 +121,7 @@ class ArksController < ApplicationController
   end
 
   # TODO? move 'large_image' path into the data model
-  def full_image
+  def large_image
     @ark = Ark.where(:noid=>params[:noid])
     redirect_to @ark[0].url_base + '/large_image/' + @ark[0].namespace_id + ":" + @ark[0].noid
   end
