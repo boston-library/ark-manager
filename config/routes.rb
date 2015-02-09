@@ -13,6 +13,7 @@ ArkHandler::Application.routes.draw do
 
   match '/:ark/:namespace/:noid/full_image' => 'arks#full_image', :as => 'full_image', :constraints => {:ark => /ark:/}, via: [:get]
 
+  match '/:ark/:namespace/:noid/large_image' => 'arks#large_image', :as => 'large_image', :constraints => {:ark => /ark:/}, via: [:get]
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
