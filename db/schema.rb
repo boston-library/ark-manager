@@ -9,11 +9,11 @@
 # from scratch. The latter is a flawed and unsustainable approach (the more migrations
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
-# It's strongly recommended to check this file into your version control system.
+# It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130318173528) do
+ActiveRecord::Schema.define(version: 20140227173528) do
 
-  create_table "arks", :force => true do |t|
+  create_table "arks", force: true do |t|
     t.string   "namespace_ark"
     t.string   "url_base"
     t.string   "pid"
@@ -21,11 +21,13 @@ ActiveRecord::Schema.define(:version => 20130318173528) do
     t.string   "view_object"
     t.string   "noid"
     t.string   "namespace_id"
-    t.datetime "created_at",                     :null => false
-    t.datetime "updated_at",                     :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "model_type"
     t.string   "local_original_identifier"
     t.string   "local_original_identifier_type"
+    t.string   "parent_pid"
+    t.boolean  "deleted"
   end
 
 end

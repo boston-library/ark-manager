@@ -5,15 +5,15 @@ ArkHandler::Application.routes.draw do
 
   mount Resque::Server.new, :at => "/resque"
 
-  match '/:ark/:namespace/:noid/thumbnail' => 'arks#thumbnail', :as => 'thumbnail', :constraints => {:ark => /ark:/}, via: [:get, :post]
+  match '/:ark/:namespace/:noid/thumbnail' => 'preview#thumbnail', :as => 'thumbnail', :constraints => {:ark => /ark:/}, via: [:get, :post]
 
   match '/:ark/:namespace/:noid' => 'arks#object_in_view', :as => 'object_in_view', :constraints => {:ark => /ark:/}, via: [:get, :post]
 
   match '/delete_ark' => 'arks#delete_ark', :as => 'delete_ark', via: [:post]
 
-  match '/:ark/:namespace/:noid/full_image' => 'arks#full_image', :as => 'full_image', :constraints => {:ark => /ark:/}, via: [:get]
+  match '/:ark/:namespace/:noid/full_image' => 'preview#full_image', :as => 'full_image', :constraints => {:ark => /ark:/}, via: [:get]
 
-  match '/:ark/:namespace/:noid/large_image' => 'arks#large_image', :as => 'large_image', :constraints => {:ark => /ark:/}, via: [:get]
+  match '/:ark/:namespace/:noid/large_image' => 'preview#large_image', :as => 'large_image', :constraints => {:ark => /ark:/}, via: [:get]
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

@@ -102,28 +102,10 @@ class ArksController < ApplicationController
     @ark.save
   end
 
-
   def object_in_view
     @ark = Ark.where(:noid=>params[:noid])
     redirect_to @ark[0].url_base + @ark[0].view_object + @ark[0].namespace_id + ":" + @ark[0].noid
     #puts "in object in view with pid: "  + params[:pid]
-  end
-
-  def thumbnail
-    @ark = Ark.where(:noid=>params[:noid])
-    redirect_to @ark[0].url_base + @ark[0].view_thumbnail + @ark[0].namespace_id + ":" + @ark[0].noid
-  end
-
-  # TODO? move 'full_image' path into the data model
-  def full_image
-    @ark = Ark.where(:noid=>params[:noid])
-    redirect_to @ark[0].url_base + '/full_image/' + @ark[0].namespace_id + ":" + @ark[0].noid
-  end
-
-  # TODO? move 'large_image' path into the data model
-  def large_image
-    @ark = Ark.where(:noid=>params[:noid])
-    redirect_to @ark[0].url_base + '/large_image/' + @ark[0].namespace_id + ":" + @ark[0].noid
   end
 
   # PUT /arks/1

@@ -28,6 +28,12 @@ role_map_development.yml
 role_map_production.yml
 role_map_test.yml
 ark.yml
+bpl_config.yml
+derivatives.yml
+redis.yml
+resque-pool.yml
+iiif_server.yml
+
 
 # Files to ignore by default in Git #
 #####################################
