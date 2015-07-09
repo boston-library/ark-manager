@@ -31,7 +31,7 @@ class PreviewController < ApplicationController
       else
         solr_response = ActiveFedora::Base.find_with_conditions('id'=>"#{fedora_pid}").first
         if solr_response['exemplary_image_ssi']
-          filename = solr_response['id'].to_s + '_thumbnail'
+          filename = solr_response['id'].to_s + file_suffix
           if solr_response['flagged_content_ssi']
             send_icon(filename)
           else
