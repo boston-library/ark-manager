@@ -68,6 +68,7 @@ class ArksController < ApplicationController
       ark_parameters[:ark][:view_object] = "/search/"
       ark_parameters[:ark][:view_thumbnail] = "/preview/"
       ark_parameters[:ark][:parent_pid] = params[:ark][:parent_pid]
+      ark_parameters[:ark][:secondary_parent_pids] = params[:ark][:secondary_parent_pids]
 
       @ark = Ark.new(ark_params(ark_parameters))
 
