@@ -117,13 +117,13 @@ class ArksController < ApplicationController
   def iiif_canvas
     @ark = Ark.where(:noid=>params[:noid])
     @canvas_object = Ark.where(:noid=>params[:canvas_object_id])
-    redirect_to @ark[0].url_base + @ark[0].view_object + @ark[0].namespace_id + ":" + @ark[0].noid + "/canvas/" + @canvas_object[0].noid
+    redirect_to @ark[0].url_base + @ark[0].view_object + @ark[0].namespace_id + ":" + @ark[0].noid + "/canvas/" + @canvas_object[0].namespace_id + ":" + @canvas_object[0].noid
   end
 
   def iiif_annotation
     @ark = Ark.where(:noid=>params[:noid])
     @annotation_object = Ark.where(:noid=>params[:annotation_object_id])
-    redirect_to @ark[0].url_base + @ark[0].view_object + @ark[0].namespace_id + ":" + @ark[0].noid + "/annotation/" + @annotation_object[0].noid
+    redirect_to @ark[0].url_base + @ark[0].view_object + @ark[0].namespace_id + ":" + @ark[0].noid + "/annotation/" + @annotation_object[0].namespace_id + ":" + @annotation_object[0].noid
   end
 
   # PUT /arks/1
