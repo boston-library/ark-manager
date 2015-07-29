@@ -14,6 +14,15 @@ ArkHandler::Application.routes.draw do
   match '/:ark/:namespace/:noid/full_image' => 'preview#full_image', :as => 'full_image', :constraints => {:ark => /ark:/}, via: [:get]
 
   match '/:ark/:namespace/:noid/large_image' => 'preview#large_image', :as => 'large_image', :constraints => {:ark => /ark:/}, via: [:get]
+
+  match '/:ark/:namespace/:noid/manifest' => 'arks#iiif_manifest', :as => 'iiif_manifest', :constraints => {:ark => /ark:/}, via: [:get]
+
+  match '/:ark/:namespace/:noid/canvas/:canvas_object_id' => 'arks#iiif_canvas', :as => 'iiif_canvas', :constraints => {:ark => /ark:/}, via: [:get]
+
+  match '/:ark/:namespace/:noid/annotation/:annotation_object_id' => 'arks#iiif_annotation', :as => 'iiif_annotation', :constraints => {:ark => /ark:/}, via: [:get]
+
+
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
