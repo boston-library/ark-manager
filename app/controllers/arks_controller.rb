@@ -138,6 +138,6 @@ class ArksController < ApplicationController
   end
 
   def ark_params(hashed_params)
-    hashed_params.require(:ark).permit(:local_original_identifier, :local_original_identifier_type, :namespace_ark, :namespace_id, :url_base, :model_type, :pid, :noid, :view_object, :view_thumbnail, :parent_pid)
+    hashed_params.require(:ark).permit(:local_original_identifier, :local_original_identifier_type, :namespace_ark, :namespace_id, :url_base, :model_type, :pid, :noid, :view_object, :view_thumbnail, :parent_pid, :secondary_parent_pids)
   end
 end
