@@ -68,9 +68,12 @@ class ArksController < ApplicationController
       ark_parameters[:ark][:view_object] = "/search/"
       ark_parameters[:ark][:view_thumbnail] = "/preview/"
       ark_parameters[:ark][:parent_pid] = params[:ark][:parent_pid]
+      logger.debug "Secondary Parent PIDS : " + params[:ark][:secondary_parent_pids]
+      logger.debug "Values: " + params[:ark][:secondary_parent_pids].values
       ark_parameters[:ark][:secondary_parent_pids] = params[:ark][:secondary_parent_pids].values if params[:ark][:secondary_parent_pids].present?
 
       @ark = Ark.new(ark_params(ark_parameters))
+      logger.debug "As ARK: " + Ark.secondary_parent_pids
 
       logger.debug "Made a new ark! : " + @ark.to_s
 =begin
