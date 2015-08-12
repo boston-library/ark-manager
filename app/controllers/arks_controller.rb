@@ -51,7 +51,7 @@ class ArksController < ApplicationController
       @ark = Ark.where(:local_original_identifier=>params[:ark][:local_original_identifier], :local_original_identifier_type=>params[:ark][:local_original_identifier_type])
     end
 
-    if @ark.length == 1 && params[:ark][:local_original_identifier] != nil && params[:ark][:local_original_identifier] != ""
+    if @ark.length == 1 && params[:ark][:local_original_identifier].present?
       @ark = @ark[0]
       logger.debug "Found a matching ark! : " + @ark.to_s
     else
@@ -68,12 +68,12 @@ class ArksController < ApplicationController
       ark_parameters[:ark][:view_object] = "/search/"
       ark_parameters[:ark][:view_thumbnail] = "/preview/"
       ark_parameters[:ark][:parent_pid] = params[:ark][:parent_pid]
-      logger.debug "Secondary Parent PIDS : " + params[:ark][:secondary_parent_pids]
-      logger.debug "Values: " + params[:ark][:secondary_parent_pids].values
+      logger.error "Secondary Parent PIDS : " + params[:ark][:secondary_parent_pids]
+      logger.error "Values: " + params[:ark][:secondary_parent_pids].values
       ark_parameters[:ark][:secondary_parent_pids] = params[:ark][:secondary_parent_pids].values if params[:ark][:secondary_parent_pids].present?
 
       @ark = Ark.new(ark_params(ark_parameters))
-      logger.debug "As ARK: " + Ark.secondary_parent_pids
+      logger.error "As ARK: " + Ark.secondary_parent_pids
 
       logger.debug "Made a new ark! : " + @ark.to_s
 =begin
