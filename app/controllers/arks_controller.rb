@@ -128,6 +128,11 @@ class ArksController < ApplicationController
     redirect_to @ark[0].url_base + @ark[0].view_object + @ark[0].namespace_id + ":" + @ark[0].noid + "/annotation/" + @annotation_object[0].namespace_id + ":" + @annotation_object[0].noid
   end
 
+  def iiif_collection
+    @ark = Ark.where(:noid=>params[:noid])
+    redirect_to @ark[0].url_base + @ark[0].view_object + @ark[0].namespace_id + ":" + @ark[0].noid + "/iiif_collection"
+  end
+
   # PUT /arks/1
   # PUT /arks/1.json
   def update

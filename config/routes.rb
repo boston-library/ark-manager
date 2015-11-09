@@ -21,6 +21,8 @@ ArkHandler::Application.routes.draw do
 
   match '/:ark/:namespace/:noid/annotation/:annotation_object_id' => 'arks#iiif_annotation', :as => 'iiif_annotation', :constraints => {:ark => /ark:/}, via: [:get]
 
+  match '/:ark/:namespace/collection/:noid' => 'arks#iiif_collection', :as => 'iiif_collection', :constraints => {:ark => /ark:/}, via: [:get]
+
 
 
   # The priority is based upon order of creation:
