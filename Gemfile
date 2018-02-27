@@ -6,7 +6,7 @@ gem 'rails', '4.2.10'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'sqlite3'
-gem 'pg'
+gem 'pg', '~> 0.19.0'
 gem 'noid', '~> 0.5.5'
 
 
