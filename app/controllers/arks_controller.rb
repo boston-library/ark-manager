@@ -107,30 +107,41 @@ class ArksController < ApplicationController
 
   def object_in_view
     @ark = Ark.where(:noid=>params[:noid])
-    redirect_to @ark[0].url_base + @ark[0].view_object + @ark[0].namespace_id + ":" + @ark[0].noid
+    redirect_to redirect_base
     #puts "in object in view with pid: "  + params[:pid]
   end
 
   def iiif_manifest
     @ark = Ark.where(:noid=>params[:noid])
-    redirect_to @ark[0].url_base + @ark[0].view_object + @ark[0].namespace_id + ":" + @ark[0].noid + "/manifest"
+    redirect_to "#{redirect_base}/manifest"
   end
 
   def iiif_canvas
     @ark = Ark.where(:noid=>params[:noid])
     @canvas_object = Ark.where(:noid=>params[:canvas_object_id])
-    redirect_to @ark[0].url_base + @ark[0].view_object + @ark[0].namespace_id + ":" + @ark[0].noid + "/canvas/" + @canvas_object[0].namespace_id + ":" + @canvas_object[0].noid
+    redirect_to redirect_base + "/canvas/" + @canvas_object[0].namespace_id + ":" + @canvas_object[0].noid
   end
 
   def iiif_annotation
     @ark = Ark.where(:noid=>params[:noid])
     @annotation_object = Ark.where(:noid=>params[:annotation_object_id])
-    redirect_to @ark[0].url_base + @ark[0].view_object + @ark[0].namespace_id + ":" + @ark[0].noid + "/annotation/" + @annotation_object[0].namespace_id + ":" + @annotation_object[0].noid
+    redirect_to redirect_base + "/annotation/" + @annotation_object[0].namespace_id + ":" + @annotation_object[0].noid
   end
 
   def iiif_collection
     @ark = Ark.where(:noid=>params[:noid])
-    redirect_to @ark[0].url_base + @ark[0].view_object + @ark[0].namespace_id + ":" + @ark[0].noid + "/iiif_collection"
+    redirect_to redirect_base + "/iiif_collection"
+  end
+
+  def iiif_search
+    @ark = Ark.where(:noid=>params[:noid])
+    iiif_query_params = request.parameters.except(:controller, :action, :solr_document_id).to_query
+    redirect_path = if iiif_query_params.empty?
+                      redirect_base + "/iiif_search"
+                    else
+                      redirect_base + "/iiif_search?" + iiif_query_params
+                    end
+    redirect_to redirect_path
   end
 
   # PUT /arks/1
@@ -161,7 +172,14 @@ class ArksController < ApplicationController
     end
   end
 
+  private
+
   def ark_params(hashed_params)
     hashed_params.require(:ark).permit(:local_original_identifier, :local_original_identifier_type, :namespace_ark, :namespace_id, :url_base, :model_type, :pid, :noid, :view_object, :view_thumbnail, :parent_pid, :secondary_parent_pids)
   end
+
+  def redirect_base
+    @ark[0].url_base + @ark[0].view_object + @ark[0].namespace_id + ':' + @ark[0].noid
+  end
+
 end
