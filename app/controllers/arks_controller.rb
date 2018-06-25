@@ -135,7 +135,7 @@ class ArksController < ApplicationController
 
   def iiif_search
     @ark = Ark.where(:noid=>params[:noid])
-    iiif_query_params = request.parameters.except(:controller, :action, :solr_document_id).to_query
+    iiif_query_params = request.query_parameters.to_query
     redirect_path = if iiif_query_params.empty?
                       redirect_base + "/iiif_search"
                     else
