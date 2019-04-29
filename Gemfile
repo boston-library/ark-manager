@@ -1,11 +1,12 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.2.10'
+gem 'rails', '4.2.11.1'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'sqlite3'
+gem 'sqlite3', '~> 1.3.6', group: :development
+
 gem 'pg', '~> 0.18'
 gem 'noid', '~> 0.5.5'
 
@@ -39,13 +40,12 @@ gem "therubyracer", "~> 0.10.0"
 # To use debugger
 # gem 'debugger'
 
-gem 'hydra-head', '7.0.1'
-gem 'active-fedora', '7.0.4'
+gem 'hydra-head', '~> 8.0.0'
+gem 'active-fedora', '>= 8.0.1', '< 9'
 gem 'bplmodels', :git => 'https://github.com/boston-library/bplmodels.git'
 
 #gem 'bplmodels', :git => 'https://github.com/boston-library/bplmodels.git', :ref => '4cbd775e53'
 
-gem 'hydra-derivatives'
 gem 'typhoeus'
 
 
