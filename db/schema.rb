@@ -11,9 +11,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150727173528) do
+ActiveRecord::Schema.define(version: 20150727173530) do
 
-  create_table "arks", force: true do |t|
+  create_table "arks", force: :cascade do |t|
     t.string   "namespace_ark"
     t.string   "url_base"
     t.string   "pid"
@@ -28,7 +28,7 @@ ActiveRecord::Schema.define(version: 20150727173528) do
     t.string   "local_original_identifier_type"
     t.string   "parent_pid"
     t.boolean  "deleted"
-    t.string   "secondary_parent_pids",          default: "--- []\n"
+    t.string   "secondary_parent_pids",          default: "{}"
   end
 
 end

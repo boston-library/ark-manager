@@ -42,7 +42,9 @@ gem "therubyracer", "~> 0.10.0"
 gem 'hydra-head', '~> 8.0.0'
 gem 'active-fedora', '>= 8.0.1', '< 9'
 gem 'bplmodels', :git => 'https://github.com/boston-library/bplmodels.git'
+gem 'bpl-derivatives', '~> 0.2.1'
 # gem 'hydra-derivatives', git: 'https://github.com/boston-library/hydra-derivatives', branch: 'nli'
+
 
 gem 'typhoeus'
 
