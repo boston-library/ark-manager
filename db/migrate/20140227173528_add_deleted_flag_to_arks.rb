@@ -1,4 +1,4 @@
-class AddDeletedFlagToArks < ActiveRecord::Migration
+class AddDeletedFlagToArks < ActiveRecord::Migration[5.2]
   def change
     add_column :arks, :deleted, :boolean
   end

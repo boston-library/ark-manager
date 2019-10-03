@@ -1,61 +1,49 @@
 source 'https://rubygems.org'
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-gem 'rails', '4.2.11.1'
+ruby '2.5.5'
 
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
+# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+gem 'rails', '~> 5.2.3'
+# Use postgresql as the database for Active Record
+gem "hiredis", "~> 0.6.0"
+gem 'redis', '~> 4.0'
+gem 'pg', '>= 0.18', '< 2.0'
+# Use Puma as the app server
 
-gem 'sqlite3', '~> 1.3.6', group: :development
+gem 'noid', '~> 0.9.0'
+gem 'active_model_serializers', '~> 0.10.0'
+# Reduces boot times through caching; required in config/boot.rb
+gem 'bootsnap', '>= 1.1.0', require: false
+gem 'oj'
+gem 'oj_mimic_json'
+gem 'net-http-persistent'
+# Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
+gem 'rack-cors'
+gem 'net-http-persistent'
+gem 'faraday'
+gem 'faraday-http-cache'
+gem 'rsolr'
+gem 'addressable'
 
-gem 'pg', '~> 0.18'
-gem 'noid', '~> 0.5.5'
+group :development, :test do
+  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'awesome_print'
+  gem 'pry'
+  gem 'pry-rails'
+  gem 'pry-rescue'
+  gem 'pry-stack_explorer'
+  gem 'pry-byebug'
+  gem 'dotenv-rails'
+  gem 'puma', '~> 3.11'
+end
 
-
-# Use SCSS for stylesheets
-gem 'sass-rails'
-
-gem 'coffee-rails'
-
-# Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
-
-gem 'jquery-rails'
-
-# Other Dependencies
-gem "execjs"
-gem "therubyracer", "~> 0.10.0"
-
-# To use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.0.0'
-
-# To use Jbuilder templates for JSON
-# gem 'jbuilder'
-
-# Use unicorn as the app server
-# gem 'unicorn'
-
-# Deploy with Capistrano
-# gem 'capistrano'
-
-# To use debugger
-# gem 'debugger'
-
-gem 'hydra-head', '~> 8.0.0'
-gem 'active-fedora', '>= 8.0.1', '< 9'
-gem 'bplmodels', :git => 'https://github.com/boston-library/bplmodels.git'
-gem 'hydra-derivatives', git: 'https://github.com/boston-library/hydra-derivatives', branch: 'nli'
-#gem 'bplmodels', :git => 'https://github.com/boston-library/bplmodels.git', :ref => '4cbd775e53'
-
-gem 'typhoeus'
+group :development do
+  gem 'listen', '>= 3.0.5', '< 3.2'
+  gem 'rspec-rails', '~> 3.8.0'
+end
 
 
-gem 'equivalent-xml', '0.4.2'
-gem 'rdf-microdata', '1.1.1.1'
-gem 'xml-simple', '1.1.3'
-gem 'rdf-rdfa', '1.1.3.1'
-
-gem "resque", '~> 1.23'
-
-gem 'resque-pool', '0.3.0'
-
-gem 'nest', '~> 1.1.1'
+# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]

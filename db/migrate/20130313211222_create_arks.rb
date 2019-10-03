@@ -1,4 +1,4 @@
-class CreateArks < ActiveRecord::Migration
+class CreateArks < ActiveRecord::Migration[5.2]
   def change
     create_table :arks do |t|
       t.string :namespace_ark

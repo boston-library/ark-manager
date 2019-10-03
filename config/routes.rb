@@ -1,9 +1,9 @@
-require 'resque/server'
+# require 'resque/server'
 
-ArkHandler::Application.routes.draw do
-  resources :arks
+Rails.application.routes.draw do
+  resources :arks, only: [:show, :create, :destroy]
 
-  mount Resque::Server.new, :at => "/resque"
+  # mount Resque::Server.new, :at => "/resque"
 
   match '/:ark/:namespace/:noid/thumbnail' => 'preview#thumbnail', :as => 'thumbnail', :constraints => {:ark => /ark:/}, via: [:get, :post]
 

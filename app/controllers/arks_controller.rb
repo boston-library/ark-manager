@@ -1,101 +1,49 @@
 class ArksController < ApplicationController
-
-  skip_before_filter :verify_authenticity_token
-
-  # GET /arks
-  # GET /arks.json
-  def index
-    @arks = Ark.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @arks }
-    end
-  end
-
-  # GET /arks/1
-  # GET /arks/1.json
+  beofre_action :find_ark, only: [:show, :destroy, :update]
   def show
-    @ark = Ark.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @ark }
-    end
+    render json: @ark
   end
 
-  # GET /arks/new
-  # GET /arks/new.json
-  def new
-    @ark = Ark.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @ark }
-    end
-  end
-
-  # GET /arks/1/edit
-  def edit
-    @ark = Ark.find(params[:id])
-  end
-
-  # POST /arks
-  # POST /arks.json
   def create
-    logger.debug "Params of :ark are: " + params[:ark].to_s
+    Rails.logger.debug "Params of :ark are: #{params[:ark].inspect}"
     if params[:ark][:parent_pid]
-      logger.debug "Found parent pid"
-      @ark = Ark.where(:local_original_identifier=>params[:ark][:local_original_identifier], :local_original_identifier_type=>params[:ark][:local_original_identifier_type], :parent_pid=>params[:ark][:parent_pid])
+      Rails.logger.debug "Found parent pid"
+      @ark = Ark.unscoped.where(:local_original_identifier=>params[:ark][:local_original_identifier], :local_original_identifier_type=>params[:ark][:local_original_identifier_type], :parent_pid=>params[:ark][:parent_pid]).first
     else
-      @ark = Ark.where(:local_original_identifier=>params[:ark][:local_original_identifier], :local_original_identifier_type=>params[:ark][:local_original_identifier_type])
+      @ark = Ark.unscoped.where(:local_original_identifier=>params[:ark][:local_original_identifier], :local_original_identifier_type=>params[:ark][:local_original_identifier_type]).first
     end
 
-    if @ark.length == 1 && params[:ark][:local_original_identifier].present?
-      @ark = @ark[0]
-      logger.debug "Found a matching ark! : " + @ark.to_s
-    else
-      pid = IdService.mint(params[:ark][:namespace_id])
-      ark_parameters = ActionController::Parameters.new(ark: {})
-      ark_parameters[:ark][:local_original_identifier] = params[:ark][:local_original_identifier]
-      ark_parameters[:ark][:local_original_identifier_type] = params[:ark][:local_original_identifier_type]
-      ark_parameters[:ark][:namespace_ark] = params[:ark][:namespace_ark]
-      ark_parameters[:ark][:namespace_id] = params[:ark][:namespace_id]
-      ark_parameters[:ark][:url_base] = params[:ark][:url_base]
-      ark_parameters[:ark][:model_type] = params[:ark][:model_type]
-      ark_parameters[:ark][:pid] = pid
-      ark_parameters[:ark][:noid] = IdService.getid(pid)
-      ark_parameters[:ark][:view_object] = "/search/"
-      ark_parameters[:ark][:view_thumbnail] = "/preview/"
-      ark_parameters[:ark][:parent_pid] = params[:ark][:parent_pid]
-
-      @ark = Ark.new(ark_params(ark_parameters))
-
-      #Seperate as didn't work if assigned above...
-      @ark.secondary_parent_pids = params[:ark][:secondary_parent_pids].values if params[:ark][:secondary_parent_pids].present?
-
-      logger.debug "Made a new ark! : " + @ark.to_s
-=begin
-      @ark = Ark.new(params[:ark])
-      pid = IdService.mint(params[:ark][:namespace_id])
-      @ark.pid = pid
-      @ark.noid = IdService.getid(pid)
-      @ark.view_object = "/search/"
-      @ark.view_thumbnail = "/preview/"
-      @ark.parent_pid = params[:ark][:parent_pid]
-=end
-    end
-
-
-    respond_to do |format|
-      if @ark.save
-        #format.html { redirect_to @ark, notice: 'Ark was successfully created.' }
-        format.json { render json: @ark.to_json, status: :created }
-      else
-        #format.html { render action: "new" }
-        logger.debug "Errors! : " + @ark.errors
-        format.json { render json: @ark.errors, status: :unprocessable_entity }
+    if @ark.present?
+      Rails.logger.debug "Found a matching ark! : " + @ark.to_s
+      if @ark.deleted
+        @ark.deleted = false
       end
+    else
+      # ark_parameters = ActionController::Parameters.new(ark: {})
+      # ark_parameters[:ark][:local_original_identifier] = params[:ark][:local_original_identifier]
+      # ark_parameters[:ark][:local_original_identifier_type] = params[:ark][:local_original_identifier_type]
+      # ark_parameters[:ark][:namespace_ark] = params[:ark][:namespace_ark]
+      # ark_parameters[:ark][:namespace_id] = params[:ark][:namespace_id]
+      # ark_parameters[:ark][:url_base] = params[:ark][:url_base]
+      # ark_parameters[:ark][:model_type] = params[:ark][:model_type]
+      # ark_parameters[:ark][:pid] = pid
+      # ark_parameters[:ark][:noid] = IdService.getid(pid)
+      # ark_parameters[:ark][:view_object] = "/search/"
+      # ark_parameters[:ark][:view_thumbnail] = "/preview/"
+      # ark_parameters[:ark][:parent_pid] = params[:ark][:parent_pid]
+
+      @ark = Ark.new(ark_params)
+      #Seperate as didn't work if assigned above...
+      # @ark.secondary_parent_pids = params[:ark][:secondary_parent_pids].values if params[:ark][:secondary_parent_pids].present?
+
+      Rails.logger.debug "Made a new ark! : " + @ark.to_s
+    end
+
+    if @ark.save
+      render json: @ark, status: :created
+    else
+      Rails.logger.error "Errors! : " + @ark.errors
+      render json: {errors: @ark.errors}, status: :unprocessable_entity
     end
   end
 
@@ -163,23 +111,25 @@ class ArksController < ApplicationController
   # DELETE /arks/1
   # DELETE /arks/1.json
   def destroy
-    @ark = Ark.find(params[:id])
-    @ark.destroy
-
-    respond_to do |format|
-      format.html { redirect_to arks_url }
-      format.json { head :no_content }
+    @ark.delete = false
+    if @ark.save
+      head: :no_content
+    else
+      render json: {errors: @ark.errors}, status: :unprocessable_entity
     end
   end
 
   private
-
-  def ark_params(hashed_params)
-    hashed_params.require(:ark).permit(:local_original_identifier, :local_original_identifier_type, :namespace_ark, :namespace_id, :url_base, :model_type, :pid, :noid, :view_object, :view_thumbnail, :parent_pid, :secondary_parent_pids)
+  def find_ark
+    if params[:id]
+      @ark = Ark.find(params[:id])
+    elsif params[:noid]
+      @ark.find_by(noid: params[:noid])
+      raise ActiveRecord::RecordNotFound, "Unable to locate ark with identifier-#{params[:noid]}"
+    end
   end
 
-  def redirect_base
-    @ark[0].url_base + @ark[0].view_object + @ark[0].namespace_id + ':' + @ark[0].noid
+  def ark_params
+    params.require(:ark).permit(:local_original_identifier, :local_original_identifier_type, :namespace_ark, :namespace_id, :url_base, :model_type, :parent_pid, secondary_parent_pids: [])
   end
-
 end

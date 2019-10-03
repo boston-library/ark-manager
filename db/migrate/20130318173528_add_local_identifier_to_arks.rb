@@ -1,4 +1,4 @@
-class AddLocalIdentifierToArks < ActiveRecord::Migration
+class AddLocalIdentifierToArks < ActiveRecord::Migration[5.2]
   def change
     add_column :arks, :local_original_identifier, :string
     add_column :arks, :local_original_identifier_type, :string

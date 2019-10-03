@@ -57,7 +57,8 @@ ehthumbs.db
 .idea # Rubymine config files
 /.idea/*
 Gemfile.lock
-
+.env
+scratch.rb
 # Directories to ignore #
 #########################
 /public/data/*
