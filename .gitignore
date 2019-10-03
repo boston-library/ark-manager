@@ -21,6 +21,7 @@ pickle-email-*.html
 ################################
 hydra-ldap.yml
 database.yml
+database.yml.52
 fedora.yml
 solr.yml
 role_map_cucumber.yml
@@ -57,7 +58,8 @@ ehthumbs.db
 .idea # Rubymine config files
 /.idea/*
 Gemfile.lock
-
+.env
+scratch.rb
 # Directories to ignore #
 #########################
 /public/data/*
