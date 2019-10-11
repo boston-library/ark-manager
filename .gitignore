@@ -21,6 +21,7 @@ pickle-email-*.html
 ################################
 hydra-ldap.yml
 database.yml
+database.yml.52
 fedora.yml
 solr.yml
 role_map_cucumber.yml
@@ -73,3 +74,6 @@ scratch.rb
 #############################
 
 *~
+
+# Ignore master key for decrypting credentials and more.
+/config/master.key

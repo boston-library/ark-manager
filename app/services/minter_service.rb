@@ -5,19 +5,11 @@ class MinterService < ApplicationService
     @semaphore = Mutex.new
     @minter = Noid::Minter.new(:template => TEMPLATE)
   end
-  # #@@namespace = ScholarSphere::Application.config.id_namespace
-  #
-  # def valid?(noid)
-  #   # remove the fedora namespace since it's not part of the noid
-  #   noid = identifier.split(":").last
-  #   @minter.valid?(noid)
-  # end
-
 
 
   def call
     ActiveSupport::Dependencies.interlock.permit_concurrent_loads do
-      Thread.new{ mint }.join.value
+      Concurrent::Promises.future { mint }.value!
     end
   end
 
@@ -28,7 +20,7 @@ class MinterService < ApplicationService
       ActiveRecord::Base.connection_pool.with_connection do
         @semaphore.synchronize do
           while noid = next_id
-            return noid unless Ark.unscoped.exists?(noid: noid)
+            return noid unless Ark.exists?(noid: noid)
           end
         end
       end

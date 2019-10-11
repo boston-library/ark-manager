@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_12_132958) do
+ActiveRecord::Schema.define(version: 2019_10_09_154034) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,10 +28,12 @@ ActiveRecord::Schema.define(version: 2019_08_12_132958) do
     t.string "parent_pid"
     t.boolean "deleted", default: false
     t.string "secondary_parent_pids", default: [], array: true
+    t.string "pid", null: false
     t.index ["deleted"], name: "index_arks_on_deleted"
     t.index ["local_original_identifier", "local_original_identifier_type"], name: "index_arks_localid"
     t.index ["noid"], name: "index_arks_on_noid", unique: true
     t.index ["parent_pid"], name: "index_arks_on_parent_pid"
+    t.index ["pid"], name: "index_arks_on_pid", unique: true
     t.index ["secondary_parent_pids"], name: "index_arks_on_secondary_parent_pids", using: :gin
   end
 

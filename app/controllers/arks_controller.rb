@@ -6,11 +6,11 @@ class ArksController < ApplicationController
 
   def create
     Rails.logger.debug "Params of :ark are: #{params[:ark].inspect}"
-    if params[:ark][:parent_pid]
+    if ark_params[:parent_pid]
       Rails.logger.debug "Found parent pid"
-      @ark = Ark.unscoped.where(:local_original_identifier=>params[:ark][:local_original_identifier], :local_original_identifier_type=>params[:ark][:local_original_identifier_type], :parent_pid=>params[:ark][:parent_pid]).first
+      @ark = Ark.by_parent_pid(ark_params[:parent_pid]).by_local_original_identifier(ark_params[:local_original_identifier], ark_params[:local_original_identifier_type]).first
     else
-      @ark = Ark.unscoped.where(:local_original_identifier=>params[:ark][:local_original_identifier], :local_original_identifier_type=>params[:ark][:local_original_identifier_type]).first
+      @ark = Ark.by_local_original_identifier(ark_params[:local_original_identifier], ark_params[:local_original_identifier_type]).first
     end
 
     if @ark.present?
@@ -19,23 +19,7 @@ class ArksController < ApplicationController
         @ark.deleted = false
       end
     else
-      # ark_parameters = ActionController::Parameters.new(ark: {})
-      # ark_parameters[:ark][:local_original_identifier] = params[:ark][:local_original_identifier]
-      # ark_parameters[:ark][:local_original_identifier_type] = params[:ark][:local_original_identifier_type]
-      # ark_parameters[:ark][:namespace_ark] = params[:ark][:namespace_ark]
-      # ark_parameters[:ark][:namespace_id] = params[:ark][:namespace_id]
-      # ark_parameters[:ark][:url_base] = params[:ark][:url_base]
-      # ark_parameters[:ark][:model_type] = params[:ark][:model_type]
-      # ark_parameters[:ark][:pid] = pid
-      # ark_parameters[:ark][:noid] = IdService.getid(pid)
-      # ark_parameters[:ark][:view_object] = "/search/"
-      # ark_parameters[:ark][:view_thumbnail] = "/preview/"
-      # ark_parameters[:ark][:parent_pid] = params[:ark][:parent_pid]
-
       @ark = Ark.new(ark_params)
-      #Seperate as didn't work if assigned above...
-      # @ark.secondary_parent_pids = params[:ark][:secondary_parent_pids].values if params[:ark][:secondary_parent_pids].present?
-
       Rails.logger.debug "Made a new ark! : " + @ark.to_s
     end
 
@@ -48,15 +32,12 @@ class ArksController < ApplicationController
   end
 
   def delete_ark
-    @ark = Ark.where(:noid=>params[:ark][:pid])
     @ark.deleted = true
     @ark.save
   end
 
   def object_in_view
-    @ark = Ark.where(:noid=>params[:noid])
-    redirect_to redirect_base
-    #puts "in object in view with pid: "  + params[:pid]
+    redirect_to @ark.redirect_base_url
   end
 
   def iiif_manifest
@@ -111,7 +92,7 @@ class ArksController < ApplicationController
   # DELETE /arks/1
   # DELETE /arks/1.json
   def destroy
-    @ark.delete = false
+    @ark.deleted = true
     if @ark.save
       head: :no_content
     else
@@ -121,12 +102,7 @@ class ArksController < ApplicationController
 
   private
   def find_ark
-    if params[:id]
-      @ark = Ark.find(params[:id])
-    elsif params[:noid]
-      @ark.find_by(noid: params[:noid])
-      raise ActiveRecord::RecordNotFound, "Unable to locate ark with identifier-#{params[:noid]}"
-    end
+    @ark = Ark.find(params:[])
   end
 
   def ark_params
