@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_09_154034) do
+ActiveRecord::Schema.define(version: 2019_10_11_150021) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,6 +35,17 @@ ActiveRecord::Schema.define(version: 2019_10_09_154034) do
     t.index ["parent_pid"], name: "index_arks_on_parent_pid"
     t.index ["pid"], name: "index_arks_on_pid", unique: true
     t.index ["secondary_parent_pids"], name: "index_arks_on_secondary_parent_pids", using: :gin
+  end
+
+  create_table "minter_states", id: :serial, force: :cascade do |t|
+    t.string "namespace", default: "default", null: false
+    t.string "template", null: false
+    t.text "counters"
+    t.bigint "seq", default: 0
+    t.binary "rand"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["namespace"], name: "index_minter_states_on_namespace", unique: true
   end
 
 end

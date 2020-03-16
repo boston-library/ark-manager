@@ -1,10 +1,9 @@
 Rails.application.routes.draw do
-  resources :arks, only: [:show, :create, :destroy]
+  resources :arks, only: [:show, :create, :destroy], constraints: { format: 'json' }
 
+  match '/:ark/:namespace/:noid' => 'arks#object_in_view', :as => 'object_in_view', :constraints => {:ark => /ark:/}, via: [:get, :post]
 
-  match '/:ark/:id' => 'arks#object_in_view', :as => 'object_in_view', :constraints => {:ark => /ark:/}, via: [:get, :post]
-
-  match '/delete_ark' => 'arks#delete_ark', :as => 'delete_ark', via: [:post]
+  # match '/delete_ark' => 'arks#de', :as => 'delete_ark', via: [:post]
 
 
   #TODO Move these to curator or front end app/ commonwealth-vlr-engine

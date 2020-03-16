@@ -1,31 +1,30 @@
 # frozen_string_literal: true
 
-class ArkMinter < Noid::Rails::Minter::Base
-  attr_reader :minter_state
+class ArkMinter < Noid::Rails::Minter::Db
+  attr_reader :namespace
 
-  def initialize(template = default_template)
+  def initialize(template = default_template, namespace = default_namespace)
+    @namespace = namespace
     super(template)
-    @minter_state = Noid::Minter.new(template: template)
   end
 
+  def default_namespace
+    Noid::Rails.config.namespace
+  end
 
   def mint
     ActiveRecord::Base.connection_pool.with_connection do
-      Mutex.new.synchronize do
-        while noid = next_id do
-          break noid unless ark_exists?(noid)
-        end
-      end
+      super
     end
   end
 
   protected
-  def ark_exists?(noid)
-    ::Ark.select(:id, :noid).lock.exists?(noid: noid)
-  end
 
-  def next_id
-    minter_state.seed($$)
-    minter_state.mint
+  def instance
+    MinterState.lock.find_by!(
+      namespace: namespace,
+      template: Noid::Rails.config.template
+    )
+
   end
 end
