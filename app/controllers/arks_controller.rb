@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ArksController < ApplicationController
   beofre_action :find_ark, only: [:show, :destroy]
 
@@ -59,6 +61,9 @@ class ArksController < ApplicationController
   private
   def find_ark
     @ark = Ark.active.find(params[:id])
+  end
+
+  def check_for_existing_ark
   end
 
   def ark_params

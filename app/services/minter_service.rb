@@ -1,18 +1,13 @@
-class MinterService < ApplicationService
+# frozen_string_literal: true
 
-  def initialize(namespace: Noid::Rails.config.namespace)
-    @minter = Noid::Rails.config.minter_class.new(Noid::Rails.config.template, namespace)
+class MinterService < ApplicationService
+  attr_reader :minter_service
+
+  def initialize(namespace = Noid::Rails.config.namespace)
+    @minter_service = Noid::Rails.config.minter_class.new(Noid::Rails.config.template, namespace)
   end
 
   def call
-    begin
-      ActiveRecord::Base.connection_pool.with_connection do
-        
-      end
-    rescue => e
-      puts e.message
-    end
-
-    nil
+    @minter_service.mint
   end
 end

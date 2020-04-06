@@ -12,19 +12,44 @@ class ArkMinter < Noid::Rails::Minter::Db
     Noid::Rails.config.namespace
   end
 
-  def mint
-    ActiveRecord::Base.connection_pool.with_connection do
-      super
+  protected
+
+  def next_id
+    # Only want one db connection at a time
+    MinterState.connection_pool.with_connection do
+      locked_inst = instance
+      locked_inst.with_lock do
+        minter = Noid::Minter.new(deserialize(locked_inst))
+        id = minter.mint
+        serialize(locked_inst, minter)
+        break id
+      end
     end
   end
 
-  protected
+  def deserialize(inst)
+    filtered_hash = inst.as_json.slice('template', 'counters', 'seq', 'rand', 'namespace')
+    filtered_hash['counters'] = Oj.load(filtered_hash['counters'], symbol_keys: true) if filtered_hash['counters']
+    filtered_hash.symbolize_keys!
+  end
+
+  def serialize(inst, minter)
+    inst.update_attributes!(
+      seq: minter.seq,
+      counters: Oj.dump(minter.counters),
+      rand: Marshal.dump(minter.instance_variable_get(:@rand))
+     )
+  end
 
   def instance
-    MinterState.lock.find_by!(
+    MinterState.find_by!(
       namespace: namespace,
-      template: Noid::Rails.config.template
+      template: template
     )
-
+  rescue ActiveRecord::RecordNotFound
+    MinterState.seed!(
+      namespace: namespace,
+      template: template
+    )
   end
 end
