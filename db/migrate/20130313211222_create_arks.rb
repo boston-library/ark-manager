@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateArks < ActiveRecord::Migration[5.2]
   def change
     create_table :arks do |t|

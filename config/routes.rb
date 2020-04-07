@@ -1,12 +1,18 @@
 Rails.application.routes.draw do
   mount Rswag::Ui::Engine => '/api-docs'
   mount Rswag::Api::Engine => '/api-docs'
+
   resources :arks, only: [:show, :create, :destroy], constraints: { format: 'json' }
 
-  match '/:ark/:namespace/:noid' => 'arks#object_in_view', :as => 'object_in_view', :constraints => {:ark => /ark:/}, via: [:get, :post]
+  match '/:ark/:namespace/:noid' => 'arks#show',
+        as: 'object_in_view',
+        constraints: {:ark => /ark:/},
+        defaults: { object_in_view: true },
+        via: [:get, :post]
 
-  # match '/delete_ark' => 'arks#de', :as => 'delete_ark', via: [:post]
-
+  match '/delete_ark/:noid' => 'arks#destroy',
+        :as => 'delete_ark',
+        via: [:post, :delete]
 
   #TODO Move these to curator or front end app/ commonwealth-vlr-engine
   # match '/:ark/:namespace/:noid/thumbnail' => 'preview#thumbnail', :as => 'thumbnail', :constraints => {:ark => /ark:/}, via: [:get, :post]
@@ -24,5 +30,4 @@ Rails.application.routes.draw do
   # match '/:ark/:namespace/collection/:noid' => 'arks#iiif_collection', :as => 'iiif_collection', :constraints => {:ark => /ark:/}, via: [:get]
   #
   # match '/:ark/:namespace/:noid/iiif_search' => 'arks#iiif_search', :as => 'iiif_search', :constraints => {:ark => /ark:/}, via: [:get]
-
 end

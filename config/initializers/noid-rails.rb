@@ -8,3 +8,8 @@ Noid::Rails.configure do |config|
     Ark.select(:id, :noid).exists?(noid: noid)
   }
 end
+
+MinterState.class_eval do
+  serialize :counters, Oj
+  serialize :rand, Marshal
+end

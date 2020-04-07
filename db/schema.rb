@@ -29,10 +29,11 @@ ActiveRecord::Schema.define(version: 2019_10_11_150021) do
     t.boolean "deleted", default: false
     t.string "secondary_parent_pids", default: [], array: true
     t.string "pid", null: false
-    t.index ["deleted"], name: "index_arks_on_deleted"
+    t.index ["deleted"], name: "index_arks_on_deleted", where: "(deleted = false)"
     t.index ["local_original_identifier", "local_original_identifier_type"], name: "index_arks_localid"
+    t.index ["namespace_ark", "noid"], name: "index_arks_on_namespace_ark_and_noid"
     t.index ["noid"], name: "index_arks_on_noid", unique: true
-    t.index ["parent_pid"], name: "index_arks_on_parent_pid"
+    t.index ["parent_pid"], name: "index_arks_on_parent_pid", where: "(parent_pid IS NOT NULL)"
     t.index ["pid"], name: "index_arks_on_pid", unique: true
     t.index ["secondary_parent_pids"], name: "index_arks_on_secondary_parent_pids", using: :gin
   end
@@ -40,11 +41,12 @@ ActiveRecord::Schema.define(version: 2019_10_11_150021) do
   create_table "minter_states", id: :serial, force: :cascade do |t|
     t.string "namespace", default: "default", null: false
     t.string "template", null: false
-    t.text "counters"
+    t.json "counters", default: "{}"
     t.bigint "seq", default: 0
     t.binary "rand"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["namespace", "template"], name: "index_minter_states_on_namespace_and_template"
     t.index ["namespace"], name: "index_minter_states_on_namespace", unique: true
   end
 

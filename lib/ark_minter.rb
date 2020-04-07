@@ -29,15 +29,15 @@ class ArkMinter < Noid::Rails::Minter::Db
 
   def deserialize(inst)
     filtered_hash = inst.as_json.slice('template', 'counters', 'seq', 'rand', 'namespace')
-    filtered_hash['counters'] = Oj.load(filtered_hash['counters'], symbol_keys: true) if filtered_hash['counters']
+    filtered_hash['counters'] = filtered_hash['counters'].symbolize_keys if filtered_hash['counters']
     filtered_hash.symbolize_keys!
   end
 
   def serialize(inst, minter)
     inst.update_attributes!(
       seq: minter.seq,
-      counters: Oj.dump(minter.counters),
-      rand: Marshal.dump(minter.instance_variable_get(:@rand))
+      counters: minter.counters,
+      rand: minter.instance_variable_get(:@rand)
      )
   end
 

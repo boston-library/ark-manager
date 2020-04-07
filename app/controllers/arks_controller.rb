@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ArksController < ApplicationController
-  beofre_action :find_ark, only: [:show, :destroy]
+  before_action :find_ark, only: [:show, :destroy]
 
   def show
     render json: @ark
@@ -52,7 +52,7 @@ class ArksController < ApplicationController
   def destroy
     @ark.deleted = true
     if @ark.save
-      head: :no_content
+      head :no_content
     else
       render json: { errors: @ark.errors }, status: :unprocessable_entity
     end
