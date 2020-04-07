@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(version: 2019_10_11_150021) do
     t.boolean "deleted", default: false
     t.string "secondary_parent_pids", default: [], array: true
     t.string "pid", null: false
+    t.index ["created_at"], name: "index_arks_on_created_at", order: :desc
     t.index ["deleted"], name: "index_arks_on_deleted", where: "(deleted = false)"
     t.index ["local_original_identifier", "local_original_identifier_type"], name: "index_arks_localid"
     t.index ["namespace_ark", "noid"], name: "index_arks_on_namespace_ark_and_noid"
@@ -41,7 +42,7 @@ ActiveRecord::Schema.define(version: 2019_10_11_150021) do
   create_table "minter_states", id: :serial, force: :cascade do |t|
     t.string "namespace", default: "default", null: false
     t.string "template", null: false
-    t.json "counters", default: "{}"
+    t.json "counters"
     t.bigint "seq", default: 0
     t.binary "rand"
     t.datetime "created_at", null: false

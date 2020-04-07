@@ -4,7 +4,7 @@ class ArkMinter < Noid::Rails::Minter::Db
   attr_reader :namespace
 
   def initialize(template = default_template, namespace = default_namespace)
-    @namespace = namespace
+    @namespace = namespace || default_namespace
     super(template)
   end
 
@@ -20,6 +20,7 @@ class ArkMinter < Noid::Rails::Minter::Db
       locked_inst = instance
       locked_inst.with_lock do
         minter = Noid::Minter.new(deserialize(locked_inst))
+        minter.seed($$)
         id = minter.mint
         serialize(locked_inst, minter)
         break id
@@ -29,7 +30,7 @@ class ArkMinter < Noid::Rails::Minter::Db
 
   def deserialize(inst)
     filtered_hash = inst.as_json.slice('template', 'counters', 'seq', 'rand', 'namespace')
-    filtered_hash['counters'] = filtered_hash['counters'].symbolize_keys if filtered_hash['counters']
+    filtered_hash['counters'] = filtered_hash['counters'].map(&:symbolize_keys) if filtered_hash['counters']
     filtered_hash.symbolize_keys!
   end
 
@@ -37,19 +38,19 @@ class ArkMinter < Noid::Rails::Minter::Db
     inst.update_attributes!(
       seq: minter.seq,
       counters: minter.counters,
-      rand: minter.instance_variable_get(:@rand)
+      rand: Marshal.dump(minter.instance_variable_get(:@rand))
      )
   end
 
   def instance
     MinterState.find_by!(
       namespace: namespace,
-      template: template
+      template: template.to_s
     )
   rescue ActiveRecord::RecordNotFound
     MinterState.seed!(
       namespace: namespace,
-      template: template
+      template: template.to_s
     )
   end
 end

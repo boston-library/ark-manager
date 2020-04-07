@@ -23,5 +23,6 @@ class AddIndexesConstraintsAndDefaultsToArks < ActiveRecord::Migration[5.2]
     add_index :arks, [:namespace_ark, :noid], using: :btree
     add_index :arks, :deleted, where: 'deleted = false', using: :btree
     add_index :arks, :secondary_parent_pids, using: :gin
+    add_index :arks, :created_at, order: { created_at: :desc }
   end
 end

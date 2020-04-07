@@ -6,7 +6,7 @@ class CreateMinterStates < ActiveRecord::Migration[4.2]
     create_table :minter_states do |t|
       t.string :namespace, null: false, default: 'default'
       t.string :template, null: false
-      t.json :counters, default: '{}'
+      t.json :counters
       t.bigint :seq, default: 0
       t.binary :random
       t.timestamps null: false
