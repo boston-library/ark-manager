@@ -45,8 +45,8 @@ class ArksController < ApplicationController
   end
 
   def object_in_view
-    @ark = Ark.active.by_namespace_ark(params[:namespace]).find_by!(noid: params[:noid])
-    redirect_to @ark.redirect_base_url
+    @ark = Ark.object_in_view(params[:namespace], params[:noid]).first!
+    redirect_to @ark.redirect_url
   end
 
   def destroy

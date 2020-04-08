@@ -5,7 +5,7 @@ class Ark < ApplicationRecord
 
   default_scope { order(created_at: :desc) }
 
-  friendly_id :slug_candidates, sequence_separator: ':'
+  friendly_id :slug_candidates
 
   scope :active, -> { where(deleted: false) }
 
@@ -42,7 +42,7 @@ class Ark < ApplicationRecord
     ]
   end
 
-  def redirect_base_url
+  def redirect_url
     "#{url_base}/search/#{pid}"
   end
 

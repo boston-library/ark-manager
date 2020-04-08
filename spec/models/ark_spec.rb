@@ -129,6 +129,57 @@ RSpec.describe Ark, type: :model do
     it { is_expected.to validate_uniqueness_of(:noid).case_insensitive }
   end
 
+  describe 'Callbacks' do
+    let!(:ark_attributes_2) { ark_attributes.dup.update({ local_original_identifier: 'Foo-Bar-0002.tif' }) }
+    let!(:new_ark_instance) { described_class.new(ark_attributes_2) }
+
+    describe '#before_validation' do
+      subject { new_ark_instance }
+
+      it 'sets the #noid #before_validation' do
+        expect(subject.noid).to be_falsey
+        subject.valid?
+        expect(subject.noid).to be_truthy
+      end
+    end
+
+    describe '#friendly_id callbacks' do
+      subject do
+        new_ark_instance.save!
+        new_ark_instance.reload
+      end
+
+      let!(:expected_pid) { "#{subject.namespace_id}:#{subject.noid}" }
+
+      it 'sets the pid on when the new ark is saved' do
+        expect(subject).to be_valid
+        expect(subject.pid).to be_truthy.and eql(expected_pid)
+      end
+    end
+  end
+
   describe 'Methods' do
+    let!(:ark_attributes_3) { ark_attributes.dup.update({ local_original_identifier: 'Foo-Bar-0003.tif' }) }
+    let!(:ark_instance){ described_class.create!(ark_attributes_3) }
+
+    describe '#to_s' do
+      subject { ark_instance }
+
+      let!(:expected_output) { Oj.dump(ark_instance.as_json, indent: 2) }
+
+      it 'expects the :expected_output to macth the output of the method call' do
+        expect(subject.to_s).to match(expected_output)
+      end
+    end
+
+    describe '#redirect_url' do
+      subject { ark_instance }
+
+      let!(:expected_output) { "#{ark_instance.url_base}/search/#{ark_instance.pid}" }
+
+      it 'expects the :expected_output to macth the output of the method call' do
+        expect(subject.redirect_url).to eql(expected_output)
+      end
+    end
   end
 end
