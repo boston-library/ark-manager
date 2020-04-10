@@ -49,6 +49,6 @@ class Ark < ApplicationRecord
   private
 
   def set_noid
-    self.noid = MinterService.call(namespace_id) if noid.blank?
+    self.noid = MinterService.call(namespace_id) if namespace_id.present? && noid.blank?
   end
 end

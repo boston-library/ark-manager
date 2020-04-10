@@ -2,51 +2,40 @@
 
 class ArksController < ApplicationController
   before_action :find_ark, only: [:show, :destroy]
+  before_action :check_for_existing_ark, only: [:create]
 
   def show
-    render json: @ark
+    respond_to do |format|
+      format.html { redirect_to @ark.redirect_url }
+      format.json
+    end
   end
 
   def create
-    Rails.logger.debug "=== Params of :ark are: #{params[:ark].inspect} ==="
-
-    if ark_params[:parent_pid]
-      Rails.logger.debug "===Found parent pid-#{params[:parent_id]}==="
-
-      @ark = Ark.by_parent_pid(ark_params[:parent_pid]).by_local_identifier(ark_params[:local_original_identifier], ark_params[:local_original_identifier_type]).first
-    else
-      @ark = Ark.by_local_identifier(ark_params[:local_original_identifier], ark_params[:local_original_identifier_type]).first
-    end
-
+    status = :created
     if @ark.present?
-
-      Rails.logger.debug "Found a matching ark! : \n"
+      Rails.logger.info 'Found a matching ark!'
       Rails.logger.debug @ark.to_s
-
       if @ark.deleted?
-
-        Rails.logger.debug "Found a matching ark! : \n"
-        Rails.logger.debug @ark.to_s
-
+        Rails.logger.info 'Ark was deleted...Restoring...'
+        status = :accepted
         @ark.deleted = false
+      else
+        render action: :show and return
       end
     else
       @ark = Ark.new(ark_params)
-      Rails.logger.debug "Made a new ark! : \n"
+      Rails.logger.info 'Initialized new Ark!'
       Rails.logger.debug @ark.to_s
     end
-
     if @ark.save
-      render json: @ark, status: :created
+       render status: status
     else
-      Rails.logger.error "Errors! : " + @ark.errors.full_messages.join("\n")
-      render json: { errors: @ark.errors }, status: :unprocessable_entity
+      Rails.logger.error 'Ark failed to create!'
+      Rails.logger.error @ark.errors.full_messages.join("\n")
+      @errors = build_ark_errors(@ark.errors)
+      render status: :unprocessable_entity
     end
-  end
-
-  def object_in_view
-    @ark = Ark.object_in_view(params[:namespace], params[:noid]).first!
-    redirect_to @ark.redirect_url
   end
 
   def destroy
@@ -58,15 +47,51 @@ class ArksController < ApplicationController
     end
   end
 
+
   private
   def find_ark
-    @ark = Ark.active.find(params[:id])
+    if params[:object_in_view]
+      @ark = Ark.object_in_view(params[:namespace], params[:noid]).first!
+    else
+      @ark = Ark.active.find(params[:id])
+    end
   end
 
   def check_for_existing_ark
+    Rails.logger.info 'Checking for existing Ark...'
+    Rails.logger.debug "==== :ark_params are #{ark_params.inspect} ===="
+    if ark_params[:parent_id]
+      @ark = Ark.with_parent_and_local_id(ark_params[:parent_pid], ark_params[:local_original_identifier], ark_params[:local_original_identifier_type]).first
+    else
+      @ark = Ark.with_local_id(ark_params[:local_original_identifier], ark_params[:local_original_identifier_type]).first
+    end
   end
 
   def ark_params
-    params.require(:ark).permit(:local_original_identifier, :local_original_identifier_type, :namespace_ark, :namespace_id, :url_base, :model_type, :parent_pid, secondary_parent_pids: [])
+    params.require(:ark).permit(:local_original_identifier,
+                                :local_original_identifier_type,
+                                :namespace_ark,
+                                :namespace_id,
+                                :url_base,
+                                :model_type,
+                                :parent_pid,
+                                secondary_parent_pids: [])
+  end
+
+  def build_ark_errors(ark_errors = {})
+    if ark_errors.any?
+      ark_errors.reduce([]) do |r, (att, msg)|
+        r << {
+                title: 'Unprocessable Entity',
+                status: 422,
+                detail: msg,
+                source: {
+                          pointer: "/data/attributes/#{att}"
+                        }
+                      }
+      end
+    else
+      []
+    end
   end
 end
