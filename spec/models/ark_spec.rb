@@ -3,17 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe Ark, type: :model do
-  let!(:ark_attributes) do
-    {
-      namespace_ark: '50959',
-      namespace_id: 'bpl-dev',
-      local_original_identifier: 'Foo-bar-0001.tif',
-      local_original_identifier_type: 'filename',
-      model_type: 'Bplmodels::PhotographicPrint',
-      url_base: 'https://search-hydradev.bpl.org'
-    }
-  end
-
   describe 'Database' do
     describe 'Columns' do
       it { is_expected.to have_db_column(:namespace_ark).of_type(:string).with_options(null: false) }
@@ -112,11 +101,16 @@ RSpec.describe Ark, type: :model do
     end
 
     describe '#object_in_view' do
+      subject { described_class.object_in_view(namespace_ark, noid).to_sql }
+
+      let!(:expected_sql) { described_class.active.merge(described_class.where(namespace_ark: namespace_ark, noid: noid)).to_sql }
+
+      it { is_expected.to eq(expected_sql) }
     end
   end
 
   describe 'Validations' do
-    subject { described_class.create(ark_attributes) }
+    subject { create(:ark) }
 
     it { is_expected.to validate_presence_of(:namespace_ark) }
     it { is_expected.to validate_presence_of(:namespace_id) }
@@ -130,8 +124,7 @@ RSpec.describe Ark, type: :model do
   end
 
   describe 'Callbacks' do
-    let!(:ark_attributes_2) { ark_attributes.dup.update({ local_original_identifier: 'Foo-Bar-0002.tif' }) }
-    let!(:new_ark_instance) { described_class.new(ark_attributes_2) }
+    let!(:new_ark_instance) { build(:ark) }
 
     describe '#before_validation' do
       subject { new_ark_instance }
@@ -159,8 +152,7 @@ RSpec.describe Ark, type: :model do
   end
 
   describe 'Methods' do
-    let!(:ark_attributes_3) { ark_attributes.dup.update({ local_original_identifier: 'Foo-Bar-0003.tif' }) }
-    let!(:ark_instance){ described_class.create!(ark_attributes_3) }
+    let!(:ark_instance) { create(:ark) }
 
     describe '#to_s' do
       subject { ark_instance }

@@ -4,6 +4,5 @@ Oj.optimize_rails
 Oj.default_options =
 {
   mode: :rails,
-  time_format: :ruby,
-  omit_nil: true
+  time_format: :ruby
 }

@@ -20,6 +20,7 @@ end
 
 require 'rspec/rails'
 require 'database_cleaner/active_record'
+require 'factory_bot_rails'
 
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|
@@ -27,6 +28,8 @@ Shoulda::Matchers.configure do |config|
     with.library :rails
   end
 end
+
+Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
 begin
   ActiveRecord::Migration.maintain_test_schema!
@@ -36,8 +39,9 @@ rescue ActiveRecord::PendingMigrationError => e
 end
 
 RSpec.configure do |config|
+  config.include FactoryBot::Syntax::Methods
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  # config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
@@ -47,6 +51,9 @@ RSpec.configure do |config|
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner.cleaning do
+      FactoryBot.lint
+    end
   end
 
   config.around(:each) do |spec|

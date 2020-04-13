@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class ApplicationService
-  def self.call(*args)
-    new(*args).call
+  def self.inherited(base)
+    base.prepend ServiceClass
+    base.include ActiveModel::Validations
   end
 end

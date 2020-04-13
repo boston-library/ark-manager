@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Ark < ApplicationRecord
+  # LOCAL_ID_TYPES=[].freeze
+
   extend FriendlyId
 
   default_scope { order(created_at: :desc) }
@@ -49,6 +51,13 @@ class Ark < ApplicationRecord
   private
 
   def set_noid
-    self.noid = MinterService.call(namespace_id) if namespace_id.present? && noid.blank?
+    if namespace_id.present? && noid.blank?
+      minter_service = MinterService.call(namespace_id)
+      self.noid = minter_service.result if minter_service.successful?
+      if minter_service.failure?
+        Rails.logger.error 'Failed to mint noid for ark!'
+        Rails.logger.error "Reasons Given #{minter_service.errors.full_messages.join('\n')}"
+      end
+    end
   end
 end

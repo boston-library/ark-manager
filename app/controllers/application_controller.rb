@@ -1,15 +1,28 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::API
+  APP_INFO = {
+    app_name: 'ark-manager',
+    author: 'Ben Barber',
+    organization: 'Boston Public Library',
+    version: '2',
+  }.freeze
+
   include ActionController::ImplicitRender
   include ActionView::Layouts
-  include ActionController::MimeResponds
   include ActionController::Caching
 
-  rescue_from ActiveRecord::RecordNotFound, ActionController::RoutingError, with: :not_found
+  rescue_from ActiveRecord::RecordNotFound, with: :not_found
+  rescue_from ActionController::RoutingError, with: :not_found
   rescue_from ActionController::UnpermittedParameters, with: :bad_request
-  rescue_from StandardError, with: :internal_server_error
 
+  def app_info
+    render json: Oj.dump(APP_INFO), status: :ok
+  end
+
+  def route_not_found
+    raise ActionController::RoutingError, 'No Route Matches This Url'
+  end
 
   def not_found(e)
     status = :not_found
@@ -29,8 +42,10 @@ class ApplicationController < ActionController::API
     render json: Oj.dump(response_hash), status: status
   end
 
-
   private
+  def authenticate!
+  end
+
   def build_error_response(title, message, status, pointer)
     {
       errors: [{

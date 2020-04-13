@@ -27,6 +27,8 @@ gem 'jbuilder', '~> 2.10'
 group :development, :test do
   gem 'awesome_print', '~> 1.8'
   gem 'dotenv-rails', '~> 2.7'
+  gem 'factory_bot_rails', '~> 5.0'
+  gem 'faker', '~> 2.6.0'
   gem 'pry', '~> 0.12'
   gem 'pry-byebug', '~> 3.8'
   gem 'pry-rails', '~> 0.3.9'
