@@ -9,6 +9,7 @@ module ResponseHelper
 end
 
 RSpec.configure do |config|
-  config.include ResponseHelper, type: :controller
-  config.include ResponseHelper, type: :request
+  %i(controller request).each do |type|
+    config.include ResponseHelper, type: type
+  end
 end

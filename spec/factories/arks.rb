@@ -17,11 +17,11 @@ FactoryBot.define do
       local_original_identifier { Faker::Artist.name }
       local_original_identifier_type { 'Institution Collection Name' }
       model_type { 'Bplmodels::Collection' }
-      parent_id { nil }
+      parent_pid { nil }
     end
 
     trait :object_ark do
-      local_original_identifier { Faker::File.filename(ext: 'tif') }
+      local_original_identifier { Faker::File.file_name(dir: '', ext: 'tif') }
       local_original_identifier_type { 'filename' }
       model_type { 'Bplmodels::PhotographicPrint' }
       parent_pid { nil }

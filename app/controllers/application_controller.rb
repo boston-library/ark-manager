@@ -12,9 +12,7 @@ class ApplicationController < ActionController::API
   include ActionView::Layouts
   include ActionController::Caching
 
-  rescue_from ActiveRecord::RecordNotFound, with: :not_found
-  rescue_from ActionController::RoutingError, with: :not_found
-  rescue_from ActionController::UnpermittedParameters, with: :bad_request
+  rescue_from StandardError, with: :handle_error
 
   def app_info
     render json: Oj.dump(APP_INFO), status: :ok
@@ -24,27 +22,27 @@ class ApplicationController < ActionController::API
     raise ActionController::RoutingError, 'No Route Matches This Url'
   end
 
-  def not_found(e)
-    status = :not_found
-    response_hash = build_error_response('Not Found', e&.message, status, request.env['PATH_INFO'])
-    render json: Oj.dump(response_hash), status: status
+  protected
+
+  def handle_error(e)
+    status = case e&.class&.name
+    when 'ActiveRecord::RecordNotFound', 'ActionController::RoutingError'
+      :not_found
+    else
+      :bad_request
+    end
+
+    head status and return if !request.format.json?
+
+    response_body = build_error_response(status.to_s.humanize, e&.message, status, request.env['PATH_INFO'])
+    render json: Oj.dump(response_body), status: status
   end
 
-  def bad_request(e)
-    status = :bad_request
-    response_hash = build_error_response('Bad Request', e&.message, status, request.env['PATH_INFO'])
-    render json: Oj.dump(response_hash), status: status
-  end
-
-  def internal_server_error(e)
-    status = :internal_server_error
-    response_hash = build_error_response('Internal Server Error', e&.message, status, request.env['PATH_INFO'])
-    render json: Oj.dump(response_hash), status: status
+  def authenticate!
+    # TODO
   end
 
   private
-  def authenticate!
-  end
 
   def build_error_response(title, message, status, pointer)
     {

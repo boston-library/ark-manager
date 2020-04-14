@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   scope 'api', defaults: { format: :json } do
     scope ':version', constraints: VersionConstraint do
-      constraints(->(request) { request.format.symbol == :json }) do
+      constraints(->(req) { req.format.symbol == :json }) do
         mount Rswag::Api::Engine => '/docs'
         resources :arks, only: [:show, :destroy], constraints: IdOrPidConstraint.new
         resources :arks, only: [:create]
@@ -13,16 +13,14 @@ Rails.application.routes.draw do
     match '*path' => 'application#route_not_found', via: [:all]
   end
 
-  defaults(format: :http) do
+  scope constraints: lambda { |req| req.format.symbol != :json } do
     mount Rswag::Ui::Engine => '/docs'
-    scope constraints: { format: /(js|http|xml)/ } do
-      match '/:ark/:namespace/:noid' => 'arks#show',
-            as: 'object_in_view',
-            constraints: { ark: /ark:/ },
-            defaults: { object_in_view: true },
-            via: [:get, :post]
-      match '*path' => 'application#route_not_found', via: [:all]
-    end
+    match '/:ark/:namespace/:noid' => 'arks#show',
+          as: 'object_in_view',
+          constraints: { ark: /ark:/ },
+          defaults: { object_in_view: true },
+          via: [:get, :post]
+    match '*path' => 'application#route_not_found', via: [:all]
   end
 
   #TODO Move these to curator or front end app/ commonwealth-vlr-engine

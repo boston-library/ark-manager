@@ -13,7 +13,7 @@ class ArksController < ApplicationController
     if @ark
       Rails.logger.info 'Found a matching ark!'
       Rails.logger.debug @ark.to_s
-      render action: :show and return unless @ark.deleted?
+      render action: :show, status: :ok and return unless @ark.deleted?
 
       Rails.logger.info "Ark #{@ark.noid} was deleted...Restoring..."
       status = :accepted
