@@ -168,24 +168,142 @@ RSpec.describe ArksController, type: :controller do
         expect(json_response).not_to be_empty
       end
 
-      it 'expects the json_response to match the attributes in the :object_ark' do
+      it 'expects the json_response to match the attributes in the :expected_response' do
         post :create, params: params
         expect(json_response).to have_key('ark')
         expect(json_response).to match(expected_response)
       end
     end
     context 'restoring ark' do
+      let!(:params) { default_valid_json_params.dup.merge({ark: deleted_object_ark.attributes.slice(*input_fields) }) }
+
+      specify 'correct template rendered' do
+        post :create, params: params
+        expect(response).to render_template(:create)
+      end
+
+      specify 'increments the active count' do
+        expect {
+          post :create, params: params
+        }.to change(Ark.active, :count).by(1)
+      end
+
+      it 'returns a 200(ok) json_response' do
+        post :create, params: params
+        expect(response).to have_http_status(:accepted)
+        expect(response.content_type).to eq('application/json')
+        expect(json_response).not_to be_empty
+      end
+
+      it 'expects the json_response to match the attributes in the :expected_response' do
+        post :create, params: params
+        expect(json_response).to have_key('ark')
+        expect(json_response).to match(ark_as_json(deleted_object_ark.reload))
+      end
 
     end
     context 'invalid ark' do
+      let!(:invalid_params) do
+        ark_params = valid_ark_attributes.dup
+        input_fields.each do |field|
+          ark_params.update(field.to_sym => nil)
+        end
+        ark_params
+      end
+
+      let!(:params) { default_valid_json_params.dup.merge(ark: invalid_params) }
+      let!(:expected_response) { all_ark_errors }
+
+      specify 'correct template rendered' do
+        post :create, params: params
+        expect(response).to render_template(:create)
+      end
+
+      specify 'does not create new ark' do
+        expect {
+          post :create, params: params
+        }.to change(Ark, :count).by(0)
+      end
+
+      it 'returns a 422(unprocessible_entity) json_response' do
+        post :create, params: params
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.content_type).to eq('application/json')
+        expect(json_response).not_to be_empty
+      end
+
+      it 'expects the json_response to match the attributes in the :expected_response' do
+        post :create, params: params
+        expect(json_response).to have_key('errors')
+        expect(json_response).to match(expected_response)
+      end
     end
   end
 
   describe '#destroy' do
+    let(:deleted_ark) { create(:ark, deleted: true) }
+    let(:ark) { create(:ark) }
+    let(:valid_params) { default_valid_json_params.dup.merge(id: ark.id) }
+    let(:valid_pid_params) { default_valid_json_params.dup.merge(id: ark.pid) }
+    let(:invalid_params) { default_valid_json_params.dup.merge(id: deleted_ark.id) }
+
     context 'successful' do
+      context 'by #id' do
+        specify 'existing ark should be deleted' do
+          delete :destroy, params: valid_params
+          expect(ark.reload.deleted).to be_truthy
+          expect { Ark.active.find(ark.id) }.to raise_error(ActiveRecord::RecordNotFound)
+        end
+
+        it 'returns a 204(no_content) response with an empty body' do
+          delete :destroy, params: valid_params
+          expect(response).to have_http_status(:no_content)
+          expect(response.body).to be_empty
+        end
+      end
+
+      context 'by #pid' do
+        specify 'ark should be deleted' do
+          delete :destroy, params: valid_pid_params
+          expect(ark.reload.deleted).to be_truthy
+          expect { Ark.active.find(ark.pid) }.to raise_error(ActiveRecord::RecordNotFound)
+        end
+
+        it 'returns a 204(no_content) response with an empty body' do
+          delete :destroy, params: valid_pid_params
+          expect(response).to have_http_status(:no_content)
+          expect(response.body).to be_empty
+        end
+      end
     end
 
     context 'unsuccessful' do
+      let(:expected_response) do
+        {
+          errors: [{
+            title: 'Not found',
+            status: Rack::Utils.status_code(:not_found),
+            message: "Couldn't find Ark with 'id'=#{invalid_params[:id]} [WHERE \"arks\".\"deleted\" = $1]",
+            detail: {
+              pointer: "/api/v2/arks/#{invalid_params[:id]}"
+            }
+          }]
+        }.as_json
+      end
+
+      it 'returns a 404(not_found) json_response' do
+        # If the ark is already deleted it should return a 404
+        delete :destroy, params: invalid_params
+        expect(response).to have_http_status(:not_found)
+        expect(response.content_type).to eq('application/json')
+        expect(json_response).not_to be_empty
+      end
+
+      it 'expects the json_response to match the :expected_response' do
+        delete :destroy, params: invalid_params
+        expect(json_response).to have_key('errors')
+        expect(json_response).to match(expected_response)
+      end
     end
   end
 end
