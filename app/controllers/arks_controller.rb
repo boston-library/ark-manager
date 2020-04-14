@@ -46,6 +46,7 @@ class ArksController < ApplicationController
   end
 
   private
+
   def find_ark
     if params[:object_in_view]
       @ark = Ark.select(:created_at, :namespace_ark, :noid, :pid, :url_base, :deleted).object_in_view(params[:namespace], params[:noid]).first!
@@ -85,7 +86,7 @@ class ArksController < ApplicationController
       title: 'Unprocessable Entity',
       status: 422,
       detail: 'Unknown Errors caused Ark to fail saving! Check the logs!',
-      source: { pointer: '/data/attributes/:unknown'}
+      source: { pointer: '/data/attributes/:unknown' }
     }] if ark_errors.blank?
 
     ark_errors.reduce([]) do |r, (attr, msg)|

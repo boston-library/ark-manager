@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddSlugToArks < ActiveRecord::Migration[5.2]
   def change
     # NOTE: pid is the slug referenced in friendly_id

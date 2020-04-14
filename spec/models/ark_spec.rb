@@ -7,13 +7,9 @@ RSpec.describe Ark, type: :model do
     describe 'Columns' do
       it { is_expected.to have_db_column(:namespace_ark).of_type(:string).with_options(null: false) }
 
-      it { is_expected.to have_db_column(:namespace_ark).of_type(:string).with_options(null: false) }
-
-      it { is_expected.to have_db_column(:url_base).of_type(:string).with_options(null: false) }
-
       it { is_expected.to have_db_column(:namespace_id).of_type(:string).with_options(null: false) }
 
-      it { is_expected.to have_db_column(:namespace_ark).of_type(:string).with_options(null: false) }
+      it { is_expected.to have_db_column(:url_base).of_type(:string).with_options(null: false) }
 
       it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
 
@@ -44,7 +40,6 @@ RSpec.describe Ark, type: :model do
       it { is_expected.to have_db_index(:parent_pid) }
 
       it { is_expected.to have_db_index(:secondary_parent_pids) }
-
     end
   end
 

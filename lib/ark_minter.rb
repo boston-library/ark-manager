@@ -20,7 +20,7 @@ class ArkMinter < Noid::Rails::Minter::Db
       locked_inst = instance
       locked_inst.with_lock do
         minter = Noid::Minter.new(deserialize(locked_inst))
-        minter.seed($$)
+        minter.seed($PROCESS_ID)
         id = minter.mint
         serialize(locked_inst, minter)
         break id

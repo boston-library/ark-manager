@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 if @errors
   json.errors do
     json.array! @errors
