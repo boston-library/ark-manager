@@ -13,8 +13,7 @@ class Ark < ApplicationRecord
 
   scope :with_parent, ->(parent_pid) { where(parent_pid: parent_pid) }
 
-  scope :with_local_id, ->(identifier, identifier_type) { where(local_original_identifier: identifier,
-  local_original_identifier_type: identifier_type) }
+  scope :with_local_id, ->(identifier, identifier_type) { where(local_original_identifier: identifier, local_original_identifier_type: identifier_type) }
 
   scope :with_parent_and_local_id, ->(parent_pid, identifier, identifier_type) { with_parent(parent_pid).merge(with_local_id(identifier, identifier_type)) }
 
@@ -51,13 +50,14 @@ class Ark < ApplicationRecord
   private
 
   def set_noid
-    if namespace_id.present? && noid.blank?
-      minter_service = MinterService.call(namespace_id)
-      self.noid = minter_service.result if minter_service.successful?
-      if minter_service.failure?
-        Rails.logger.error 'Failed to mint noid for ark!'
-        Rails.logger.error "Reasons Given #{minter_service.errors.full_messages.join('\n')}"
-      end
+    return unless namespace_id.present? && noid.blank?
+
+    minter_service = MinterService.call(namespace_id)
+    if minter_service.successful?
+      self.noid = minter_service.result
+    else
+      Rails.logger.error 'Failed to mint noid for ark!'
+      Rails.logger.error "Reasons Given #{minter_service.errors.full_messages.join('\n')}"
     end
   end
 end

@@ -6,13 +6,13 @@ module ArkErrorHelper
     ark.valid?
     errors = ark.errors.reduce([]) do |r, (attr, msg)|
       r << {
-              title: 'Unprocessable Entity',
+        title: 'Unprocessable Entity',
               status: 422,
               detail: msg,
               source: { pointer: "/data/attributes/#{attr}" }
-           }.as_json
+      }.as_json
     end
-    { 'errors' => errors  }
+    { 'errors' => errors }
   end
 end
 

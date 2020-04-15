@@ -39,7 +39,7 @@ class ArkMinter < Noid::Rails::Minter::Db
       seq: minter.seq,
       counters: minter.counters,
       rand: Marshal.dump(minter.instance_variable_get(:@rand))
-     )
+    )
   end
 
   def instance

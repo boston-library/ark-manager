@@ -52,8 +52,7 @@ RSpec.describe ArksController, type: :controller do
       end
     end
 
-
-    context '#not_found' do
+    describe '#not_found' do
       let!(:params) { default_valid_json_params.dup.merge({ id: 'foo:b1a23r456' }) }
 
       let!(:expected_response) do
@@ -120,9 +119,9 @@ RSpec.describe ArksController, type: :controller do
       let!(:params) { default_valid_json_params.dup.merge({ ark: valid_ark_attributes }) }
 
       specify 'creates new ark' do
-        expect {
+        expect do
           post :create, params: params
-        }.to change(Ark, :count).by(1)
+        end.to change(Ark, :count).by(1)
       end
 
       specify 'correct template rendered' do
@@ -147,7 +146,7 @@ RSpec.describe ArksController, type: :controller do
     end
 
     context 'existing ark' do
-      let!(:params) { default_valid_json_params.dup.merge({ark: object_ark.attributes.slice(*input_fields) }) }
+      let!(:params) { default_valid_json_params.dup.merge({ ark: object_ark.attributes.slice(*input_fields) }) }
       let!(:expected_response) { ark_as_json(object_ark) }
 
       specify 'correct template rendered' do
@@ -156,9 +155,9 @@ RSpec.describe ArksController, type: :controller do
       end
 
       specify 'does not create new ark' do
-        expect {
+        expect do
           post :create, params: params
-        }.to change(Ark, :count).by(0)
+        end.to change(Ark, :count).by(0)
       end
 
       it 'returns a 200(ok) json_response' do
@@ -174,8 +173,9 @@ RSpec.describe ArksController, type: :controller do
         expect(json_response).to match(expected_response)
       end
     end
+
     context 'restoring ark' do
-      let!(:params) { default_valid_json_params.dup.merge({ark: deleted_object_ark.attributes.slice(*input_fields) }) }
+      let!(:params) { default_valid_json_params.dup.merge({ ark: deleted_object_ark.attributes.slice(*input_fields) }) }
 
       specify 'correct template rendered' do
         post :create, params: params
@@ -183,9 +183,9 @@ RSpec.describe ArksController, type: :controller do
       end
 
       specify 'increments the active count' do
-        expect {
+        expect do
           post :create, params: params
-        }.to change(Ark.active, :count).by(1)
+        end.to change(Ark.active, :count).by(1)
       end
 
       it 'returns a 200(ok) json_response' do
@@ -200,8 +200,8 @@ RSpec.describe ArksController, type: :controller do
         expect(json_response).to have_key('ark')
         expect(json_response).to match(ark_as_json(deleted_object_ark.reload))
       end
-
     end
+
     context 'invalid ark' do
       let!(:invalid_params) do
         ark_params = valid_ark_attributes.dup
@@ -220,9 +220,9 @@ RSpec.describe ArksController, type: :controller do
       end
 
       specify 'does not create new ark' do
-        expect {
+        expect do
           post :create, params: params
-        }.to change(Ark, :count).by(0)
+        end.to change(Ark, :count).by(0)
       end
 
       it 'returns a 422(unprocessible_entity) json_response' do

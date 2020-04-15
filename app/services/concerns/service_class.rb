@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ServiceClass
-   attr_reader :result
+  attr_reader :result
 
   module ClassMethods
     def call(*args)
@@ -14,7 +14,7 @@ module ServiceClass
   end
 
   def call
-    fail NotImplementedError unless defined?(super)
+    raise NotImplementedError unless defined?(super)
 
     @called = true
     @result = super
@@ -38,10 +38,10 @@ module ServiceClass
   end
 
   private
+
   def called?
     return @called if defined?(@called)
 
     @called = false
   end
-
 end

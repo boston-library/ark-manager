@@ -26,7 +26,7 @@ class ArksController < ApplicationController
     end
 
     if @ark.save
-       render status: status
+      render status: status
     else
       Rails.logger.error 'Ark failed to save!'
       Rails.logger.error @ark.errors.full_messages.join("\n")
@@ -82,20 +82,24 @@ class ArksController < ApplicationController
   end
 
   def build_ark_errors(ark_errors = {})
-    return [{
+    return default_ark_error if ark_errors.blank?
+
+    ark_errors.reduce([]) do |r, (attr, msg)|
+      r << {
+        title: 'Unprocessable Entity',
+              status: 422,
+              detail: msg,
+              source: { pointer: "/data/attributes/#{attr}" }
+      }
+    end
+  end
+
+  def default_ark_error
+    [{
       title: 'Unprocessable Entity',
       status: 422,
       detail: 'Unknown Errors caused Ark to fail saving! Check the logs!',
       source: { pointer: '/data/attributes/:unknown' }
-    }] if ark_errors.blank?
-
-    ark_errors.reduce([]) do |r, (attr, msg)|
-      r << {
-              title: 'Unprocessable Entity',
-              status: 422,
-              detail: msg,
-              source: { pointer: "/data/attributes/#{attr}" }
-           }
-    end
+    }]
   end
 end

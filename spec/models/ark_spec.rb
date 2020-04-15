@@ -90,7 +90,7 @@ RSpec.describe Ark, type: :model do
     describe '#with_parent_and_local_id' do
       subject { described_class.with_parent_and_local_id(parent_id, identifier, identifier_type).to_sql }
 
-      let!(:expected_sql) { described_class.with_parent(parent_id).merge(described_class.with_local_id( identifier, identifier_type)).to_sql }
+      let!(:expected_sql) { described_class.with_parent(parent_id).merge(described_class.with_local_id(identifier, identifier_type)).to_sql }
 
       it { is_expected.to eq(expected_sql) }
     end

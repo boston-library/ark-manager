@@ -23,12 +23,15 @@ RSpec.configure do |config|
         description: 'Ark Manager Version 2 API endpoints'
       },
       paths: {},
+      components: {
+        schemas: {}
+      },
       servers: [
         {
-          url: 'https://{defaultHost}',
+          url: 'http://{defaultHost}',
           variables: {
             defaultHost: {
-              default: 'http://127.0.0.1:3000'
+              default: '127.0.0.1:3000'
             }
           }
         }

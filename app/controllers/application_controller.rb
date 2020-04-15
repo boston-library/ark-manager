@@ -26,11 +26,11 @@ class ApplicationController < ActionController::API
 
   def handle_error(e)
     status = case e&.class&.name
-    when 'ActiveRecord::RecordNotFound', 'ActionController::RoutingError'
-      :not_found
-    else
-      :bad_request
-    end
+             when 'ActiveRecord::RecordNotFound', 'ActionController::RoutingError'
+               :not_found
+             else
+               :bad_request
+             end
 
     head status and return if !request.format.json?
 
