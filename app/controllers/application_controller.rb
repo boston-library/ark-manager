@@ -28,6 +28,8 @@ class ApplicationController < ActionController::API
     status = case e&.class&.name
              when 'ActiveRecord::RecordNotFound', 'ActionController::RoutingError'
                :not_found
+             when 'ActionController::UnknownFormat'
+               :not_acceptable
              else
                :bad_request
              end
@@ -38,9 +40,9 @@ class ApplicationController < ActionController::API
     render json: Oj.dump(response_body), status: status
   end
 
-  def authenticate!
-    # TODO
-  end
+  # def authenticate!
+  #   # TODO
+  # end
 
   private
 

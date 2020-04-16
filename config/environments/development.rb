@@ -16,22 +16,18 @@ Rails.application.configure do
 
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.
-  if ENV['REDIS_SOCKET_PATH'].present?
-    config.cache_store = :redis_cache_store,
-                         {
-                           driver: :hiredis,
-                           path: ENV.fetch('REDIS_SOCKET_PATH'),
-                           db: Integer(ENV.fetch('REDIS_CACHE_DB') { 0 }),
-                           expires_in: 90.minutes
-                         }
-  else
+
+  if ENV['REDIS_URL'].present?
     config.cache_store = :redis_cache_store,
                          {
                            driver: :hiredis,
                            url: 'redis://127.0.0.1:6379/0',
                            expires_in: 90.minutes
                          }
+  else
+    config.cache_store = config.cache_store = :memory_store
   end
+
   config.action_controller.perform_caching = true
 
   # Print deprecation notices to the Rails logger.
