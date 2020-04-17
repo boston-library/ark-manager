@@ -1,0 +1,139 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "API V2",
+    "description": "Ark Manager Version 2 API endpoints"
+  },
+  "paths": {
+    "/api/{version}/arks": {
+      "post": {
+        "summary": "Create Ark",
+        "tags": [
+          "Arks"
+        ],
+        "description": "Endpoints for Creating or Restoring Arks and returns JSON",
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "route not found",
+            "content": {}
+          },
+          "201": {
+            "description": "ark created",
+            "content": {}
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "local_original_identifier": {
+                    "type": "string"
+                  },
+                  "local_original_identifier_type": {
+                    "type": "string"
+                  },
+                  "namespace_ark": {
+                    "type": "string"
+                  },
+                  "namespace_id": {
+                    "type": "string"
+                  },
+                  "url_base": {
+                    "type": "string"
+                  },
+                  "model_type": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "secondary_parent_pids": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "local_original_identifier",
+                  "local_original_identifier_type",
+                  "namespace_ark",
+                  "namespace_id",
+                  "url_base",
+                  "model_type"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "errors_object": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "$ref": "#/components/schemas/errors_map"
+          }
+        }
+      },
+      "errors_map": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/errors_item"
+          }
+        }
+      },
+      "errors_item": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "source": {
+            "type": "object",
+            "properties": {
+              "pointer": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "http://{defaultHost}",
+      "variables": {
+        "defaultHost": {
+          "default": "127.0.0.1:3000"
+        }
+      }
+    }
+  ]
+}

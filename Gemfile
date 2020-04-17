@@ -22,7 +22,6 @@ gem 'rails', '~> 5.2.4.2'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'redis', '~> 4.1'
 gem 'rswag-api', '~> 2.3'
-gem 'rswag-ui', '~> 2.3'
 
 group :development, :test do
   gem 'awesome_print', '~> 1.8'

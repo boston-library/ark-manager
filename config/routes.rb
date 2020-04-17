@@ -6,7 +6,6 @@ Rails.application.routes.draw do
   scope 'api', defaults: { format: :json } do
     scope ':version', constraints: VersionConstraint do
       constraints(->(req) { req.format.json? }) do
-        mount Rswag::Api::Engine => '/docs'
         resources :arks, only: [:show, :destroy], constraints: IdOrPidConstraint.new
         resources :arks, only: [:create]
       end
@@ -15,15 +14,15 @@ Rails.application.routes.draw do
     match '*path' => 'application#route_not_found', via: [:all]
   end
 
-  scope constraints: ->(req) { !req.format.symbol.json? } do
-    mount Rswag::Ui::Engine => '/docs'
+  scope constraints: ->(req) { !req.format.json? } do
     match '/:ark/:namespace/:noid' => 'arks#show',
           as: 'object_in_view',
           constraints: { ark: /ark:/ },
           defaults: { object_in_view: true },
           via: [:get, :post]
-    match '*path' => 'application#route_not_found', via: [:all]
   end
+  match '*path' => 'application#route_not_found', via: [:all]
+  mount Rswag::Api::Engine => 'api-docs'
 
   # TODO: Move these to curator or front end app/ commonwealth-vlr-engine
   # match '/:ark/:namespace/:noid/thumbnail' => 'preview#thumbnail', :as => 'thumbnail', :constraints => {:ark => /ark:/}, via: [:get, :post]

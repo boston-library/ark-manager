@@ -7,6 +7,12 @@ FactoryBot.define do
     url_base { 'https://digitalcommonwealth.org' }
     namespace_id { 'commonwealth' }
 
+    trait :invalid_ark do
+      local_original_identifier { nil }
+      local_original_identifier_type { nil }
+      model_type { nil }
+    end
+
     trait :institution_ark do
       local_original_identifier { Faker::University.name }
       model_type { 'Bplmodels::Institution' }
