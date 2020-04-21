@@ -60,8 +60,8 @@ RSpec.describe ArksController, type: :controller do
           errors: [{
             title: 'Not found',
             status: Rack::Utils.status_code(:not_found),
-            message: "can't find record with friendly id: \"#{params[:id]}\"",
-            detail: {
+            detail: "can't find record with friendly id: \"#{params[:id]}\"",
+            source: {
               pointer: "/api/v2/arks/#{params[:id]}"
             }
           }]
@@ -283,8 +283,8 @@ RSpec.describe ArksController, type: :controller do
           errors: [{
             title: 'Not found',
             status: Rack::Utils.status_code(:not_found),
-            message: "Couldn't find Ark with 'id'=#{invalid_params[:id]} [WHERE \"arks\".\"deleted\" = $1]",
-            detail: {
+            detail: "Couldn't find Ark with 'id'=#{invalid_params[:id]} [WHERE \"arks\".\"deleted\" = $1]",
+            source: {
               pointer: "/api/v2/arks/#{invalid_params[:id]}"
             }
           }]

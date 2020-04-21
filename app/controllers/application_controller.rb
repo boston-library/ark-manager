@@ -51,8 +51,8 @@ class ApplicationController < ActionController::API
       errors: [{
         title: title,
         status: Rack::Utils.status_code(status),
-        message: message,
-        detail: {
+        detail: message,
+        source: {
           pointer: pointer
         }
       }]

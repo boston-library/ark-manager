@@ -15,7 +15,7 @@ RSpec.configure do |config|
   # document below. You can override this behavior by adding a swagger_doc tag to the
   # the root example_group in your specs, e.g. describe '...', swagger_doc: 'v2/swagger.json'
   config.swagger_docs = {
-    'v2/swagger.json' => {
+    'v2/ark_manager_swagger.json' => {
       openapi: '3.0.1',
       info: {
         title: 'API V2',
@@ -23,6 +23,54 @@ RSpec.configure do |config|
         description: 'Ark Manager Version 2 API endpoints'
       },
       paths: {},
+      components: {
+        schemas: {
+          arks: {
+            type: 'object',
+            properties: {
+              id: { type: 'integer' },
+              pid: { type: 'string' },
+              created_at: { type: 'string' },
+              updated_at: { type: 'string' },
+              local_original_identifier: { type: 'string' },
+              local_original_identifier_type: { type: 'string' },
+              namespace_ark: { type: 'string' },
+              namespace_id: { type: 'string' },
+              parent_pid: { type: 'string', nullable: true },
+              url_base: { type: 'string' },
+              model_type: { type: 'string' },
+              secondary_parent_pids: {
+                type: 'array',
+                items: { type: 'string' }
+              },
+              required: ['id', 'pid', 'created_at', 'updated_at', 'local_original_identifier', 'local_original_identifier_type', 'namespace_ark', 'namespace_id', 'url_base', 'model_type', 'secondary_parent_pids']
+            }
+          },
+          errors_map: {
+            type: 'object',
+            properties: {
+              errors: {
+                type: 'array',
+                items: { '$ref' => '#/components/schemas/error_object' }
+              }
+            }
+          },
+          error_object: {
+            type: 'object',
+            properties: {
+              title: { type: 'string' },
+              status: { type: 'integer' },
+              detail: { type: 'string' },
+              source: {
+                type: 'object',
+                properties: {
+                  pointer: { type: 'string' }
+                }
+              }
+            }
+          }
+        }
+      },
       servers: [
         {
           url: 'http://{defaultHost}',

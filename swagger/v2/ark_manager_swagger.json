@@ -1,0 +1,367 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "API V2",
+    "version": "v2",
+    "description": "Ark Manager Version 2 API endpoints"
+  },
+  "paths": {
+    "/api/{version}/arks": {
+      "post": {
+        "summary": "Create Ark",
+        "tags": [
+          "Arks",
+          "Create",
+          "Restore",
+          "JSON"
+        ],
+        "description": "Endpoints for Creating or Restoring Arks and returns JSON",
+        "operationId": "createOrRestoreArk",
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Route not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors_map"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid Object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors_map"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Ark created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/arks"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "local_original_identifier": {
+                    "type": "string"
+                  },
+                  "local_original_identifier_type": {
+                    "type": "string"
+                  },
+                  "namespace_ark": {
+                    "type": "string"
+                  },
+                  "namespace_id": {
+                    "type": "string"
+                  },
+                  "url_base": {
+                    "type": "string"
+                  },
+                  "parent_pid": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "model_type": {
+                    "type": "string"
+                  },
+                  "secondary_parent_pids": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "local_original_identifier",
+                  "local_original_identifier_type",
+                  "namespace_ark",
+                  "namespace_id",
+                  "url_base",
+                  "model_type"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/{version}/arks/{id}": {
+      "get": {
+        "summary": "Retreive JSON Ark",
+        "tags": [
+          "Arks",
+          "Show",
+          "JSON"
+        ],
+        "operationId": "Show Ark JSON",
+        "description": "Fetches individual arks as json",
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Found Ark by #pid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/arks"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Deleted Ark not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors_map"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Soft Delete Ark",
+        "tags": [
+          "Arks",
+          "Soft-Delete",
+          "JSON",
+          "No-Content"
+        ],
+        "operationId": "SoftDeleteArk",
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Ark(by #pid) Soft Deleted",
+            "content": {}
+          },
+          "404": {
+            "description": "Already deleted Ark not found",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors_map"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors_map"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{ark}/{namespace}/{noid}": {
+      "get": {
+        "summary": "Ark Permalink",
+        "tags": [
+          "Arks",
+          "Permalink",
+          "Redirect"
+        ],
+        "parameters": [
+          {
+            "name": "ark",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "namespace",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "noid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Permalink Redirection",
+            "content": {}
+          },
+          "404": {
+            "description": "Ark Not Found",
+            "content": {}
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "arks": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "pid": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          },
+          "local_original_identifier": {
+            "type": "string"
+          },
+          "local_original_identifier_type": {
+            "type": "string"
+          },
+          "namespace_ark": {
+            "type": "string"
+          },
+          "namespace_id": {
+            "type": "string"
+          },
+          "parent_pid": {
+            "type": "string",
+            "nullable": true
+          },
+          "url_base": {
+            "type": "string"
+          },
+          "model_type": {
+            "type": "string"
+          },
+          "secondary_parent_pids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "pid",
+            "created_at",
+            "updated_at",
+            "local_original_identifier",
+            "local_original_identifier_type",
+            "namespace_ark",
+            "namespace_id",
+            "url_base",
+            "model_type",
+            "secondary_parent_pids"
+          ]
+        }
+      },
+      "errors_map": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/error_object"
+            }
+          }
+        }
+      },
+      "error_object": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "detail": {
+            "type": "string"
+          },
+          "source": {
+            "type": "object",
+            "properties": {
+              "pointer": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "http://{defaultHost}",
+      "variables": {
+        "defaultHost": {
+          "default": "127.0.0.1:3000"
+        }
+      }
+    }
+  ]
+}
