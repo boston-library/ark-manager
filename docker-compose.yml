@@ -1,34 +1,33 @@
-version: '0.1'
+version: '3'
 
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
-    environment:
-      ARK_MANAGER_DATABASE_USER: postgres
-      - ARK_MANAGER_DATABASE_PASSWROD=sekret
-      - ARK_MANAGER_DATABASE_HOST=db
-      - ARK_MANAGER_DATABASE_PORT=5432
-      - REDIS_URL=redis://redis:6379/
-      - SETTINGS__ENABLE_STOMP=false
-      - SETTINGS__REDIS__HOSTNAME=redis
     volumes:
-       - .:/app
+       - .:/ark-manager
     ports:
-      - "3001:3000"
-    depends_on:
-      - db
-      - redis
-  db:
-    image: postgres:11
+      - "3002:3000"
+    volumes:
+      - gem_cache:/usr/local/bundle/gems
+    env_file: .env
     environment:
-      - POSTGRES_PASSWORD=sekret
-      - POSTGRES_USER=postgres
+      - RAILS_ENV=development
+      - RAILS_LOG_TO_STDOUT=true
+      - POSTGRES_HOST=pg_db
+    depends_on:
+      - pg_db
+      - redis
+  pg_db:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=postgres
     volumes:
       - postgres-data:/var/lib/postgresql/data
   redis:
-    image: redis
+    image: redis:latest
 
 volumes:
   postgres-data:
+  gem_cache:

@@ -1,9 +1,13 @@
-# based on instructions here: https://docs.docker.com/compose/rails/
-FROM ruby:2.6.5
+FROM ruby:2.6.6
+
+MAINTAINER bbarber@bpl.org
+
+ENV BUNDLER_VERSION=2.1.2
 
 RUN apt-get update -qq && apt-get install -y postgresql-client
 
-RUN gem install bundler:2.0.2
+RUN gem update --system
+RUN gem install bundler:2.1.2
 
 RUN mkdir /ark-manager
 
@@ -13,7 +17,8 @@ COPY Gemfile /ark-manager/Gemfile
 
 COPY Gemfile.lock /ark-manager/Gemfile.lock
 
-RUN bundle install
+RUN bundle config build.nokogiri --use-system-libraries
+RUN bundle check || bundle install --jobs 20 --retry 5
 
 COPY . /ark-manager
 
@@ -27,4 +32,4 @@ ENTRYPOINT ["entrypoint.sh"]
 EXPOSE 3000
 
 # Start the main process.
-CMD ["rails", "server", "-b", "0.0.0.0"]
+CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
