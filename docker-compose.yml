@@ -16,6 +16,7 @@ services:
       - RAILS_ENV=development
       - RAILS_LOG_TO_STDOUT=true
       - POSTGRES_HOST=pg_db
+      - REDIS_DOCKER_URL=redis
     depends_on:
       - pg_db
       - redis
@@ -25,7 +26,7 @@ services:
       - POSTGRES_PASSWORD=postgres
     volumes:
       - postgres-data:/var/lib/postgresql/data
-  redis:
+  cache:
     image: redis:latest
 
 volumes:

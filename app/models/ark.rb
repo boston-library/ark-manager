@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Ark < ApplicationRecord
-  # LOCAL_ID_TYPES=[].freeze
+  LOCAL_ID_TYPES = ['Physical Location', 'Institution Collection Name', 'Barcode', 'filename', 'id_local-accession field', 'DSpace Handle', 'id_local-other field'].freeze
 
   extend FriendlyId
 
@@ -26,9 +26,9 @@ class Ark < ApplicationRecord
             :namespace_id,
             :model_type,
             :local_original_identifier,
-            :local_original_identifier_type,
             presence: true
 
+  validates :local_original_identifier_type, presence: true, inclusion: { in: LOCAL_ID_TYPES }
   validates :noid, presence: true, uniqueness: { case_sensitive: false }
   validates :url_base, presence: true, format: { with: URI.regexp(['http', 'https']) }
 

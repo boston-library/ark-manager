@@ -116,6 +116,8 @@ RSpec.describe Ark, type: :model do
     it { is_expected.to validate_presence_of(:url_base) }
 
     it { is_expected.to validate_uniqueness_of(:noid).case_insensitive }
+
+    it { is_expected.to validate_inclusion_of(:local_original_identifier_type).in_array(Ark::LOCAL_ID_TYPES) }
   end
 
   describe 'Callbacks' do

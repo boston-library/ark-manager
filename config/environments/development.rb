@@ -17,11 +17,11 @@ Rails.application.configure do
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.
 
-  if ENV['REDIS_URL'].present?
+  if ENV['REDIS_DOCKER_URL'].present? || ENV['REDIS_CACHE_URL'].present?
     config.cache_store = :redis_cache_store,
                          {
                            driver: :hiredis,
-                           url: 'redis://127.0.0.1:6379/0',
+                           url: ENV['REDIS_DOCKER_URL'].presence || ENV['REDIS_CACHE_URL'].presence,
                            expires_in: 90.minutes
                          }
   else
