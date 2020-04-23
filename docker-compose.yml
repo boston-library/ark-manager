@@ -15,7 +15,7 @@ services:
       - RAILS_ENV=development
       - RAILS_LOG_TO_STDOUT=true
       - ARK_MANAGER_DATABASE_HOST=pg_db
-      - REDIS_DOCKER_URL=cache
+      - REDIS_DOCKER_URL=redis://cache:6379/0
     depends_on:
       - pg_db
       - cache
