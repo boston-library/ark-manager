@@ -33,7 +33,7 @@ group :development, :test do
   gem 'pry-rails', '~> 0.3.9'
   gem 'rspec-rails', '~> 3.9', '< 4.0'
   gem 'rswag-specs', '~> 2.3'
-  gem 'rubocop', '~> 0.75', require: false
+  gem 'rubocop', '~> 0.75.1', require: false
   gem 'rubocop-performance', '~> 1.5', require: false
   gem 'rubocop-rails', '~> 2.4.2', require: false
   gem 'rubocop-rspec', require: false
