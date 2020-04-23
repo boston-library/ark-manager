@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-       - .:/ark-manager
+       - .:/ark-manager-app
        - gem_cache:/usr/local/bundle/gems
     ports:
       - "3002:3000"
@@ -14,7 +14,7 @@ services:
     environment:
       - RAILS_ENV=development
       - RAILS_LOG_TO_STDOUT=true
-      - POSTGRES_HOST=pg_db
+      - ARK_MANAGER_DATABASE_HOST=pg_db
       - REDIS_DOCKER_URL=cache
     depends_on:
       - pg_db
