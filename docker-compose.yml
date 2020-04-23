@@ -7,10 +7,9 @@ services:
       dockerfile: Dockerfile
     volumes:
        - .:/ark-manager
+       - gem_cache:/usr/local/bundle/gems
     ports:
       - "3002:3000"
-    volumes:
-      - gem_cache:/usr/local/bundle/gems
     env_file: .env
     environment:
       - RAILS_ENV=development
