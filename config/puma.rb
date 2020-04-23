@@ -20,16 +20,15 @@ port        ENV.fetch('PORT') { 3000 }
 environment ENV.fetch('RAILS_ENV') { 'development' }
 
 stdout_redirect('/dev/stdout', '/dev/stderr', true)
-# Use the `preload_app!` method when specifying a `workers` number.
-# This directive tells Puma to first boot the application and load code
-# before forking the application. This takes advantage of Copy On Write
-# process behavior so workers use less memory.
-#
-rackup DefaultRackup
+
+app_dir = File.expand_path('..', __dir__)
+
+pidfile "#{app_dir}/tmp/pids/server.pid"
+state_path "#{app_dir}/tmp/pids/server.state"
 
 preload_app!
 
-worker_timeout 60
+worker_timeout 600
 
 on_restart do
   Rails.logger.info 'Restarting Worker...'

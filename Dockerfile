@@ -18,7 +18,7 @@ COPY Gemfile /ark-manager/Gemfile
 COPY Gemfile.lock /ark-manager/Gemfile.lock
 
 RUN bundle config build.nokogiri --use-system-libraries
-RUN bundle check || bundle install --jobs 20 --retry 5
+RUN bundle check || bundle install --jobs 3 --retry 3
 
 COPY . /ark-manager
 
