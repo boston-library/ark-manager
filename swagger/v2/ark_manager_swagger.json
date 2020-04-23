@@ -48,8 +48,28 @@
               }
             }
           },
+          "200": {
+            "description": "Existing Ark Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/arks"
+                }
+              }
+            }
+          },
           "201": {
             "description": "Ark created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/arks"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Deleted Ark Restored",
             "content": {
               "application/json": {
                 "schema": {

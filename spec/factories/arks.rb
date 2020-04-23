@@ -15,21 +15,21 @@ FactoryBot.define do
 
     trait :institution_ark do
       local_original_identifier { Faker::University.name }
-      model_type { 'Bplmodels::Institution' }
+      model_type { 'Curator::Institution' }
       local_original_identifier_type { 'Physical Location' }
     end
 
     trait :collection_ark do
       local_original_identifier { Faker::Artist.name }
       local_original_identifier_type { 'Institution Collection Name' }
-      model_type { 'Bplmodels::Collection' }
+      model_type { 'Curator::Collection' }
       parent_pid { nil }
     end
 
     trait :object_ark do
       local_original_identifier { Faker::File.file_name(dir: '', ext: 'tif') }
       local_original_identifier_type { 'filename' }
-      model_type { 'Bplmodels::PhotographicPrint' }
+      model_type { 'Curator::DigitalObject' }
       parent_pid { nil }
     end
   end

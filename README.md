@@ -1,3 +1,5 @@
-[![Build Status](https://travis-ci.org/boston-library/ark-manager.svg?branch=version_2)](https://travis-ci.org/boston-library/ark-manager)
+[![Build Status](https://travis-ci.org/boston-library/ark-manager.svg?branch=master)](https://travis-ci.org/boston-library/ark-manager)[![Coverage Status](https://coveralls.io/repos/github/boston-library/ark-manager/badge.svg?branch=master)](https://coveralls.io/github/boston-library/ark-manager?branch=master)
 
-== Ark Manager Version 2
+## Ark Manager Version 2
+
+A lightweight API that manages the creation of ARKs([Archival Resource Keys](https://en.wikipedia.org/wiki/Archival_Resource_Key) as well as redirection to the objects associated with them.

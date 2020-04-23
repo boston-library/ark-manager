@@ -55,8 +55,9 @@ RSpec.describe 'Ark Manager V2 Endpoints', type: :request, swagger_doc: 'v2/ark_
           let(:version) { valid_version }
           let(:ark) do
             parent_pid = create(:ark, :institution_ark).pid
-            create(:ark, :collection_ark, parent_pid: parent_pid).attributes.slice(:local_original_identifier, :local_original_identifier_type, :namespace_ark, :namespace_id, :url_base, :model_type)
+            create(:ark, :collection_ark, parent_pid: parent_pid).attributes.slice('local_original_identifier', 'local_original_identifier_type', 'namespace_ark', 'namespace_id', 'url_base', 'model_type')
           end
+          run_test!
         end
 
         response '201', 'Ark created' do
@@ -72,8 +73,9 @@ RSpec.describe 'Ark Manager V2 Endpoints', type: :request, swagger_doc: 'v2/ark_
 
           let(:version) { valid_version }
           let(:ark) do
-            create(:ark, :institution_ark, deleted: true).attributes.slice(:local_original_identifier, :local_original_identifier_type, :namespace_ark, :namespace_id, :url_base, :model_type)
+            create(:ark, :institution_ark, deleted: true).attributes.slice('local_original_identifier', 'local_original_identifier_type', 'namespace_ark', 'namespace_id', 'url_base', 'model_type')
           end
+          run_test!
         end
       end
     end

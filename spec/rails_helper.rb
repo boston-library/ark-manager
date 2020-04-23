@@ -16,6 +16,9 @@ Coveralls.wear!('rails')
 SimpleCov.formatter = Coveralls::SimpleCov::Formatter
 SimpleCov.start do
   add_filter '/spec/'
+  add_filter '/lib/scripts.rb'
+  add_filter '/app/controllers/preview_controller.rb'
+  add_filter '/app/models/application_record.rb'
 end
 
 require 'rspec/rails'
