@@ -12,10 +12,6 @@ cache:
 addons:
   postgresql: "9.6"
 
-branches:
-  only:
-    - "version_2"
-
 before_install:
   - gem update --system 3.1.2
   - gem install bundler
