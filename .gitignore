@@ -4,7 +4,6 @@
 *.sassc
 .sass-cache
 capybara-*.html
-.rspec
 /.bundle
 /vendor/bundle
 /log/*
@@ -58,6 +57,7 @@ ehthumbs.db
 .idea # Rubymine config files
 /.idea/*
 Gemfile.lock
+.ruby-version
 .env
 scratch.rb
 # Directories to ignore #
@@ -74,3 +74,6 @@ scratch.rb
 #############################
 
 *~
+
+# Ignore master key for decrypting credentials and more.
+/config/master.key

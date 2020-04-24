@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+       - .:/ark-manager-app
+    ports:
+      - "3002:3000"
+    env_file: .env
+    environment:
+      - RAILS_ENV=development
+      - RAILS_LOG_TO_STDOUT=true
+      - ARK_MANAGER_DATABASE_HOST=pg_db
+      - REDIS_DOCKER_URL=redis://cache:6379/0
+    depends_on:
+      - pg_db
+      - cache
+  pg_db:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+  cache:
+    image: redis:latest
+
+volumes:
+  postgres-data:

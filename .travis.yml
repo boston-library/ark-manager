@@ -1,0 +1,35 @@
+language: ruby
+sudo: false
+dist: bionic
+
+services:
+  - postgresql
+  - redis-server
+
+cache:
+  bundler: true
+
+addons:
+  postgresql: "9.6"
+
+branches:
+  only:
+    - "version_2"
+
+before_install:
+  - gem update --system 3.1.2
+  - gem install bundler
+
+before_script:
+- cp config/database.yml.travis config/database.yml
+- RAILS_ENV=test bundle exec rails db:create
+
+rvm:
+  - 2.5.8
+  - 2.6.6
+
+env:
+  global:
+    - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
+  matrix:
+    - "RAILS_VERSION=5.2.4.2"

@@ -1,61 +1,54 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-gem 'rails', '4.2.11.1'
+ruby '>= 2.5.8'
 
-# Bundle edge Rails instead:
+gem 'bootsnap', '>= 1.1.0', require: false
+# Reduces boot times through caching; required in config/boot.rb
+gem 'friendly_id', '~> 5.3.0'
+gem 'hiredis', '~> 0.6.0'
+gem 'jbuilder', '~> 2.10'
+gem 'noid-rails', '~> 3.0'
+gem 'oj', '~> 3.10'
+gem 'pg', '>= 0.18', '< 2.0'
+# Use postgresql as the database for Active Record
+gem 'puma', '~> 4.3'
+# Use Puma as the app server
+gem 'rack-cors', '~> 1.1'
+# Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
+gem 'rails', '~> 5.2.4.2', '< 6'
+# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+gem 'redis', '~> 4.1'
+gem 'rswag-api', '~> 2.3'
 
-gem 'sqlite3', '~> 1.3.6', group: :development
+group :development, :test do
+  gem 'awesome_print', '~> 1.8'
+  gem 'dotenv-rails', '~> 2.7'
+  gem 'factory_bot_rails', '~> 5.0'
+  gem 'faker', '~> 2.6.0'
+  gem 'pry', '~> 0.12'
+  gem 'pry-byebug', '~> 3.8'
+  gem 'pry-rails', '~> 0.3.9'
+  gem 'rspec-rails', '~> 3.9', '< 4.0'
+  gem 'rswag-specs', '~> 2.3'
+  gem 'rubocop', '~> 0.75.1', require: false
+  gem 'rubocop-performance', '~> 1.5', require: false
+  gem 'rubocop-rails', '~> 2.4.2', require: false
+  gem 'rubocop-rspec', require: false
+end
 
-gem 'pg', '~> 0.18'
-gem 'noid', '~> 0.5.5'
+group :development do
+  gem 'listen', '>= 3.0.5', '< 3.2'
+end
 
+group :test do
+  gem 'coveralls', require: false
+  gem 'database_cleaner-active_record', '~> 1.8'
+  gem 'rails-controller-testing', '~> 1.0'
+  gem 'shoulda-matchers', '~> 4.1'
+end
 
-# Use SCSS for stylesheets
-gem 'sass-rails'
-
-gem 'coffee-rails'
-
-# Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
-
-gem 'jquery-rails'
-
-# Other Dependencies
-gem "execjs"
-gem "therubyracer", "~> 0.10.0"
-
-# To use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.0.0'
-
-# To use Jbuilder templates for JSON
-# gem 'jbuilder'
-
-# Use unicorn as the app server
-# gem 'unicorn'
-
-# Deploy with Capistrano
-# gem 'capistrano'
-
-# To use debugger
-# gem 'debugger'
-
-gem 'hydra-head', '~> 8.0.0'
-gem 'active-fedora', '>= 8.0.1', '< 9'
-gem 'bplmodels', :git => 'https://github.com/boston-library/bplmodels.git'
-gem 'bpl-derivatives', '~> 0.2.1'
-# gem 'hydra-derivatives', git: 'https://github.com/boston-library/hydra-derivatives', branch: 'nli'
-
-
-gem 'typhoeus'
-
-
-gem 'equivalent-xml', '0.4.2'
-gem 'rdf-microdata', '1.1.1.1'
-gem 'xml-simple', '1.1.3'
-gem 'rdf-rdfa', '1.1.3.1'
-
-gem "resque", '~> 1.23'
-
-gem 'resque-pool', '0.3.0'
-
-gem 'nest', '~> 1.1.1'
+# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
