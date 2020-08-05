@@ -10,10 +10,10 @@ cache:
   bundler: true
 
 addons:
-  postgresql: "11.8"
+  postgresql: "11"
   apt:
     packages:
-      - postgresql-11
+      - postgresql-client-11
 
 before_install:
   - gem update --system 3.1.4
