@@ -6,7 +6,7 @@
 # the maximum value specified for Puma. Default is set to 5 threads for minimum
 # and maximum; this matches the default thread size of Active Record.
 #
-workers Integer(ENV.fetch('WEB_CONCURRENCY') { 2 })
+workers Integer(ENV.fetch('WEB_CONCURRENCY') { `grep processor /proc/cpuinfo | wc -l` })
 
 threads_count = ENV.fetch('RAILS_MAX_THREADS') { 5 }
 threads threads_count, threads_count
@@ -26,18 +26,18 @@ app_dir = File.expand_path('..', __dir__)
 pidfile "#{app_dir}/tmp/pids/server.pid"
 state_path "#{app_dir}/tmp/pids/server.state"
 
-preload_app!
-
 worker_timeout 600
 
-on_restart do
-  Rails.logger.info 'Restarting Worker...'
-  ActiveRecord::Base.connection.disconnect! if defined?(ActiveRecord::Base)
+preload_app!
+
+before_fork do
+  Rails.logger.info 'Worker Forking...'
+  ActiveRecord::Base.connection_pool.disconnect! if defined?(ActiveRecord)
 end
 
 on_worker_boot do
   Rails.logger.info 'Booting Worker...'
-  ActiveRecord::Base.establish_connection if defined?(ActiveRecord::Base)
+  ActiveRecord::Base.establish_connection if defined?(ActiveRecord)
 end
 # Allow puma to be restarted by `rails restart` command.
 plugin :tmp_restart

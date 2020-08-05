@@ -4,10 +4,10 @@ MAINTAINER bbarber@bpl.org
 
 ENV BUNDLER_VERSION=2.1.2
 
-RUN apt-get update -qq && apt-get install -y postgresql-client
+RUN apt-get update -qq &&  DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y postgresql-client-11
 
-RUN gem update --system
-RUN gem install bundler:2.1.2
+RUN gem update --system 3.1.4
+RUN gem install bundler:2.1.4
 
 RUN mkdir /ark-manager-app
 
@@ -16,7 +16,7 @@ WORKDIR /ark-manager-app
 COPY Gemfile Gemfile.* /ark-manager-app/
 
 RUN bundle config build.nokogiri --use-system-libraries
-RUN bundle check || bundle install --jobs 3 --retry 3
+RUN bundle check || bundle install --jobs 5 --retry 3
 
 COPY . /ark-manager-app
 

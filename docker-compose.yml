@@ -19,13 +19,15 @@ services:
       - pg_db
       - cache
   pg_db:
-    image: postgres
+    image: postgres:11.8
     environment:
       - POSTGRES_PASSWORD=postgres
     volumes:
       - postgres-data:/var/lib/postgresql/data
   cache:
     image: redis:latest
+    sysctls:
+      net.core.somaxconn: 1024
 
 volumes:
   postgres-data:

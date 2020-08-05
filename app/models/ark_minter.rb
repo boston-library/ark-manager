@@ -35,7 +35,7 @@ class ArkMinter < Noid::Rails::Minter::Db
   end
 
   def serialize(inst, minter)
-    inst.update_attributes!(
+    inst.update!(
       seq: minter.seq,
       counters: minter.counters,
       rand: Marshal.dump(minter.instance_variable_get(:@rand))

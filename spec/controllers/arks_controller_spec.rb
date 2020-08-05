@@ -4,9 +4,10 @@ require 'rails_helper'
 
 RSpec.describe ArksController, type: :controller do
   let!(:default_valid_json_params) { { format: :json, version: 'v2' } }
+  let!(:expected_content_type) { 'application/json; charset=utf-8' }
+
   describe '#show' do
     let!(:ark) { create(:ark) }
-
     context 'json response' do
       render_views
 
@@ -23,7 +24,7 @@ RSpec.describe ArksController, type: :controller do
         it 'returns a successful json response' do
           get :show, params: params
           expect(response).to have_http_status(:ok)
-          expect(response.content_type).to eq('application/json')
+          expect(response.content_type).to eq(expected_content_type)
           expect(json_response).not_to be_empty
         end
 
@@ -40,7 +41,7 @@ RSpec.describe ArksController, type: :controller do
         it 'returns a successful json response' do
           get :show, params: params
           expect(response).to have_http_status(:ok)
-          expect(response.content_type).to eq('application/json')
+          expect(response.content_type).to eq(expected_content_type)
           expect(json_response).not_to be_empty
         end
 
@@ -71,7 +72,7 @@ RSpec.describe ArksController, type: :controller do
       it 'returns a 404 json response' do
         get :show, params: params
         expect(response).to have_http_status(:not_found)
-        expect(response.content_type).to eq('application/json')
+        expect(response.content_type).to eq(expected_content_type)
         expect(json_response).not_to be_empty
       end
 
@@ -132,7 +133,7 @@ RSpec.describe ArksController, type: :controller do
       it 'returns a 201(created) json_response' do
         post :create, params: params
         expect(response).to have_http_status(:created)
-        expect(response.content_type).to eq('application/json')
+        expect(response.content_type).to eq(expected_content_type)
         expect(json_response).not_to be_empty
       end
 
@@ -163,7 +164,7 @@ RSpec.describe ArksController, type: :controller do
       it 'returns a 200(ok) json_response' do
         post :create, params: params
         expect(response).to have_http_status(:ok)
-        expect(response.content_type).to eq('application/json')
+        expect(response.content_type).to eq(expected_content_type)
         expect(json_response).not_to be_empty
       end
 
@@ -191,7 +192,7 @@ RSpec.describe ArksController, type: :controller do
       it 'returns a 200(ok) json_response' do
         post :create, params: params
         expect(response).to have_http_status(:accepted)
-        expect(response.content_type).to eq('application/json')
+        expect(response.content_type).to eq(expected_content_type)
         expect(json_response).not_to be_empty
       end
 
@@ -228,7 +229,7 @@ RSpec.describe ArksController, type: :controller do
       it 'returns a 422(unprocessible_entity) json_response' do
         post :create, params: params
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.content_type).to eq('application/json')
+        expect(response.content_type).to eq(expected_content_type)
         expect(json_response).not_to be_empty
       end
 
@@ -295,7 +296,7 @@ RSpec.describe ArksController, type: :controller do
         # If the ark is already deleted it should return a 404
         delete :destroy, params: invalid_params
         expect(response).to have_http_status(:not_found)
-        expect(response.content_type).to eq('application/json')
+        expect(response.content_type).to eq(expected_content_type)
         expect(json_response).not_to be_empty
       end
 
