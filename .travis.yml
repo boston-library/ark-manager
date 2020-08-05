@@ -11,6 +11,9 @@ cache:
 
 addons:
   postgresql: "11.8"
+  apt:
+    packages:
+      - postgresql-11
 
 before_install:
   - gem update --system 3.1.4
