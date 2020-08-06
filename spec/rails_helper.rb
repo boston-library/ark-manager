@@ -16,7 +16,7 @@ Coveralls.wear!('rails')
 SimpleCov.formatter = Coveralls::SimpleCov::Formatter
 SimpleCov.start do
   add_filter '/spec/'
-  add_filter '/lib/scripts.rb'
+  add_filter '/lib/scripts.rb.ignore'
   add_filter '/app/controllers/preview_controller.rb'
   add_filter '/app/models/application_record.rb'
 end
@@ -82,7 +82,7 @@ RSpec.configure do |config|
     metadata[:type] = :service
   end
 
-  config.define_derived_metadata(file_path: Regexp.new('/spec/lib/constraints/')) do |metadata|
+  config.define_derived_metadata(file_path: Regexp.new('/spec/constraints/')) do |metadata|
     metadata[:type] = :constraint
   end
 

@@ -3,3 +3,7 @@
 ## Ark Manager Version 2
 
 A lightweight API that manages the creation of ARKs([Archival Resource Keys](https://en.wikipedia.org/wiki/Archival_Resource_Key) as well as redirection to the objects associated with them.
+
+# Docker
+
+To use the docker container run `docker-compose up --build -d && docker-compose run app rails db:prepare`
