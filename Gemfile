@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.2.11.1'
+gem 'rails', '4.2.11.3'
 
 # Bundle edge Rails instead:
 
@@ -22,7 +22,7 @@ gem 'jquery-rails'
 
 # Other Dependencies
 gem "execjs"
-gem "therubyracer", "~> 0.10.0"
+gem "therubyracer" #, "~> 0.10.0"
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
