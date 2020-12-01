@@ -10,14 +10,15 @@ cache:
   bundler: true
 
 addons:
-  postgresql: "11"
+  postgresql: "12"
   apt:
     packages:
-      - postgresql-client-11
+      - postgresql-12
+      - postgresql-client-12
 
 before_install:
   - gem update --system 3.1.4
-  - gem install bundler
+  - gem install bundler:2.1.4
 
 before_script:
 - cp config/database.yml.travis config/database.yml
@@ -31,4 +32,4 @@ env:
   global:
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
   matrix:
-    - "RAILS_VERSION=6.0.3.2"
+    - "RAILS_VERSION=6.0.3.4"

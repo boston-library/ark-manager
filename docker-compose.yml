@@ -19,7 +19,7 @@ services:
       - pg_db
       - cache
   pg_db:
-    image: postgres:11.8
+    image: postgres:12
     environment:
       - POSTGRES_PASSWORD=postgres
     volumes:
