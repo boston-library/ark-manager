@@ -1,23 +1,26 @@
 language: ruby
-sudo: false
+os: linux
 dist: bionic
 
 services:
-  - postgresql
-  - redis-server
+  - redis
 
 cache:
   bundler: true
 
 addons:
-  postgresql: "11"
+  postgresql: "12"
   apt:
     packages:
-      - postgresql-client-11
+      - postgresql-12
+      - postgresql-client-12
 
 before_install:
+  - sudo sed -i 's/port = 5433/port = 5432/' /etc/postgresql/12/main/postgresql.conf
+  - sudo cp /etc/postgresql/{9.6,12}/main/pg_hba.conf
+  - sudo pg_ctlcluster 12 main restart
   - gem update --system 3.1.4
-  - gem install bundler
+  - gem install bundler:2.1.4
 
 before_script:
 - cp config/database.yml.travis config/database.yml
@@ -29,6 +32,11 @@ rvm:
 
 env:
   global:
+    - PGPORT=5432
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
-  matrix:
-    - "RAILS_VERSION=6.0.3.2"
+  jobs:
+    - "RAILS_VERSION=6.0.3.4"
+
+after_failure:
+  - pg_isready
+  - pg_lsclusters

@@ -2,12 +2,34 @@ FROM ruby:2.6.6
 
 MAINTAINER bbarber@bpl.org
 
-ENV BUNDLER_VERSION=2.1.2
+ENV LANG=C.UTF-8 \
+    BUNDLER_VERSION=2.1.4
 
-RUN apt-get update -qq &&  DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y postgresql-client-11
+RUN apt-get update -qq \
+  && DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends \
+  apt-utils \
+  gnupg2 \
+  curl \
+  less \
+  && apt-get clean \
+  && rm -rf /var/cache/apt/archives/* \
+  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+  && truncate -s 0 /var/log/*log
+
+# Add PostgreSQL to sources list
+RUN curl -sSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
+    && echo 'deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main' 12 > /etc/apt/sources.list.d/pgdg.list
+
+RUN apt-get update -qq && \
+  DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends \
+  libpq-dev \
+  postgresql-client-12 && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
+  truncate -s 0 /var/log/*log
 
 RUN gem update --system 3.1.4
-RUN gem install bundler:2.1.4
+RUN gem install bundler:$BUNDLER_VERSION
 
 RUN mkdir /ark-manager-app
 
