@@ -3,7 +3,6 @@ os: linux
 dist: bionic
 
 services:
-  - postgresql
   - redis
 
 cache:
@@ -17,6 +16,9 @@ addons:
       - postgresql-client-12
 
 before_install:
+  - sudo sed -i 's/port = 5433/port = 5432/' /etc/postgresql/12/main/postgresql.conf
+  - sudo cp /etc/postgresql/{9.6,12}/main/pg_hba.conf
+  - sudo pg_ctlcluster 12 main restart
   - gem update --system 3.1.4
   - gem install bundler:2.1.4
 
@@ -30,6 +32,11 @@ rvm:
 
 env:
   global:
+    - PGPORT=5432
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
   jobs:
     - "RAILS_VERSION=6.0.3.4"
+
+after_failure:
+  - pg_isready
+  - pg_lsclusters

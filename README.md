@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/boston-library/ark-manager.svg?branch=master)](https://travis-ci.org/boston-library/ark-manager)[![Coverage Status](https://coveralls.io/repos/github/boston-library/ark-manager/badge.svg?branch=master)](https://coveralls.io/github/boston-library/ark-manager?branch=master)
+[![Build Status](https://travis-ci.com/boston-library/ark-manager.svg?branch=master)](https://travis-ci.com/boston-library/ark-manager)[![Coverage Status](https://coveralls.io/repos/github/boston-library/ark-manager/badge.svg?branch=master)](https://coveralls.io/github/boston-library/ark-manager?branch=master)
 
 ## Ark Manager Version 2
 
