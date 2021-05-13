@@ -7,21 +7,23 @@ class ArksController < ApplicationController
   def show
     redirect_to @ark.redirect_url and return if redirect_for_object?
     # Renders JSON if !redirect_for_object
+    fresh_when last_updated: @ark.updated_at.utc, strong_etag: @ark
   end
 
   def create
     if @ark
-      Rails.logger.info 'Found a matching ark!'
+      Rails.logger.debug 'Found a matching ark!'
       Rails.logger.debug @ark.to_s
-      render action: :show, status: :ok and return unless @ark.deleted?
 
-      Rails.logger.info "Ark #{@ark.noid} was deleted...Restoring..."
+      render action: :show, status: :ok and return if !@ark.deleted? && stale?(strong_etag: @ark, last_updated: @ark.updated_at.utc)
+
+      Rails.logger.debug "Ark #{@ark.noid} was deleted...Restoring..."
       status = :accepted
       @ark.deleted = false
     else
       status = :created
       @ark = Ark.new(ark_params)
-      Rails.logger.info 'Initialized new Ark!'
+      Rails.logger.debug 'Initialized new Ark!'
       Rails.logger.debug @ark.to_s
     end
 
@@ -56,7 +58,7 @@ class ArksController < ApplicationController
   end
 
   def check_for_existing_ark
-    Rails.logger.info 'Checking for existing Ark...'
+    Rails.logger.debug 'Checking for existing Ark...'
     Rails.logger.debug "==== :ark_params are #{ark_params.inspect} ===="
 
     if ark_params[:parent_id]

@@ -1,5 +1,6 @@
 .DS_Store
 Dockerfile
+.coveralls.yml
 .travis.yml
 .ruby-version
 docker-compose.yml
@@ -14,3 +15,5 @@ log/*
 coverage/
 README.md
 .env
+.env.sample
+scratch.rb

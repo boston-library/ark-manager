@@ -1,5 +1,8 @@
 # returns preview (thumbnail), large, and full-size JPEG images
 class PreviewController < ApplicationController
+  include ActionController::DataStreaming
+  include ActionController::Helpers
+
   class ImageNotFound < StandardError; end
   # return a thumbnail-size JPEG image file for 'thumbnail' requests
   def thumbnail
@@ -18,10 +21,6 @@ class PreviewController < ApplicationController
 
   private
 
-  # sends an image datastream to the client
-  # for flagged items, return the image icon
-  # TODO: requires a service for retreiving from solr and azure blobs
-  #
   def return_image_datastream(datastream_id=nil, file_suffix)
     model = @ark.model_type
     filename = "#{@ark.pid}#{file_suffix}"
@@ -41,6 +40,10 @@ class PreviewController < ApplicationController
       # raise ImageNotFound, "No Image Content Found at #{datastream_url}" if response.code == 404
       # send_image(filename, response.body)
     end
+  end
+
+  def not_found(msg = 'Image Not found')
+    raise ImageNotFound, msg
   end
 
   # returns a Fedora datastream url or IIIF url
@@ -70,7 +73,6 @@ class PreviewController < ApplicationController
   end
 
   def find_ark
-    @ark = Ark.find_by(noid: params[:noid])
-    raise ActiveRecord::RecordNotFound, "Unable to locate ark with identifier-#{params[:noid]}" if @ark.blank?
+    @ark = Ark.find_by!(noid: params[:noid])
   end
 end

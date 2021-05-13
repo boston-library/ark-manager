@@ -3,36 +3,40 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '>= 2.5.8'
+ruby '>= 2.5.9'
 
 gem 'bootsnap', '>= 1.1.0', require: false
 # Reduces boot times through caching; required in config/boot.rb
+gem 'connection_pool', '~> 2.2'
+gem 'faraday', '~> 1.4'
+gem 'faraday-net_http_persistent', '~> 1.1'
 gem 'friendly_id', '~> 5.4'
 gem 'hiredis', '~> 0.6'
-gem 'jbuilder', '~> 2.10'
+gem 'jbuilder', '~> 2.11'
+gem 'net-http-persistent', '>= 3.1'
 gem 'noid-rails', '~> 3.0'
-gem 'oj', '~> 3.10'
+gem 'oj', '~> 3.11'
 gem 'pg', '>= 0.18', '< 2.0'
 # Use postgresql as the database for Active Record
-gem 'puma', '~> 4.3'
+gem 'puma', '~> 5.3'
 # Use Puma as the app server
 gem 'rack-cors', '~> 1.1'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
-gem 'rails', '~> 6', '< 6.1'
+gem 'rails', '~> 6.0.3', '< 6.1'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'redis', '~> 4.2'
-gem 'rswag-api', '~> 2.3'
+gem 'rsolr', '~> 2.3'
+gem 'rswag-api', '~> 2.4'
 
 group :development, :test do
-  gem 'awesome_print', '~> 1.8'
+  gem 'awesome_print', '~> 1.9'
   gem 'dotenv-rails', '~> 2.7'
-  gem 'factory_bot_rails', '~> 6'
-  gem 'faker', '~> 2.15'
-  gem 'pry', '~> 0.13'
-  gem 'pry-byebug', '~> 3.9'
+  gem 'factory_bot_rails', '~> 6.2'
+  gem 'faker', '~> 2.17'
+  gem 'pry', '~> 0.14'
   gem 'pry-rails', '~> 0.3'
   gem 'rspec-rails', '~> 4.0'
-  gem 'rswag-specs', '~> 2.3'
+  gem 'rswag-specs', '~> 2.4'
   gem 'rubocop', '~> 0.75.1', require: false
   gem 'rubocop-performance', '~> 1.5', require: false
   gem 'rubocop-rails', '~> 2.4.2', require: false
@@ -45,9 +49,10 @@ end
 
 group :test do
   gem 'coveralls', require: false
-  gem 'database_cleaner-active_record', '~> 1.8'
+  gem 'database_cleaner-active_record', '~> 2'
   gem 'rails-controller-testing', '~> 1.0'
-  gem 'shoulda-matchers', '~> 4.4'
+  gem 'shoulda-matchers', '~> 4.5'
+  gem 'vcr', '~> 6'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

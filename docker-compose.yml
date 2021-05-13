@@ -2,6 +2,7 @@ version: '3'
 
 services:
   app:
+    container_name: ark_manager_app
     build:
       context: .
       dockerfile: Dockerfile
@@ -14,18 +15,21 @@ services:
       - RAILS_ENV=development
       - RAILS_LOG_TO_STDOUT=true
       - ARK_MANAGER_DATABASE_HOST=pg_db
-      - REDIS_DOCKER_URL=redis://cache:6379/0
+      - ARK_MANAGER_REDIS_CACHE_URL=redis://cache:6379/0
     depends_on:
       - pg_db
       - cache
   pg_db:
+    container_name: ark_manager_db
     image: postgres:12
     environment:
       - POSTGRES_PASSWORD=postgres
     volumes:
       - postgres-data:/var/lib/postgresql/data
   cache:
+    container_name: ark_manager_cache
     image: redis:latest
+    command: redis-server --maxmemory 16mb --maxmemory-policy allkeys-lfu
     sysctls:
       net.core.somaxconn: 1024
 

@@ -8,6 +8,17 @@ class ApplicationController < ActionController::API
     version: '2',
   }.freeze
 
+  NOT_FOUND_ERROR_CLASSES = [
+    'ActiveRecord::RecordNotFound',
+    'ActionController::RoutingError',
+    'PreviewController::ImageNotFound'
+  ]
+
+  BAD_REQUEST_CLASSSES = [
+    'ActiveRecord::RecordInvalid',
+    'ActiveRecord::RecordNotSaved'
+  ].freeze
+
   include ActionController::ImplicitRender
   include ActionView::Layouts
   include ActionController::Caching
@@ -15,7 +26,9 @@ class ApplicationController < ActionController::API
   rescue_from StandardError, with: :handle_error
 
   def app_info
-    render json: Oj.dump(APP_INFO), status: :ok
+    http_cache_forever(public: true) do
+      render json: Oj.dump(APP_INFO), status: :ok
+    end
   end
 
   def route_not_found
@@ -26,12 +39,14 @@ class ApplicationController < ActionController::API
 
   def handle_error(e)
     status = case e&.class&.name
-             when 'ActiveRecord::RecordNotFound', 'ActionController::RoutingError'
+             when *NOT_FOUND_ERROR_CLASSES
                :not_found
              when 'ActionController::UnknownFormat'
                :not_acceptable
-             else
+             when *BAD_REQUEST_CLASSSES
                :bad_request
+             else
+               :internal_server_error
              end
 
     head status and return if !request.format.json?

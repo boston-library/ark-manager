@@ -1,9 +1,9 @@
-FROM ruby:2.6.6
+FROM ruby:2.6.7
 
 MAINTAINER bbarber@bpl.org
 
 ENV LANG=C.UTF-8 \
-    BUNDLER_VERSION=2.1.4
+    BUNDLER_VERSION=2.2.17
 
 RUN apt-get update -qq \
   && DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends \
@@ -28,8 +28,8 @@ RUN apt-get update -qq && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
   truncate -s 0 /var/log/*log
 
-RUN gem update --system 3.1.4
-RUN gem install bundler:$BUNDLER_VERSION
+RUN gem update --system --no-document
+RUN gem install bundler:$BUNDLER_VERSION --no-document
 
 RUN mkdir /ark-manager-app
 

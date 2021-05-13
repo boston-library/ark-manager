@@ -7,10 +7,12 @@ services:
 
 cache:
   bundler: true
+  apt: true
 
 addons:
   postgresql: "12"
   apt:
+    update: true
     packages:
       - postgresql-12
       - postgresql-client-12
@@ -19,23 +21,24 @@ before_install:
   - sudo sed -i 's/port = 5433/port = 5432/' /etc/postgresql/12/main/postgresql.conf
   - sudo cp /etc/postgresql/{9.6,12}/main/pg_hba.conf
   - sudo pg_ctlcluster 12 main restart
-  - gem update --system 3.1.4
-  - gem install bundler:2.1.4
+  - gem update --system --no-document
+  - gem install bundler:2.2.17 --no-document
 
 before_script:
 - cp config/database.yml.travis config/database.yml
-- RAILS_ENV=test bundle exec rails db:prepare
+- bundle exec rails db:prepare
 
 rvm:
-  - 2.5.8
-  - 2.6.6
+  - 2.5.9
+  - 2.6.7
 
 env:
   global:
+    - PGVER=12
     - PGPORT=5432
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
   jobs:
-    - "RAILS_VERSION=6.0.3.4"
+    - "RAILS_VERSION=6.0.3.7"
 
 after_failure:
   - pg_isready
