@@ -24,13 +24,22 @@ class SolrService < ApplicationService
   end
 
   def call
-    solr = self.class.solr_client.get 'get', params: query
+    begin
+      solr = self.class.solr_client.get 'get', params: query
 
-    response = solr['doc'].presence || {}
+      response = solr['doc'].presence || {}
 
-    errors.add(:not_found, "No Solr document found with id #{query[:id]}") if response.blank?
+      errors.add(:not_found, "No Solr document found with id #{query[:id]}") if response.blank?
 
-    response
+      return response
+    rescue RSolr::Error::Http => e
+      errors.add(:bad_request, e.message)
+    rescue RSolr::Error::ConnectionRefused => e
+      errors.add(:bad_gateway, e.message)
+    rescue RSolr::Error::InvalidJsonResponse => e
+      errors.add(:unprocessable_entity, e.message)
+    end
+    {}
   end
 
   def explicit?

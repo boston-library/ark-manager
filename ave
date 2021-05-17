@@ -1,0 +1,15 @@
+=> [32m#<Ark:0x000000000368b1d8[0m
+ id: [1;36mnil[0m,
+ namespace_ark: [31m[1;31m"[0m[31m50959[1;31m"[0m[31m[0m,
+ url_base: [31m[1;31m"[0m[31mhttps://search-hydradev.bpl.org[1;31m"[0m[31m[0m,
+ noid: [1;36mnil[0m,
+ namespace_id: [31m[1;31m"[0m[31mbpl-dev[1;31m"[0m[31m[0m,
+ created_at: [1;36mnil[0m,
+ updated_at: [1;36mnil[0m,
+ model_type: [31m[1;31m"[0m[31mCurator::DigitalObject[1;31m"[0m[31m[0m,
+ local_original_identifier: [31m[1;31m"[0m[31m39999065685610[1;31m"[0m[31m[0m,
+ local_original_identifier_type: [31m[1;31m"[0m[31mBarcode[1;31m"[0m[31m[0m,
+ parent_pid: [31m[1;31m"[0m[31mbpl-dev:000000000[1;31m"[0m[31m[0m,
+ deleted: [1;36mfalse[0m,
+ secondary_parent_pids: [],
+ pid: [1;36mnil[0m[32m>[0m

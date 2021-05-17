@@ -2,77 +2,74 @@
 class PreviewController < ApplicationController
   include ActionController::DataStreaming
   include ActionController::Helpers
+  helper PreviewsHelper
+
+  class PreviewServiceError < StandardError
+    attr_reader :status
+
+    def initalize(msg = 'Sever Error', status = :internal_server_error)
+      @status = status
+      super(msg)
+    end
+  end
 
   class ImageNotFound < StandardError; end
+
   # return a thumbnail-size JPEG image file for 'thumbnail' requests
   def thumbnail
-    return_image_datastream('thumbnail300', '_thumbnail')
+    send_image_data('image_thumbnail_300', '_thumbnail')
   end
 
   # return a full-size JPEG image file for 'full_image' requests
   def full_image
-    return_image_datastream(nil, '_full')
+    send_image_data(nil, '_full')
   end
 
   # return a large-size JPEG image file for 'large_image' requests
   def large_image
-    return_image_datastream('access800', '_large')
+    send_image_data('image_access_800', '_large')
   end
 
   private
 
-  def return_image_datastream(datastream_id=nil, file_suffix)
-    model = @ark.model_type
+  def send_image_data(filestream_id = nil, file_suffix)
+    model_type = @ark.model_type
     filename = "#{@ark.pid}#{file_suffix}"
-    if /File\z/ =~ model || /OAIObject\z/ =~ model
-      datastream_url = image_url(@ark.pid, file_suffix, datastream_id)
-    else
-      # solr_response = SolrService.call(@ark.pid)
-      raise ImageNotFound, "No Exemplary Image Found In Solr" if solr_response['exemplary_image_ssi'].blank?
-      if solr_response['flagged_content_ssi']
-        send_icon(filename)
-      else
-        datastream_url = image_url(solr_response['exemplary_image_ssi'], file_suffix, datastream_id)
-      end
-    end
-    if datastream_url
-      # response = Typhoeus::Request.get(datastream_url)
-      # raise ImageNotFound, "No Image Content Found at #{datastream_url}" if response.code == 404
-      # send_image(filename, response.body)
-    end
+
+    solr_resp = SolrService.call(@ark.pid)
+
+    handle_preview_service_error!(solr_resp) if !solr_resp.success?
+
+    send_icon(filename) and return if solr_resp.explicit?
+
+    solr_doc = solr_resp.result
+
+    filestream_key = case model_type
+                      when /Filestream\z/
+                        solr_doc['storage_key_base_ss']
+                      else
+                        solr_response['exemplary_image_key_base_ss']
+                      end
+    not_found!("No storage_key_base_ss or exemplary_image_key_base_ss found In Solr Doc") if filestream_key.blank?
+
+    image_data_resp = ImageContentService.call(@ark.pid, filestream_id, filestream_key, file_suffix)
+
+    handle_preview_service_error!(image_data_resp) if !image_data_resp.success?
+
+    send_image(file_name, image_data_resp.result.path)
   end
 
-  def not_found(msg = 'Image Not found')
+  def not_found!(msg)
     raise ImageNotFound, msg
   end
 
-  # returns a Fedora datastream url or IIIF url
-  def image_url(pid, file_suffix, datastream_id)
-    return "#{ENV['IIIF_SERVER_URL']}#{pid}/full/full/0/default.jpg" if file_suffix == '_full'
-    datastream_disseminator_url(pid, datastream_id)
-  end
-
-  # returns the direct URL to a datastream in Fedora
-  def datastream_disseminator_url(pid, datastream_id)
-    # TODO: pull in the image content from the azure blob its associated with.
-    # ActiveFedora::Base.connection_for_pid(pid).client.url + "/objects/#{pid}/datastreams/#{datastream_id}/content"
-  end
-
-  def send_icon(filename)
-    send_file File.join(Rails.root, 'public', 'dc_image-icon.png'),
-              :filename => "#{filename}.png",
-              :type => :png,
-              :disposition => 'inline'
-  end
-
-  def send_image(filename, binary)
-    send_data binary,
-              :filename => "#{filename}.jpg",
-              :type => :jpg,
-              :disposition => 'inline'
+  def handle_preview_service_error!(service_resp)
+    status = service_resp.errors.keys.first || :internal_server_error
+    msg = service_resp.errors.full_messages.join(', ')
+    raise PreviewServiceError.new(msg, status)
   end
 
   def find_ark
-    @ark = Ark.find_by!(noid: params[:noid])
+    @ark = Ark.active.find_by!(noid: params[:noid])
   end
 end

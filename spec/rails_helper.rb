@@ -32,6 +32,16 @@ Shoulda::Matchers.configure do |config|
   end
 end
 
+require 'vcr'
+
+VCR.configure do |c|
+  c.cassette_library_dir = 'spec/vcr'
+  c.configure_rspec_metadata!
+  c.hook_into :faraday
+  c.allow_http_connections_when_no_cassette = true
+end
+
+
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
 begin

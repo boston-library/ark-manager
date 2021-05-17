@@ -14,7 +14,7 @@ class ApplicationController < ActionController::API
     'PreviewController::ImageNotFound'
   ]
 
-  BAD_REQUEST_CLASSSES = [
+  UNPROCESSABLE_ENTITY_CLASSES = [
     'ActiveRecord::RecordInvalid',
     'ActiveRecord::RecordNotSaved'
   ].freeze
@@ -26,9 +26,7 @@ class ApplicationController < ActionController::API
   rescue_from StandardError, with: :handle_error
 
   def app_info
-    http_cache_forever(public: true) do
-      render json: Oj.dump(APP_INFO), status: :ok
-    end
+    render json: Oj.dump(APP_INFO), status: :ok
   end
 
   def route_not_found
@@ -39,12 +37,14 @@ class ApplicationController < ActionController::API
 
   def handle_error(e)
     status = case e&.class&.name
+             when 'PreviewController::PreviewServiceError'
+               e&.status || :internal_server_error
              when *NOT_FOUND_ERROR_CLASSES
                :not_found
              when 'ActionController::UnknownFormat'
                :not_acceptable
-             when *BAD_REQUEST_CLASSSES
-               :bad_request
+             when *UNPROCESSABLE_ENTITY_CLASSES
+               :unprocessable_entity
              else
                :internal_server_error
              end

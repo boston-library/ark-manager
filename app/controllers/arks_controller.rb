@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 class ArksController < ApplicationController
-  before_action :find_ark, only: [:show, :destroy]
+  before_action :find_ark, except: [:create]
   before_action :check_for_existing_ark, only: [:create]
 
   def show
     redirect_to @ark.redirect_url and return if redirect_for_object?
     # Renders JSON if !redirect_for_object
-    fresh_when last_updated: @ark.updated_at.utc, strong_etag: @ark
+    fresh_when last_modified: @ark.updated_at.utc, strong_etag: @ark
   end
 
   def create
@@ -15,36 +15,64 @@ class ArksController < ApplicationController
       Rails.logger.debug 'Found a matching ark!'
       Rails.logger.debug @ark.to_s
 
-      render action: :show, status: :ok and return if !@ark.deleted? && stale?(strong_etag: @ark, last_updated: @ark.updated_at.utc)
+      render action: :show, status: :ok and return if !@ark.deleted? && stale?(strong_etag: @ark, last_modified: @ark.updated_at.utc)
 
       Rails.logger.debug "Ark #{@ark.noid} was deleted...Restoring..."
+
       status = :accepted
       @ark.deleted = false
     else
       status = :created
       @ark = Ark.new(ark_params)
+
       Rails.logger.debug 'Initialized new Ark!'
       Rails.logger.debug @ark.to_s
     end
 
-    if @ark.save
-      render status: status
-    else
-      Rails.logger.error 'Ark failed to save!'
-      Rails.logger.error @ark.errors.full_messages.join("\n")
-      @errors = build_ark_errors(@ark.errors)
-      render status: :unprocessable_entity
-    end
+    render status: status and return if @ark.save
+
+    Rails.logger.error 'Ark failed to save!'
+    Rails.logger.error @ark.errors.full_messages.join("\n")
+
+    @errors = build_ark_errors(@ark.errors)
+    render status: :unprocessable_entity
   end
 
   def destroy
     @ark.deleted = true
-    if @ark.save
-      head :no_content
-    else
-      errors = build_ark_errors(@ark.errors)
-      render json: { errors: errors }, status: :unprocessable_entity
-    end
+    head :no_content and return if @ark.save
+
+    errors = build_ark_errors(@ark.errors)
+    render json: { errors: errors }, status: :unprocessable_entity
+  end
+
+  def iiif_manifest
+    redirect_to "#{@ark.redirect_url}/manifest"
+  end
+
+  def iiif_canvas
+    @canvas_object = Ark.active.find_by!(noid: params[:canvas_object_id])
+    redirect_to "#{@ark.redirect_url}/canvas/#{@canvas_object.pid}"
+  end
+
+  def iiif_annotation
+    @annotation_object = Ark.active.find_by!(noid: params[:annotation_object_id])
+    redirect_to "#{@ark.redirect_url}/annotation/#{@annotation_object.pid}"
+  end
+
+  def iiif_collection
+    redirect_to "#{@ark.redirect_url}/iiif_collection"
+  end
+
+  def iiif_search
+    iiif_query_params = request.query_parameters.to_query
+
+    search_redirect_url = if iiif_query_params.blank?
+                      "#{@ark.redirect_url}/iiif_search"
+                    else
+                      "#{@ark.redirect_url}/iiif_search?#{iiif_query_params}"
+                    end
+    redirect_to search_redirect_url
   end
 
   private

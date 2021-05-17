@@ -8,6 +8,7 @@ ruby '>= 2.5.9'
 gem 'bootsnap', '>= 1.1.0', require: false
 # Reduces boot times through caching; required in config/boot.rb
 gem 'connection_pool', '~> 2.2'
+gem 'down', '~> 5.2'
 gem 'faraday', '~> 1.4'
 gem 'faraday-net_http_persistent', '~> 1.1'
 gem 'friendly_id', '~> 5.4'
