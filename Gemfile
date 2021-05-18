@@ -54,6 +54,7 @@ group :test do
   gem 'rails-controller-testing', '~> 1.0'
   gem 'shoulda-matchers', '~> 4.5'
   gem 'vcr', '~> 6'
+  gem 'webmock', '~> 3.13'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

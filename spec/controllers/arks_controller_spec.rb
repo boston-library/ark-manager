@@ -103,6 +103,122 @@ RSpec.describe ArksController, type: :controller do
         end
       end
     end
+
+    describe 'iiif endpoints' do
+      let!(:valid_params) { { ark: 'ark:', namespace: ark.namespace_ark, noid: ark.noid, object_in_view: true } }
+
+      describe '#iiif_manifest' do
+        it 'expects a 302 response and to redirect_to the :ark #redirect_url/manifest' do
+          get :iiif_manifest, params: valid_params
+          expect(response).to have_http_status(:found)
+          expect(response).to redirect_to("#{ark.redirect_url}/manifest")
+        end
+
+        context 'with invalid params' do
+          let(:invalid_params) { valid_params.dup.update(noid: 'abcde1234') }
+
+          it 'expects a 404 response with no content' do
+            get :iiif_manifest, params: invalid_params
+            expect(response.content_type).to eq('text/html')
+            expect(response).to have_http_status(:not_found)
+            expect(response.body).to be_empty
+          end
+        end
+      end
+
+      describe '#iiif_canvas' do
+        let!(:canvas_object) { create(:ark) }
+        let(:canvas_valid_params) { { ark: 'ark:', namespace: ark.namespace_ark, noid: ark.noid, object_in_view: true }.merge(canvas_object_id: canvas_object.noid) }
+
+        it 'expects a 302 response and to redirect_to the :ark #redirect_url/canvas/:canvas_object_pid' do
+          get :iiif_canvas, params: canvas_valid_params
+          expect(response).to have_http_status(:found)
+          expect(response).to redirect_to("#{ark.redirect_url}/canvas/#{canvas_object.pid}")
+        end
+
+        context 'with invalid params' do
+          let(:canvas_invalid_params) { canvas_valid_params.dup.update(noid: 'abcde1234') }
+
+          it 'expects a 404 response with no content' do
+            get :iiif_canvas, params: canvas_invalid_params
+            expect(response.content_type).to eq('text/html')
+            expect(response).to have_http_status(:not_found)
+            expect(response.body).to be_empty
+          end
+        end
+      end
+
+      describe '#iiif_annotation' do
+        let!(:annotation_object) { create(:ark) }
+        let(:annotation_valid_params) { { ark: 'ark:', namespace: ark.namespace_ark, noid: ark.noid, object_in_view: true }.merge(annotation_object_id: annotation_object.noid) }
+
+        it 'expects a 302 response and to redirect_to the :ark #redirect_url/annotation/:annotation_object_pid' do
+          get :iiif_annotation, params: annotation_valid_params
+          expect(response).to have_http_status(:found)
+          expect(response).to redirect_to("#{ark.redirect_url}/annotation/#{annotation_object.pid}")
+        end
+
+        context 'with invalid params' do
+          let(:annotation_invalid_params) { annotation_valid_params.dup.update(noid: 'abcde1234') }
+
+          it 'expects a 404 response with no content' do
+            get :iiif_annotation, params: annotation_invalid_params
+            expect(response.content_type).to eq('text/html')
+            expect(response).to have_http_status(:not_found)
+            expect(response.body).to be_empty
+          end
+        end
+      end
+
+      describe '#iiif_collection' do
+        it 'expects a 302 response and to redirect_to the :ark #redirect_url/manifest' do
+          get :iiif_collection, params: valid_params
+          expect(response).to have_http_status(:found)
+          expect(response).to redirect_to("#{ark.redirect_url}/iiif_collection")
+        end
+
+        context 'with invalid params' do
+          let(:invalid_params) { valid_params.dup.update(noid: 'abcde1234') }
+
+          it 'expects a 404 response with no content' do
+            get :iiif_collection, params: invalid_params
+            expect(response.content_type).to eq('text/html')
+            expect(response).to have_http_status(:not_found)
+            expect(response.body).to be_empty
+          end
+        end
+      end
+
+      describe '#iiif_search' do
+        it 'expects a 302 response and to redirect_to the :ark #redirect_url/iiif_search' do
+          get :iiif_search, params: valid_params
+          expect(response).to have_http_status(:found)
+          expect(response).to redirect_to("#{ark.redirect_url}/iiif_search")
+        end
+
+        context 'with query params' do
+          let(:query) { { q: 'foo' } }
+          let(:valid_query_params) { valid_params.merge(query) }
+
+          it 'expects a 302 response and to redirect_to the :ark #redirect_url/iiif_search?:query' do
+            get :iiif_search, params: valid_query_params
+            expect(response).to have_http_status(:found)
+            expect(response).to redirect_to("#{ark.redirect_url}/iiif_search?#{query.to_query}")
+          end
+        end
+
+        context 'with invalid params' do
+          let(:invalid_params) { valid_params.dup.update(noid: 'abcde1234') }
+
+          it 'expects a 404 response with no content' do
+            get :iiif_search, params: invalid_params
+            expect(response.content_type).to eq('text/html')
+            expect(response).to have_http_status(:not_found)
+            expect(response.body).to be_empty
+          end
+        end
+      end
+    end
   end
 
   describe '#create' do

@@ -20,7 +20,7 @@ class SolrService < ApplicationService
 
   #bpl-dev:1fda3335
   def initialize(ark_id)
-    @query = {'id': ark_id}
+    @query = { 'id': ark_id }
   end
 
   def call

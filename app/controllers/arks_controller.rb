@@ -51,12 +51,14 @@ class ArksController < ApplicationController
   end
 
   def iiif_canvas
-    @canvas_object = Ark.active.find_by!(noid: params[:canvas_object_id])
+    @canvas_object = Ark.select(:created_at, :namespace_ark, :noid, :pid, :url_base, :deleted).object_in_view(params[:namespace], params[:canvas_object_id]).first!
+
     redirect_to "#{@ark.redirect_url}/canvas/#{@canvas_object.pid}"
   end
 
   def iiif_annotation
-    @annotation_object = Ark.active.find_by!(noid: params[:annotation_object_id])
+    @annotation_object =  Ark.select(:created_at, :namespace_ark, :noid, :pid, :url_base, :deleted).object_in_view(params[:namespace], params[:annotation_object_id]).first!
+
     redirect_to "#{@ark.redirect_url}/annotation/#{@annotation_object.pid}"
   end
 
@@ -65,7 +67,7 @@ class ArksController < ApplicationController
   end
 
   def iiif_search
-    iiif_query_params = request.query_parameters.to_query
+    iiif_query_params = iiif_search_params.to_query
 
     search_redirect_url = if iiif_query_params.blank?
                       "#{@ark.redirect_url}/iiif_search"
@@ -98,6 +100,10 @@ class ArksController < ApplicationController
 
   def redirect_for_object?
     params[:object_in_view] || !request.format.json?
+  end
+
+  def iiif_search_params
+    params.permit(:q, :motivation, :date, :user)
   end
 
   def ark_params

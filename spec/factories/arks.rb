@@ -4,8 +4,8 @@ FactoryBot.define do
   factory :ark do
     institution_ark
     namespace_ark { '50959' }
-    url_base { 'https://digitalcommonwealth.org' }
-    namespace_id { 'commonwealth' }
+    url_base { 'http://search.hydradev.bpl.org' }
+    namespace_id { 'bpl-dev' }
 
     trait :invalid_ark do
       local_original_identifier { nil }

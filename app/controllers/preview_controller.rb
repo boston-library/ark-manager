@@ -38,7 +38,7 @@ class PreviewController < ApplicationController
 
     solr_resp = SolrService.call(@ark.pid)
 
-    handle_preview_service_error!(solr_resp) if !solr_resp.success?
+    handle_preview_service_error!(solr_resp) if solr_resp.failure?
 
     send_icon(filename) and return if solr_resp.explicit?
 
@@ -48,13 +48,14 @@ class PreviewController < ApplicationController
                       when /Filestream\z/
                         solr_doc['storage_key_base_ss']
                       else
-                        solr_response['exemplary_image_key_base_ss']
+                        solr_doc['exemplary_image_key_base_ss']
                       end
-    not_found!("No storage_key_base_ss or exemplary_image_key_base_ss found In Solr Doc") if filestream_key.blank?
+
+    not_found!("No 'storage_key_base_ss' or 'exemplary_image_key_base_ss' found In solr response doc") if filestream_key.blank?
 
     image_data_resp = ImageContentService.call(@ark.pid, filestream_id, filestream_key, file_suffix)
 
-    handle_preview_service_error!(image_data_resp) if !image_data_resp.success?
+    handle_preview_service_error!(image_data_resp) if image_data_resp.failure?
 
     send_image(file_name, image_data_resp.result.path)
   end
