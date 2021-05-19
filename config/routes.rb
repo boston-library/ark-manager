@@ -32,7 +32,7 @@ Rails.application.routes.draw do
       controller 'preview' do
         match '/thumbnail', action: 'thumbnail', as: 'thumbnail', via: [:get, :post]
         get '/full_image', action: 'full_image', as: 'full_image'
-        get '/large_image', action: 'preview#large_image', as: 'large_image'
+        get '/large_image', action: 'large_image', as: 'large_image'
       end
 
       match '*path' => 'application#route_not_found', via: [:all]

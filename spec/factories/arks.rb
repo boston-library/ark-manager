@@ -32,5 +32,12 @@ FactoryBot.define do
       model_type { 'Curator::DigitalObject' }
       parent_pid { nil }
     end
+
+    trait :filestream_image_ark do
+      local_original_identifier { Faker::File.file_name(dir: '', ext: 'tif') }
+      local_original_identifier_type { 'filename' }
+      model_type { 'Curator::Filestreams::Image' }
+      parent_pid { nil }
+    end
   end
 end

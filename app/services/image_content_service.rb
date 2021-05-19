@@ -25,6 +25,7 @@ class ImageContentService < ApplicationService
        status = get_status_symbol(e&.response&.code.to_i) || :internal_server_error
        errors.add(status, e.message)
      end
+     nil
    end
 
    private

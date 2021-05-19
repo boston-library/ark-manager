@@ -1,0 +1,204 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://127.0.0.1:8983/solr/curator_development/get?id=bpl-dev%3Aj6731q74d&wt=json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v1.4.1
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      last-modified:
+      - Wed, 19 May 2021 17:04:32 GMT
+      etag:
+      - '"MzZjMDAwMDAwMDAwMDAwMFNvbHI="'
+      content-type:
+      - application/json;charset=utf-8
+      content-length:
+      - '4263'
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "doc":
+          {
+            "id":"bpl-dev:j6731q74d",
+            "system_create_dtsi":"2019-10-30T13:57:12Z",
+            "system_modified_dtsi":"2021-05-14T19:33:17Z",
+            "curator_model_ssi":"Curator::DigitalObject",
+            "curator_model_suffix_ssi":"DigitalObject",
+            "title_info_primary_tsi":"Map of the Yosemite Valley",
+            "title_info_primary_subtitle_tsi":"from surveys made by order of the Commissioners to manage the Yosemite Valley and Mariposa Big Tree Grove",
+            "genre_basic_ssim":["Maps"],
+            "date_tsim":["1870–1872"],
+            "date_type_ssm":["dateCreated"],
+            "date_edtf_ssm":["1870/1872"],
+            "date_start_dtsi":"1870-01-01T00:00:00Z",
+            "date_end_dtsi":"1872-12-31T23:59:59.999Z",
+            "name_tsim":["King, Clarence, 1842-1901"],
+            "name_role_tsim":["Creator"],
+            "name_facet_ssim":["King, Clarence, 1842-1901"],
+            "related_item_host_ssim":["Norman B. Leventhal Map Center Collection"],
+            "subject_topic_tsim":["Yosemite Valley (Calif.)--Maps"],
+            "subject_facet_ssim":["Yosemite Valley (Calif.)--Maps",
+              "1870"],
+            "subject_date_tsim":["1870"],
+            "subject_date_start_dtsi":"1870-01-01T00:00:00Z",
+            "subject_date_end_dtsi":"1870-12-31T23:59:59.999Z",
+            "subject_coordinates_geospatial":["37.7333,-119.55",
+              "ENVELOPE(-119.7, -119.48, 37.79, 37.68)"],
+            "subject_point_geospatial":["37.7333,-119.55"],
+            "subject_bbox_geospatial":["ENVELOPE(-119.7, -119.48, 37.79, 37.68)"],
+            "subject_geojson_facet_ssim":["{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-119.55,37.7333]},\"properties\":{\"placename\":\"Yosemite Valley, CA\"}}",
+              "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Polygon\",\"coordinates\":[[[-119.7,37.68],[-119.48,37.68],[-119.48,37.79],[-119.7,37.79],[-119.7,37.68]]]},\"bbox\":[-119.7,37.68,-119.48,37.79]}"],
+            "subject_hiergeo_geojson_ssm":["{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-119.55,37.7333]},\"properties\":{\"area\":\"Yosemite Valley\",\"continent\":\"North and Central America\",\"country\":\"United States\",\"state\":\"California\",\"county\":\"Mariposa\"}}"],
+            "physical_location_ssim":["Boston Public Library"],
+            "sub_location_tsi":"Norman B. Leventhal Map Center",
+            "identifier_local_call_tsim":["G4362.Y62 1870 .G3"],
+            "identifier_local_barcode_tsim":["39999065685610"],
+            "note_resp_tsim":["by C. King and J.T. Gardner, 1865 ; drawn by J.T.G."],
+            "note_date_tsim":["This date is inferred."],
+            "note_tsim":["Ladders moved from preceding Bridge to above Vernal Falls; erasure is visible. Other place names added or removed.",
+              "Relief shown by hachures."],
+            "edition_name_tsi":"[2nd ed.].",
+            "scale_tsim":["Scale [ca. 1:32,000]"],
+            "rights_ss":"No known copyright restrictions.",
+            "license_ss":"This work is licensed for use under a Creative Commons Attribution Non-Commercial Share Alike License (CC BY-NC-SA).",
+            "reuse_allowed_ssi":"creative commons",
+            "license_uri_ss":"https://creativecommons.org/licenses/by-nc-sa/4.0/",
+            "rightsstatement_ss":"In Copyright",
+            "rightsstatement_uri_ss":"http://rightsstatements.org/vocab/InC/1.0/",
+            "digital_origin_ssi":"reformatted_digital",
+            "extent_tsi":"1 map ; 38 x 63 cm.",
+            "publisher_tsi":"Julius Bien",
+            "pubplace_tsi":"New York",
+            "issuance_tsi":"monographic",
+            "resource_type_manuscript_bsi":false,
+            "type_of_resource_ssim":["Cartographic"],
+            "lang_term_ssim":["English"],
+            "publishing_state_ssi":"published",
+            "processing_state_ssi":"complete",
+            "destination_site_ssim":["commonwealth",
+              "bpl",
+              "nblmc"],
+            "hosting_status_ssi":"hosted",
+            "harvesting_status_bsi":true,
+            "exemplary_image_ssi":"bpl-dev:j6731q75p",
+            "exemplary_image_key_base_ss":"images/bpl-dev:j6731q75p",
+            "admin_set_name_ssi":"Norman B. Leventhal Map Center Collection",
+            "admin_set_ark_id_ssi":"bpl-dev:000000000",
+            "institution_name_ssi":"Boston Public Library",
+            "institution_ark_id_ssi":"bpl-dev:4q77fr32b",
+            "collection_name_ssim":["Norman B. Leventhal Map Center Collection"],
+            "collection_ark_id_ssim":["bpl-dev:000000000"],
+            "filenames_ssim":["06_01_011448",
+              "bpl-dev:j6731q74d_metadata"],
+            "_version_":1699766269555769344,
+            "timestamp":"2021-05-14T20:17:15.169Z"}}
+  recorded_at: Wed, 19 May 2021 21:16:12 GMT
+- request:
+    method: get
+    uri: https://iiifdev.bpl.org/iiif/2/bpl-dev:j6731q74d/full/full/0/default.jpg
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Down/5.2.1
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Date:
+      - Wed, 19 May 2021 21:26:07 GMT
+      Server:
+      - Restlet-Framework/2.3.11
+      Strict-Transport-Security:
+      - max-age=15768000; includeSubDomains; preload;
+      X-Frame-Options:
+      - DENY
+      X-Content-Type-Options:
+      - nosniff
+      Content-Type:
+      - text/plain;charset=utf-8
+      Vary:
+      - Accept-Charset,Accept-Encoding,Accept-Language,Origin,Accept
+      X-Powered-By:
+      - Cantaloupe/4.0.4-SNAPSHOT
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: "404 Not Found\n\nHTTP 404\n\n\njava.nio.file.NoSuchFileException: HTTP
+        404\n\tat edu.illinois.library.cantaloupe.source.HttpSource.checkAccess(HttpSource.java:244)\n\tat
+        edu.illinois.library.cantaloupe.resource.iiif.v2.ImageResource.doGet(ImageResource.java:120)\n\tat
+        jdk.internal.reflect.GeneratedMethodAccessor5.invoke(Unknown Source)\n\tat
+        java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat
+        java.base/java.lang.reflect.Method.invoke(Method.java:567)\n\tat org.restlet.resource.ServerResource.doHandle(ServerResource.java:511)\n\tat
+        org.restlet.resource.ServerResource.get(ServerResource.java:723)\n\tat org.restlet.resource.ServerResource.doHandle(ServerResource.java:603)\n\tat
+        org.restlet.resource.ServerResource.doNegotiatedHandle(ServerResource.java:662)\n\tat
+        org.restlet.resource.ServerResource.doConditionalHandle(ServerResource.java:348)\n\tat
+        org.restlet.resource.ServerResource.handle(ServerResource.java:1020)\n\tat
+        org.restlet.resource.Finder.handle(Finder.java:236)\n\tat org.restlet.routing.Filter.doHandle(Filter.java:150)\n\tat
+        org.restlet.routing.Filter.handle(Filter.java:197)\n\tat org.restlet.routing.Router.doHandle(Router.java:422)\n\tat
+        org.restlet.routing.Router.handle(Router.java:641)\n\tat org.restlet.routing.Filter.doHandle(Filter.java:150)\n\tat
+        org.restlet.routing.Filter.handle(Filter.java:197)\n\tat org.restlet.routing.Filter.doHandle(Filter.java:150)\n\tat
+        org.restlet.routing.Filter.handle(Filter.java:197)\n\tat org.restlet.routing.Filter.doHandle(Filter.java:150)\n\tat
+        org.restlet.engine.application.StatusFilter.doHandle(StatusFilter.java:140)\n\tat
+        org.restlet.routing.Filter.handle(Filter.java:197)\n\tat org.restlet.routing.Filter.doHandle(Filter.java:150)\n\tat
+        org.restlet.routing.Filter.handle(Filter.java:197)\n\tat org.restlet.engine.CompositeHelper.handle(CompositeHelper.java:202)\n\tat
+        org.restlet.engine.application.ApplicationHelper.handle(ApplicationHelper.java:77)\n\tat
+        org.restlet.Application.handle(Application.java:385)\n\tat org.restlet.routing.Filter.doHandle(Filter.java:150)\n\tat
+        org.restlet.routing.Filter.handle(Filter.java:197)\n\tat org.restlet.routing.Router.doHandle(Router.java:422)\n\tat
+        org.restlet.routing.Router.handle(Router.java:641)\n\tat org.restlet.routing.Filter.doHandle(Filter.java:150)\n\tat
+        org.restlet.routing.Filter.handle(Filter.java:197)\n\tat org.restlet.routing.Router.doHandle(Router.java:422)\n\tat
+        org.restlet.routing.Router.handle(Router.java:641)\n\tat org.restlet.routing.Filter.doHandle(Filter.java:150)\n\tat
+        org.restlet.routing.Filter.handle(Filter.java:197)\n\tat org.restlet.engine.CompositeHelper.handle(CompositeHelper.java:202)\n\tat
+        org.restlet.Component.handle(Component.java:408)\n\tat org.restlet.Server.handle(Server.java:507)\n\tat
+        org.restlet.engine.connector.ServerHelper.handle(ServerHelper.java:63)\n\tat
+        org.restlet.engine.adapter.HttpServerHelper.handle(HttpServerHelper.java:143)\n\tat
+        org.restlet.ext.servlet.ServerServlet.service(ServerServlet.java:1117)\n\tat
+        javax.servlet.http.HttpServlet.service(HttpServlet.java:790)\n\tat org.eclipse.jetty.servlet.ServletHolder.handle(ServletHolder.java:857)\n\tat
+        org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:535)\n\tat
+        org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:146)\n\tat
+        org.eclipse.jetty.security.SecurityHandler.handle(SecurityHandler.java:548)\n\tat
+        org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:132)\n\tat
+        org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:257)\n\tat
+        org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:1595)\n\tat
+        org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:255)\n\tat
+        org.eclipse.jetty.server.handler.ContextHandler.doHandle(ContextHandler.java:1340)\n\tat
+        org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:203)\n\tat
+        org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:473)\n\tat
+        org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:1564)\n\tat
+        org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:201)\n\tat
+        org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:1242)\n\tat
+        org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:144)\n\tat
+        org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:132)\n\tat
+        org.eclipse.jetty.server.Server.handle(Server.java:503)\n\tat org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:364)\n\tat
+        org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:260)\n\tat
+        org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:305)\n\tat
+        org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:103)\n\tat org.eclipse.jetty.io.ssl.SslConnection$DecryptedEndPoint.onFillable(SslConnection.java:411)\n\tat
+        org.eclipse.jetty.io.ssl.SslConnection.onFillable(SslConnection.java:305)\n\tat
+        org.eclipse.jetty.io.ssl.SslConnection$2.succeeded(SslConnection.java:159)\n\tat
+        org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:103)\n\tat org.eclipse.jetty.io.ChannelEndPoint$2.run(ChannelEndPoint.java:118)\n\tat
+        org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.runTask(EatWhatYouKill.java:333)\n\tat
+        org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.doProduce(EatWhatYouKill.java:310)\n\tat
+        org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.tryProduce(EatWhatYouKill.java:168)\n\tat
+        org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.run(EatWhatYouKill.java:126)\n\tat
+        org.eclipse.jetty.util.thread.ReservedThreadExecutor$ReservedThread.run(ReservedThreadExecutor.java:366)\n\tat
+        org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:765)\n\tat
+        org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:683)\n\tat
+        java.base/java.lang.Thread.run(Thread.java:835)\n\n"
+  recorded_at: Wed, 19 May 2021 21:26:07 GMT
+recorded_with: VCR 6.0.0

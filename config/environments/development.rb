@@ -30,6 +30,7 @@ Rails.application.configure do
       'Cache-Control' => "public, max-age=#{1.day.to_i}"
     }
     config.cache_store = :redis_cache_store, {
+      driver: :hiredis,
       url: ENV['ARK_MANAGER_REDIS_CACHE_URL'],
       pool_size: ENV.fetch('RAILS_MAX_THREADS') { 5 },
       pool_timeout: 10,
@@ -49,6 +50,7 @@ Rails.application.configure do
 
   # Highlight code that triggered database queries in logs.
   config.active_record.verbose_query_logs = true
+
   config.debug_exception_response_format = :api
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true

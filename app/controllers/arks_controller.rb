@@ -6,6 +6,7 @@ class ArksController < ApplicationController
 
   def show
     redirect_to @ark.redirect_url and return if redirect_for_object?
+
     # Renders JSON if !redirect_for_object
     fresh_when last_modified: @ark.updated_at.utc, strong_etag: @ark
   end
@@ -15,7 +16,7 @@ class ArksController < ApplicationController
       Rails.logger.debug 'Found a matching ark!'
       Rails.logger.debug @ark.to_s
 
-      render action: :show, status: :ok and return if !@ark.deleted? && stale?(strong_etag: @ark, last_modified: @ark.updated_at.utc)
+      render action: :show, status: :ok and return if !@ark.deleted?
 
       Rails.logger.debug "Ark #{@ark.noid} was deleted...Restoring..."
 

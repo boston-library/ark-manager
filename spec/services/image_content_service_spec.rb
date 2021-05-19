@@ -7,7 +7,7 @@ RSpec.describe ImageContentService, type: :service do
   let(:described_service_class) { described_class }
   let(:valid_ark_id) { 'bpl-dev:j6731q74d' }
   let(:filestream_id) { 'image_thumbnail_300' }
-  let(:filestream_key) { 'images/bpl-dev:j6731q75p' }
+  let(:filestream_key) { "images/bpl-dev:j6731q75p" }
   let(:file_suffix) {  '_thumbnail' }
 
   specify { expect(described_service_class).to be_const_defined('ApplicationService') }
@@ -38,5 +38,26 @@ RSpec.describe ImageContentService, type: :service do
   end
 
   describe 'deliberate failure' do
+    subject { described_service_class.call(invalid_ark_id, filestream_id, filestream_key, file_suffix) }
+
+    let(:invalid_ark_id) { 'bpl-dev:nonexistent' }
+    let(:filestream_id) { 'image_thumbnail_300' }
+    let(:filestream_key) { "images/#{invalid_ark_id}" }
+    let(:file_suffix) {  '_thumbnail' }
+
+    around(:each) { |spec| VCR.use_cassette("services/image_content/#{invalid_ark_id}", &spec) }
+
+    it { is_expected.not_to be_success }
+    it { is_expected.not_to be_successful }
+    it { is_expected.to be_failure }
+
+    it 'expects the #errors not to be #empty?' do
+      expect(subject.errors).not_to be_empty
+      expect(subject.errors.messages).to have_key(:not_found)
+    end
+
+    it 'expects the #result to be an empty Hash' do
+      expect(subject.result).to be_nil
+    end
   end
 end
