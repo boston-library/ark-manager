@@ -81,6 +81,44 @@ RSpec.configure do |config|
           }
         }
       ]
+    },
+    'object_in_view.json' => {
+      openapi: '3.0.1',
+      info: {
+        title: 'Object In View',
+        description: 'Permalink and IIIF endpoints for Arks'
+      },
+      paths: {},
+      components: {},
+      servers: [
+        {
+          url: 'http://{defaultHost}',
+          variables: {
+            defaultHost: {
+              default: '127.0.0.1:3000'
+            }
+          }
+        }
+      ]
+    },
+    'image_previews.json' => {
+      openapi: '3.0.1',
+      info: {
+        title: 'Image Previews',
+        description: 'Endpoints for previewing varying images for Ark'
+      },
+      paths: {},
+      components: {},
+      servers: [
+        {
+          url: 'http://{defaultHost}',
+          variables: {
+            defaultHost: {
+              default: '127.0.0.1:3000'
+            }
+          }
+        }
+      ]
     }
   }
 

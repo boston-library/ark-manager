@@ -12,7 +12,7 @@ class ApplicationController < ActionController::API
     'ActiveRecord::RecordNotFound',
     'ActionController::RoutingError',
     'PreviewController::ImageNotFound'
-  ]
+  ].freeze
 
   UNPROCESSABLE_ENTITY_CLASSES = [
     'ActiveRecord::RecordInvalid',
@@ -44,10 +44,10 @@ class ApplicationController < ActionController::API
     status = case e&.class&.name
              when 'PreviewController::PreviewServiceError'
                e&.status || :internal_server_error
-             when *NOT_FOUND_ERROR_CLASSES
-               :not_found
              when 'ActionController::UnknownFormat'
                :not_acceptable
+             when *NOT_FOUND_ERROR_CLASSES
+               :not_found
              when *UNPROCESSABLE_ENTITY_CLASSES
                :unprocessable_entity
              else

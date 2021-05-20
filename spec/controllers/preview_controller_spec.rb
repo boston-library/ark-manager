@@ -6,6 +6,14 @@ RSpec.describe PreviewController, type: :controller do
   let!(:digital_object_ark) { create(:ark, :object_ark, noid: 'j6731q74d') }
   let!(:filestream_image_ark) { create(:ark, :filestream_image_ark, noid: 'j6731q75p') }
 
+  describe 'Controller Class Constants' do
+    subject { described_class }
+
+    it { is_expected.to be_const_defined(:FILE_SUFFIXES) }
+    it { is_expected.to be_const_defined(:FILESTREAM_ATTACHMENT_NAMES) }
+    it { is_expected.to be_const_defined(:DEFAULT_ICON_FILEPATH) }
+  end
+
   render_views
 
   describe '#thumbnail' do

@@ -1,0 +1,191 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Image Previews",
+    "description": "Endpoints for previewing varying images for Ark"
+  },
+  "paths": {
+    "/{ark}/{namespace}/{noid}/thumbnail": {
+      "get": {
+        "summary": "Ark Thumbnail",
+        "tags": [
+          "Arks",
+          "Images",
+          "Thumbnail"
+        ],
+        "parameters": [
+          {
+            "name": "ark",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "namespace",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "noid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Ark Not Found"
+          }
+        }
+      },
+      "post": {
+        "summary": "Ark Thumbnail",
+        "tags": [
+          "Arks",
+          "Images",
+          "Thumbnail"
+        ],
+        "parameters": [
+          {
+            "name": "ark",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "namespace",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "noid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Inline file response"
+          },
+          "404": {
+            "description": "Ark Not Found"
+          }
+        }
+      }
+    },
+    "/{ark}/{namespace}/{noid}/large_image": {
+      "get": {
+        "summary": "Ark large_image",
+        "tags": [
+          "Arks",
+          "Images",
+          "Large-Image"
+        ],
+        "parameters": [
+          {
+            "name": "ark",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "namespace",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "noid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Inline file response"
+          },
+          "404": {
+            "description": "Ark Not Found"
+          }
+        }
+      }
+    },
+    "/{ark}/{namespace}/{noid}/full_image": {
+      "get": {
+        "summary": "Ark Full Image",
+        "tags": [
+          "Arks",
+          "Images",
+          "Large-Image"
+        ],
+        "parameters": [
+          {
+            "name": "ark",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "namespace",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "noid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Inline file response"
+          },
+          "404": {
+            "description": "Ark Not Found"
+          }
+        }
+      }
+    }
+  },
+  "components": {},
+  "servers": [
+    {
+      "url": "http://{defaultHost}",
+      "variables": {
+        "defaultHost": {
+          "default": "127.0.0.1:3000"
+        }
+      }
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 
 class SolrService < ApplicationService
   class << self
-    SOLR_CLIENT_MUTEX=Mutex.new
+    SOLR_CLIENT_MUTEX = Mutex.new
     def solr_client
       Thread.current[:current_curator_solr_client] ||= begin
         SOLR_CLIENT_MUTEX.synchronize do
@@ -22,7 +22,6 @@ class SolrService < ApplicationService
 
   attr_reader :query
 
-  #bpl-dev:1fda3335
   def initialize(ark_id)
     @query = { 'id': ark_id }
   end

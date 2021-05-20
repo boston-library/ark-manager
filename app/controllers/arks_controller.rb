@@ -58,7 +58,7 @@ class ArksController < ApplicationController
   end
 
   def iiif_annotation
-    @annotation_object =  Ark.select(:created_at, :namespace_ark, :noid, :pid, :url_base, :deleted).object_in_view(params[:namespace], params[:annotation_object_id]).first!
+    @annotation_object = Ark.select(:created_at, :namespace_ark, :noid, :pid, :url_base, :deleted).object_in_view(params[:namespace], params[:annotation_object_id]).first!
 
     redirect_to "#{@ark.redirect_url}/annotation/#{@annotation_object.pid}"
   end
@@ -70,11 +70,8 @@ class ArksController < ApplicationController
   def iiif_search
     iiif_query_params = iiif_search_params.to_query
 
-    search_redirect_url = if iiif_query_params.blank?
-                      "#{@ark.redirect_url}/iiif_search"
-                    else
-                      "#{@ark.redirect_url}/iiif_search?#{iiif_query_params}"
-                    end
+    search_redirect_url = iiif_query_params.blank? ? "#{@ark.redirect_url}/iiif_search" : "#{@ark.redirect_url}/iiif_search?#{iiif_query_params}"
+
     redirect_to search_redirect_url
   end
 

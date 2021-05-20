@@ -723,9 +723,13 @@ RSpec/PredicateMatcher:
   Enabled: true
 
 RSpec/RepeatedDescription:
+  Exclude:
+    - 'spec/requests/preview_spec.rb'
   Enabled: true
 
 RSpec/RepeatedExample:
+  Exclude:
+    - 'spec/requests/preview_spec.rb'
   Enabled: true
 
 RSpec/ReturnFromStub:
@@ -735,6 +739,8 @@ RSpec/ScatteredLet:
   Enabled: false
 
 RSpec/ScatteredSetup:
+  Exclude:
+    - 'spec/requests/preview_spec.rb'
   Enabled: true
 
 RSpec/SharedContext:

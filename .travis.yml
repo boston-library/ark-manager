@@ -2,9 +2,6 @@ language: ruby
 os: linux
 dist: bionic
 
-services:
-  - redis
-
 cache:
   bundler: true
   apt: true
@@ -37,6 +34,9 @@ env:
     - PGVER=12
     - PGPORT=5432
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
+    - CURATOR_SOLR_URL=http://127.0.0.1:8983/solr/curator_development
+    - AZURE_DERIVATIVES_URL=http://127.0.0.1:8888/devstoreaccount1/derivatives
+    - IIIF_SERVER_URL=https://iiifdev.bpl.org/iiif/2/
   jobs:
     - "RAILS_VERSION=6.0.3.7"
 

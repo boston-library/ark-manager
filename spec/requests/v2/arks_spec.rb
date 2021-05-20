@@ -177,40 +177,4 @@ RSpec.describe 'Ark Manager V2 Endpoints', type: :request, swagger_doc: 'v2/ark_
       end
     end
   end
-
-  describe 'Permalink' do
-    let!(:valid_ark_param) { 'ark:' }
-    let!(:valid_namespace_param) { '50959' }
-
-    path '/{ark}/{namespace}/{noid}' do
-      get 'Ark Permalink' do
-        tags 'Arks', 'Permalink', 'Redirect'
-        produces 'text/html'
-        parameter name: :ark, in: :path, type: :string
-        parameter name: :namespace, in: :path, type: :string
-        parameter name: :noid, in: :path, type: :string
-
-        response '302', 'Permalink Redirection' do
-          let(:ark) { valid_ark_param }
-          let(:namespace) { valid_namespace_param }
-          let(:noid) { create(:ark).noid }
-          run_test!
-        end
-
-        response '404', 'Invalid :ark parameter' do
-          let(:ark) { 'invalid_ark_param' }
-          let(:namespace) { valid_namespace_param }
-          let(:noid) { 'commonwealth:000000000' }
-          run_test!
-        end
-
-        response '404', 'Ark Not Found' do
-          let(:ark) { valid_ark_param }
-          let(:namespace) { valid_namespace_param }
-          let(:noid) { 'abcde1234' }
-          run_test!
-        end
-      end
-    end
-  end
 end

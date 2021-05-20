@@ -7,7 +7,7 @@ RSpec.describe ImageContentService, type: :service do
   let(:described_service_class) { described_class }
   let(:valid_ark_id) { 'bpl-dev:j6731q74d' }
   let(:filestream_attachment_name) { 'image_thumbnail_300' }
-  let(:filestream_key) { "images/bpl-dev:j6731q75p" }
+  let(:filestream_key) { 'images/bpl-dev:j6731q75p' }
   let(:file_suffix) {  '_thumbnail' }
 
   specify { expect(described_service_class).to be_const_defined('ApplicationService') }
@@ -25,7 +25,6 @@ RSpec.describe ImageContentService, type: :service do
 
     it { is_expected.to respond_to(:filestream_attachment_name, :filestream_key, :file_suffix, :filestream_ark_id) }
   end
-
 
   describe 'successful #result' do
     subject { described_service_class.call(filestream_attachment_name, filestream_key, file_suffix) }
