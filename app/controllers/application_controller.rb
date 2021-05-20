@@ -8,6 +8,17 @@ class ApplicationController < ActionController::API
     version: '2',
   }.freeze
 
+  NOT_FOUND_ERROR_CLASSES = [
+    'ActiveRecord::RecordNotFound',
+    'ActionController::RoutingError',
+    'PreviewController::ImageNotFound'
+  ].freeze
+
+  UNPROCESSABLE_ENTITY_CLASSES = [
+    'ActiveRecord::RecordInvalid',
+    'ActiveRecord::RecordNotSaved'
+  ].freeze
+
   include ActionController::ImplicitRender
   include ActionView::Layouts
   include ActionController::Caching
@@ -25,13 +36,22 @@ class ApplicationController < ActionController::API
   protected
 
   def handle_error(e)
+    Rails.logger.error '============================================='
+    Rails.logger.error e.class&.name
+    Rails.logger.error e&.message
+    Rails.logger.error '============================================='
+
     status = case e&.class&.name
-             when 'ActiveRecord::RecordNotFound', 'ActionController::RoutingError'
-               :not_found
+             when 'PreviewController::PreviewServiceError'
+               e&.status || :internal_server_error
              when 'ActionController::UnknownFormat'
                :not_acceptable
+             when *NOT_FOUND_ERROR_CLASSES
+               :not_found
+             when *UNPROCESSABLE_ENTITY_CLASSES
+               :unprocessable_entity
              else
-               :bad_request
+               :internal_server_error
              end
 
     head status and return if !request.format.json?

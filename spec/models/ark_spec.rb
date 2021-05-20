@@ -19,7 +19,7 @@ RSpec.describe Ark, type: :model do
 
       it { is_expected.to have_db_column(:deleted).of_type(:boolean).with_options(default: false) }
 
-      it { is_expected.to have_db_column(:secondary_parent_pids).of_type(:string).with_options(default: [], array: true) }
+      it { is_expected.to have_db_column(:secondary_parent_pids).of_type(:string).with_options(default: []) }
 
       it { is_expected.to have_db_column(:pid).of_type(:string).with_options(null: false) }
     end

@@ -32,6 +32,15 @@ Shoulda::Matchers.configure do |config|
   end
 end
 
+require 'vcr'
+
+VCR.configure do |c|
+  c.cassette_library_dir = 'spec/vcr'
+  c.configure_rspec_metadata!
+  c.hook_into :faraday, :webmock
+  c.default_cassette_options = { record: ENV['CI'].present? ? :none : :new_episodes }
+end
+
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
 begin

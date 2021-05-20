@@ -1,48 +1,78 @@
 # frozen_string_literal: true
 
 class ArksController < ApplicationController
-  before_action :find_ark, only: [:show, :destroy]
+  before_action :find_ark, except: [:create]
   before_action :check_for_existing_ark, only: [:create]
 
   def show
     redirect_to @ark.redirect_url and return if redirect_for_object?
+
     # Renders JSON if !redirect_for_object
+    fresh_when last_modified: @ark.updated_at.utc, strong_etag: @ark
   end
 
   def create
     if @ark
-      Rails.logger.info 'Found a matching ark!'
+      Rails.logger.debug 'Found a matching ark!'
       Rails.logger.debug @ark.to_s
-      render action: :show, status: :ok and return unless @ark.deleted?
 
-      Rails.logger.info "Ark #{@ark.noid} was deleted...Restoring..."
+      render action: :show, status: :ok and return if !@ark.deleted?
+
+      Rails.logger.debug "Ark #{@ark.noid} was deleted...Restoring..."
+
       status = :accepted
       @ark.deleted = false
     else
       status = :created
       @ark = Ark.new(ark_params)
-      Rails.logger.info 'Initialized new Ark!'
+
+      Rails.logger.debug 'Initialized new Ark!'
       Rails.logger.debug @ark.to_s
     end
 
-    if @ark.save
-      render status: status
-    else
-      Rails.logger.error 'Ark failed to save!'
-      Rails.logger.error @ark.errors.full_messages.join("\n")
-      @errors = build_ark_errors(@ark.errors)
-      render status: :unprocessable_entity
-    end
+    render status: status and return if @ark.save
+
+    Rails.logger.error 'Ark failed to save!'
+    Rails.logger.error @ark.errors.full_messages.join("\n")
+
+    @errors = build_ark_errors(@ark.errors)
+    render status: :unprocessable_entity
   end
 
   def destroy
     @ark.deleted = true
-    if @ark.save
-      head :no_content
-    else
-      errors = build_ark_errors(@ark.errors)
-      render json: { errors: errors }, status: :unprocessable_entity
-    end
+    head :no_content and return if @ark.save
+
+    errors = build_ark_errors(@ark.errors)
+    render json: { errors: errors }, status: :unprocessable_entity
+  end
+
+  def iiif_manifest
+    redirect_to "#{@ark.redirect_url}/manifest"
+  end
+
+  def iiif_canvas
+    @canvas_object = Ark.select(:created_at, :namespace_ark, :noid, :pid, :url_base, :deleted).object_in_view(params[:namespace], params[:canvas_object_id]).first!
+
+    redirect_to "#{@ark.redirect_url}/canvas/#{@canvas_object.pid}"
+  end
+
+  def iiif_annotation
+    @annotation_object = Ark.select(:created_at, :namespace_ark, :noid, :pid, :url_base, :deleted).object_in_view(params[:namespace], params[:annotation_object_id]).first!
+
+    redirect_to "#{@ark.redirect_url}/annotation/#{@annotation_object.pid}"
+  end
+
+  def iiif_collection
+    redirect_to "#{@ark.redirect_url}/iiif_collection"
+  end
+
+  def iiif_search
+    iiif_query_params = iiif_search_params.to_query
+
+    search_redirect_url = iiif_query_params.blank? ? "#{@ark.redirect_url}/iiif_search" : "#{@ark.redirect_url}/iiif_search?#{iiif_query_params}"
+
+    redirect_to search_redirect_url
   end
 
   private
@@ -56,7 +86,7 @@ class ArksController < ApplicationController
   end
 
   def check_for_existing_ark
-    Rails.logger.info 'Checking for existing Ark...'
+    Rails.logger.debug 'Checking for existing Ark...'
     Rails.logger.debug "==== :ark_params are #{ark_params.inspect} ===="
 
     if ark_params[:parent_id]
@@ -68,6 +98,10 @@ class ArksController < ApplicationController
 
   def redirect_for_object?
     params[:object_in_view] || !request.format.json?
+  end
+
+  def iiif_search_params
+    params.permit(:q, :motivation, :date, :user)
   end
 
   def ark_params

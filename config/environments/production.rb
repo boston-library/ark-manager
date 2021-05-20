@@ -35,17 +35,20 @@ Rails.application.configure do
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
-  config.log_level = :debug
+  config.log_level = :warn
 
   # Prepend all log lines with the following tags.
   config.log_tags = [:request_id]
 
   # Use a different cache store in production.
+  config.action_controller.perform_caching = true
   config.cache_store = :redis_cache_store,
                        {
                          driver: :hiredis,
-                         url: ENV['REDIS_DOCKER_URL'].presence || ENV['REDIS_CACHE_URL'].presence,
-                         expires_in: 90.minutes
+                         url: ENV['ARK_MANAGER_REDIS_CACHE_URL'].presence,
+                         pool_size: ENV.fetch('RAILS_MAX_THREADS') { 5 },
+                         pool_timeout: 5,
+                         expires_in: 24.hours
                        }
 
   # Use a real queuing backend for Active Job (and separate queues per environment).

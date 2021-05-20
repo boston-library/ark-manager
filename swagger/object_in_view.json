@@ -1,0 +1,313 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Object In View",
+    "description": "Permalink and IIIF endpoints for Arks"
+  },
+  "paths": {
+    "/{ark}/{namespace}/{noid}": {
+      "get": {
+        "summary": "Ark Permalink",
+        "tags": [
+          "Arks",
+          "Permalink",
+          "Redirect"
+        ],
+        "parameters": [
+          {
+            "name": "ark",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "namespace",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "noid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Permalink Redirection"
+          },
+          "404": {
+            "description": "Ark Not Found"
+          }
+        }
+      }
+    },
+    "/{ark}/{namespace}/{noid}/manifest": {
+      "get": {
+        "summary": "Ark IIIF Manifest",
+        "tags": [
+          "Arks",
+          "IIIF",
+          "Manifest",
+          "Redirect"
+        ],
+        "parameters": [
+          {
+            "name": "ark",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "namespace",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "noid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "IIIF Manifest Redirection"
+          },
+          "404": {
+            "description": "Ark Not Found"
+          }
+        }
+      }
+    },
+    "/{ark}/{namespace}/{noid}/canvas/{canvas_object_id}": {
+      "get": {
+        "summary": "Ark IIIF Canvas Object",
+        "tags": [
+          "Arks",
+          "IIIF",
+          "Canvas-Object",
+          "Redirect"
+        ],
+        "parameters": [
+          {
+            "name": "ark",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "namespace",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "noid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "canvas_object_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "IIIF Canvas Object Redirection"
+          },
+          "404": {
+            "description": "Canvas Ark Not Found"
+          }
+        }
+      }
+    },
+    "/{ark}/{namespace}/{noid}/annotation/{annotation_object_id}": {
+      "get": {
+        "summary": "Ark IIIF Annotation Object",
+        "tags": [
+          "Arks",
+          "IIIF",
+          "Annotation-Object",
+          "Redirect"
+        ],
+        "parameters": [
+          {
+            "name": "ark",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "namespace",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "noid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "annotation_object_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "IIIF Annotation Object Redirection"
+          },
+          "404": {
+            "description": "Annotation Ark Not Found"
+          }
+        }
+      }
+    },
+    "/{ark}/{namespace}/{noid}/iiif_collection": {
+      "get": {
+        "summary": "Ark IIIF Collection",
+        "tags": [
+          "Arks",
+          "IIIF",
+          "Collection",
+          "Redirect"
+        ],
+        "parameters": [
+          {
+            "name": "ark",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "namespace",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "noid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "IIIF Collection Redirection"
+          },
+          "404": {
+            "description": "Ark Not Found"
+          }
+        }
+      }
+    },
+    "/{ark}/{namespace}/{noid}/iiif_search": {
+      "get": {
+        "summary": "Ark IIIF Search",
+        "tags": [
+          "Arks",
+          "IIIF",
+          "Search",
+          "Redirect"
+        ],
+        "parameters": [
+          {
+            "name": "ark",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "namespace",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "noid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "IIIF Search Redirection With Query"
+          },
+          "404": {
+            "description": "Ark Not Found"
+          }
+        }
+      }
+    }
+  },
+  "components": {},
+  "servers": [
+    {
+      "url": "http://{defaultHost}",
+      "variables": {
+        "defaultHost": {
+          "default": "127.0.0.1:3000"
+        }
+      }
+    }
+  ]
+}

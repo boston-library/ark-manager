@@ -2,7 +2,8 @@
 
 RSpec.shared_examples 'service_class', type: :service do
   specify { expect(described_service_class).to be_truthy }
-  specify { expect(described_service_class_instance).to be_truthy }
+  specify { expect(described_service_class_instance).to be_truthy.and be_an_instance_of(described_service_class) }
+  specify { expect(class_call_args).to be_truthy.and be_an_instance_of(Array) }
 
   describe 'ClassMethods' do
     subject { described_service_class }
@@ -11,7 +12,7 @@ RSpec.shared_examples 'service_class', type: :service do
     it { is_expected.to respond_to(:call) }
 
     describe '.call' do
-      subject { described_service_class.call }
+      subject { described_service_class.call(*class_call_args) }
 
       before(:each) { allow(described_service_class).to receive(:call).and_call_original }
 

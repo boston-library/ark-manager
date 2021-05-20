@@ -22,6 +22,7 @@ RSpec.describe ApplicationService, type: :service do
 
     it_behaves_like 'service_class' do
       let(:described_service_class_instance) { described_service_class.new }
+      let(:class_call_args) { [] }
     end
 
     describe 'successful #result' do

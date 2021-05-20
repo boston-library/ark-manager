@@ -11,6 +11,7 @@ RSpec.describe MinterService, type: :service do
   specify { expect(described_service_class).to respond_to(:call).with(0..1).arguments }
 
   it_behaves_like 'service_class' do
+    let(:class_call_args) { [] }
     let(:described_service_class_instance) { described_service_class.new }
   end
 

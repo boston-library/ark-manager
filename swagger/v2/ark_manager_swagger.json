@@ -211,8 +211,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Ark(by #pid) Soft Deleted",
-            "content": {}
+            "description": "Ark(by #pid) Soft Deleted"
           },
           "404": {
             "description": "Already deleted Ark not found",
@@ -228,52 +227,6 @@
                 }
               }
             }
-          }
-        }
-      }
-    },
-    "/{ark}/{namespace}/{noid}": {
-      "get": {
-        "summary": "Ark Permalink",
-        "tags": [
-          "Arks",
-          "Permalink",
-          "Redirect"
-        ],
-        "parameters": [
-          {
-            "name": "ark",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "namespace",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "noid",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "302": {
-            "description": "Permalink Redirection",
-            "content": {}
-          },
-          "404": {
-            "description": "Ark Not Found",
-            "content": {}
           }
         }
       }
