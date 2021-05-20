@@ -1,6 +1,20 @@
 # frozen_string_literal: true
 
 class PreviewController < ApplicationController
+  DEFAULT_ICON_FILEPATH= Rails.root.join('public', 'dc_image-icon.png').to_s
+
+  FILE_SUFFIXES = {
+    thumbnail: '_thumbnail',
+    large_image: '_large',
+    full: '_full'
+  }.freeze
+
+  FILESTREAM_ATTACHMENT_NAMES = {
+    thumbnail: 'image_thumbnail_300',
+    large: 'image_access_800',
+    full: nil
+  }.freeze
+
   class ImageNotFound < StandardError; end
   class PreviewServiceError < StandardError
     attr_reader :status
@@ -17,22 +31,22 @@ class PreviewController < ApplicationController
 
   # return a thumbnail-size JPEG image file for 'thumbnail' requests
   def thumbnail
-    send_image_data('image_thumbnail_300', '_thumbnail')
+    send_image_data(FILESTREAM_ATTACHMENT_NAMES[:thumbnail], FILE_SUFFIXES[:thumbnail])
   end
 
   # return a full-size JPEG image file for 'full_image' requests
   def full_image
-    send_image_data(nil, '_full')
+    send_image_data(FILESTREAM_ATTACHMENT_NAMES[:full], FILE_SUFFIXES[:full])
   end
 
   # return a large-size JPEG image file for 'large_image' requests
   def large_image
-    send_image_data('image_access_800', '_large')
+    send_image_data(FILESTREAM_ATTACHMENT_NAMES[:large], FILE_SUFFIXES[:large])
   end
 
   protected
 
-  def send_image_data(filestream_id = nil, file_suffix)
+  def send_image_data(filestream_attachment_name = nil, file_suffix)
     model_type = @ark.model_type
     filename = "#{@ark.pid}#{file_suffix}"
 
@@ -53,7 +67,7 @@ class PreviewController < ApplicationController
 
     not_found!("No 'storage_key_base_ss' or 'exemplary_image_key_base_ss' found In solr response doc") if filestream_key.blank?
 
-    image_data_resp = ImageContentService.call(@ark.pid, filestream_id, filestream_key, file_suffix)
+    image_data_resp = ImageContentService.call(filestream_attachment_name, filestream_key, file_suffix)
 
     handle_preview_service_error!(image_data_resp) if image_data_resp.failure?
 
@@ -61,8 +75,6 @@ class PreviewController < ApplicationController
   end
 
   private
-
-  DEFAULT_ICON_FILEPATH= Rails.root.join('public', 'dc_image-icon.png').to_s.freeze
 
   def send_icon(filename)
     send_file DEFAULT_ICON_FILEPATH,

@@ -24,6 +24,12 @@ RSpec.describe SolrService, type: :service do
 
     it 'is expected to be an instance of RSolr::Client' do
       expect(subject.solr_client).to be_an_instance_of(RSolr::Client)
+      expect(subject.solr_client.object_id).to eq(Thread.current[:current_curator_solr_client].object_id)
+    end
+
+    it 'expects the .solr_client to have the correct url set' do
+      expect(subject.solr_client.options).to have_key(:url)
+      expect(subject.solr_client.options[:url]).to eq(ENV['CURATOR_SOLR_URL'])
     end
   end
 

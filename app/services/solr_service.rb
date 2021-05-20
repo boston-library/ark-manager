@@ -2,17 +2,21 @@
 
 class SolrService < ApplicationService
   class << self
+    SOLR_CLIENT_MUTEX=Mutex.new
     def solr_client
-      return @solr_client if defined?(@solr_client)
+      Thread.current[:current_curator_solr_client] ||= begin
+        SOLR_CLIENT_MUTEX.synchronize do
+          conn = Faraday.new(headers: { 'User-Agent' => 'BPL-Ark-Manager/2' }) do |builder|
+            builder.response :logger, Rails.logger
+            builder.response :raise_error
+            builder.adapter :net_http_persistent, pool: ENV.fetch('RAILS_MAX_THREADS', 5) do |http|
+              http.idle_timeout = 120
+            end
+          end
 
-      conn = Faraday.new do |builder|
-        builder.response :logger, Rails.logger
-        builder.adapter :net_http_persistent, pool: ENV.fetch('RAILS_MAX_THREADS', 5) do |http|
-          http.idle_timeout = 120
+          RSolr.connect conn, :url => ENV.fetch('CURATOR_SOLR_URL')
         end
       end
-
-      @solr_client = RSolr.connect conn, :url => ENV.fetch('CURATOR_SOLR_URL')
     end
   end
 

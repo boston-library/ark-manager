@@ -1,18 +1,23 @@
 # frozen_string_literal: true
 
 class ImageContentService < ApplicationService
-   attr_reader :pid, :filestream_id, :filestream_key, :file_suffix
+   attr_reader :filestream_attachment_name, :filestream_key, :file_suffix
 
-   def initialize(pid, filestream_id, filestream_key, file_suffix)
-     @pid = pid
-     @filestream_id = filestream_id
+   def initialize(filestream_attachment_name, filestream_key, file_suffix)
+     @filestream_attachment_name = filestream_attachment_name
      @filestream_key = filestream_key
      @file_suffix = file_suffix
    end
 
+   def filestream_ark_id
+     return if filestream_key.blank?
+
+     filestream_key.split('/').last
+   end
+
    def call
      begin
-       response = Down.download(image_url)
+       response = Down.download(image_url, headers: { 'User-Agent' => 'BPL-Ark-Manager/2' })
        return response
      rescue Down::NotFound => e
        errors.add(:not_found, e.message)
@@ -40,10 +45,9 @@ class ImageContentService < ApplicationService
      status_symbol.downcase.gsub(' ', '_').to_sym
    end
 
-
    def image_url
-     return "#{ENV['IIIF_SERVER_URL']}#{pid}/full/full/0/default.jpg" if file_suffix == '_full'
+     return "#{ENV.fetch('IIIF_SERVER_URL')}#{filestream_ark_id}/full/full/0/default.jpg" if file_suffix == '_full'
 
-     "#{ENV['AZURE_DERIVATIVES_URL']}/#{filestream_key}/#{filestream_id}.jpg"
+     "#{ENV.fetch('AZURE_DERIVATIVES_URL')}/#{filestream_key}/#{filestream_attachment_name}.jpg"
    end
 end

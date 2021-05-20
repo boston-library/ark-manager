@@ -36,6 +36,11 @@ class ApplicationController < ActionController::API
   protected
 
   def handle_error(e)
+    Rails.logger.error '============================================='
+    Rails.logger.error e.class&.name
+    Rails.logger.error e&.message
+    Rails.logger.error '============================================='
+
     status = case e&.class&.name
              when 'PreviewController::PreviewServiceError'
                e&.status || :internal_server_error
