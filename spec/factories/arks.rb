@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :ark do
     institution_ark
     namespace_ark { '50959' }
-    url_base { 'http://search.hydradev.bpl.org' }
+    url_base { 'https://search-dc3dev.bpl.org' }
     namespace_id { 'bpl-dev' }
 
     trait :invalid_ark do
