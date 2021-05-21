@@ -29,15 +29,5 @@ state_path "#{app_dir}/tmp/pids/server.state"
 worker_timeout 600
 
 preload_app!
-
-before_fork do
-  Rails.logger.info 'Worker Forking...'
-  ActiveRecord::Base.connection_pool.disconnect! if defined?(ActiveRecord)
-end
-
-on_worker_boot do
-  Rails.logger.info 'Booting Worker...'
-  ActiveRecord::Base.establish_connection if defined?(ActiveRecord)
-end
 # Allow puma to be restarted by `rails restart` command.
 plugin :tmp_restart
