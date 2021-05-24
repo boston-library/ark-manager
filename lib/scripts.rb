@@ -3,7 +3,14 @@
 require 'csv'
 
 module Scripts
+
+  def self.run_import(csv_path)
+    Import.new(csv_path).run!
+  end
+
   class Import
+    ERROR_FILE_OUTPUT_PATH=Rails.root.join('tmp', 'import_errors.json').to_s
+
     CURATOR_COLLECTION_CLASSES=['Bplmodels::Collection', 'Bplmodels::SystemCollection', 'Bplmodels::OAICollection'].freeze
 
     CURATOR_DIGITAL_OBJECT_CLASSES=[
@@ -46,7 +53,7 @@ module Scripts
             Ark.create_or_find_by!(row.slice(:namespace_id, :noid, :local_original_identifier, :local_original_identifier_type, :pid, :parent_pid)) do |ark|
               ark.created_at = row[:created_at]
               ark.namespace_ark = row[:namespace_ark]
-              ark.url_base = row[:url_base]
+              ark.url_base = ENV.fetch('ARK_MANAGER_DEFAULT_BASE_URL', 'https://search-dc3dev.bpl.org')
               ark.model_type = dc3_class_translation(row[:model_type])
               ark.deleted = row[:deleted] || false
               ark.secondary_parent_pids = normalize_secondary_parent_pids(row[:secondary_parent_pids])
@@ -59,6 +66,8 @@ module Scripts
           end
         end
       end
+    ensure
+      output_errors_as_json
     end
 
     protected
@@ -138,6 +147,14 @@ module Scripts
     def normalize_secondary_parent_pids(secondary_parent_pids)
       return [] if secondary_parent_pids == '{}'
       secondary_parent_pids.tr('{', '').tr('[', '').tr('}', '').tr(']', '').split(',')
+    end
+
+    def output_errors_as_json
+      return if import_errors.blank?
+
+      File.open(ERROR_FILE_OUTPUT_PATH, 'w+') do |f|
+        f.write(Oj.dump(import_errors.as_json, indent: 3))
+      end
     end
   end
 end

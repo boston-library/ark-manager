@@ -2,7 +2,7 @@
 
 NAMESPACES = [
   Noid::Rails.config.namespace,
-  ENV.fetch('OAI_ARK_NAMESPACE') { 'oai-dev' }
+  ENV.fetch('ARK_MANAGER_OAI_NAMESPACE') { 'oai-dev' }
 ].freeze
 
 TEMPLATE = Noid::Rails.config.template.to_s
