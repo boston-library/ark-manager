@@ -58,6 +58,7 @@ module Scripts
               ark.deleted = row[:deleted] || false
               ark.secondary_parent_pids = normalize_secondary_parent_pids(row[:secondary_parent_pids])
             end
+            puts "Row #{i + 1} successfully imported"
           rescue StandardError => e
             puts "Error Occured on Row #{i + 1}"
             puts "Reason #{e.message}"

@@ -23,5 +23,5 @@ MinterState.connection_pool.with_connection do
     end
     puts 'Seed success!'
   end
-  puts "Default MinterStates successfully seeded!"
+  puts 'Default MinterStates seed task complete'
 end

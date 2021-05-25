@@ -2,10 +2,16 @@
 
 require 'noid-rails'
 
-Rails.configuration.to_prepare do
-  MinterState.class_eval do
-    serialize :counters, Oj
+Rails.application.reloader.to_prepare do
+  module MinterStateSerializePatch
+    extend ActiveSupport::Concern
+
+    included do
+      serialize :counters, Oj
+    end
   end
+
+  MinterState.send(:include, MinterStateSerializePatch)
 
   Noid::Rails.configure do |config|
     config.template = '.reeddeeddk'

@@ -13,6 +13,8 @@ else
     cp /ark-manager-app/config/database.yml.sample $database_config_file
 fi
 
+echo "running bundle exec rails db:prepare..."
+bundle exec rails db:prepare
 # Then exec the container's main process (what's set as CMD in the Dockerfile).
 exec "$@"
 

@@ -77,7 +77,7 @@ class PreviewController < ApplicationController
   private
 
   def send_icon(filename)
-    expires_in 1.year, public: true,  must_revalidate: true
+    expires_in 1.week, public: true, 's-maxage': 1.week, 'no-transform': true
 
     send_file DEFAULT_ICON_FILEPATH,
               :filename => "#{filename}.png",
@@ -86,7 +86,7 @@ class PreviewController < ApplicationController
   end
 
   def send_image(filename, file_path)
-    expires_in 2.hours, public: true,  must_revalidate: true
+    expires_in 4.hours, public: true, 's-maxage': 4.hours, 'no-transform': true
 
     send_file file_path,
               :filename => "#{filename}.jpg",

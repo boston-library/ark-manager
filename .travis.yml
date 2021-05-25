@@ -39,7 +39,3 @@ env:
     - IIIF_SERVER_URL=https://iiifdev.bpl.org/iiif/2/
   jobs:
     - "RAILS_VERSION=6.0.3.7"
-
-after_failure:
-  - pg_isready
-  - pg_lsclusters

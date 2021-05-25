@@ -12,20 +12,17 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors, logger: (-> { R
     origins '*'
     resource '/ark:/*/thumbnail',
              headers: :any,
-             expose: ['ETag'],
+             methods: [:get, :post, :head],
              max_age: 2.hours
 
     resource '/ark:/*/large_image',
-              headers: :any,
-              expose: ['ETag'],
-              max_age: 2.hours
+             headers: :any,
+             methods: [:get, :head],
+             max_age: 2.hours
 
     resource '/ark:/*/large_image',
-              headers: :any,
-              methods: [:get, :post, :head],
-              expose: ['ETag'],
-              max_age: 2.hours
-
-
+             headers: :any,
+             methods: [:get, :head],
+             max_age: 2.hours
   end
 end
