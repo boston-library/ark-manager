@@ -16,12 +16,12 @@ FactoryBot.define do
     trait :institution_ark do
       local_original_identifier { Faker::University.name }
       model_type { 'Curator::Institution' }
-      local_original_identifier_type { 'Physical Location' }
+      local_original_identifier_type { 'physical_location' }
     end
 
     trait :collection_ark do
       local_original_identifier { Faker::Artist.name }
-      local_original_identifier_type { 'Institution Collection Name' }
+      local_original_identifier_type { 'institution_collection_name' }
       model_type { 'Curator::Collection' }
       parent_pid { nil }
     end

@@ -13,8 +13,8 @@ threads threads_count, threads_count
 
 # Specifies the `port` that Puma will listen on to receive requests; default is 3000.
 #
-bind 'tcp://0.0.0.0'
-port        ENV.fetch('PORT') { 3000 } if ENV.fetch('RAILS_ENV', 'development') == 'development'
+bind ENV.fetch('ARK_MANAGER_BIND') { 'tcp://127.0.0.1' }
+port        ENV.fetch('PORT') { 3000 }
 # Specifies the `environment` that Puma will run in.
 #
 environment ENV.fetch('RAILS_ENV') { 'development' }
@@ -26,18 +26,9 @@ app_dir = File.expand_path('..', __dir__)
 pidfile "#{app_dir}/tmp/pids/server.pid"
 state_path "#{app_dir}/tmp/pids/server.state"
 
-worker_timeout 600
+worker_timeout 3600 if ENV.fetch('RAILS_ENV', 'development') == 'development'
 
 preload_app!
-
-before_fork do
-  Rails.logger.info 'Worker Forking...'
-  ActiveRecord::Base.connection_pool.disconnect! if defined?(ActiveRecord)
-end
-
-on_worker_boot do
-  Rails.logger.info 'Booting Worker...'
-  ActiveRecord::Base.establish_connection if defined?(ActiveRecord)
-end
 # Allow puma to be restarted by `rails restart` command.
+
 plugin :tmp_restart

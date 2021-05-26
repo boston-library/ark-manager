@@ -7,11 +7,22 @@
 #
 # Read more: https://github.com/cyu/rack-cors
 
-Rails.application.config.middleware.insert_before 0, Rack::Cors do
+Rails.application.config.middleware.insert_before 0, Rack::Cors, logger: (-> { Rails.logger }) do
   allow do
     origins '*'
-    resource '*',
+    resource '/ark:/*/thumbnail',
              headers: :any,
-             methods: [:get, :post, :options, :head]
+             methods: [:get, :post, :head],
+             max_age: 2.hours
+
+    resource '/ark:/*/large_image',
+             headers: :any,
+             methods: [:get, :head],
+             max_age: 2.hours
+
+    resource '/ark:/*/large_image',
+             headers: :any,
+             methods: [:get, :head],
+             max_age: 2.hours
   end
 end

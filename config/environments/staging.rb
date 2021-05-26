@@ -73,6 +73,12 @@ Rails.application.configure do
     logger           = ActiveSupport::Logger.new(STDOUT)
     logger.formatter = config.log_formatter
     config.logger    = ActiveSupport::TaggedLogging.new(logger)
+  else
+    shift_age = 'monthly'
+    shift_size = 32.megabytes
+    logger = ActiveSupport::Logger.new(config.paths['log'].first, shift_age, shift_size)
+    logger.formatter = config.log_formatter
+    config.logger = ActiveSupport::TaggedLogging.new(logger)
   end
 
   # Do not dump schema after migrations.

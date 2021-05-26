@@ -1,7 +1,18 @@
 # frozen_string_literal: true
 
 class Ark < ApplicationRecord
-  LOCAL_ID_TYPES = ['Physical Location', 'Institution Collection Name', 'Barcode', 'filename', 'id_local-accession field', 'DSpace Handle', 'id_local-other field'].freeze
+  LOCAL_ID_TYPES = [
+    'physical_location',
+    'institution_collection_name',
+    'institution_name',
+    'barcode',
+    'filename',
+    'marc_md5',
+    'id_local-accession',
+    'id_local-other',
+    'dspace_handle',
+    'oai_header_id'
+  ].freeze
 
   extend FriendlyId
 
