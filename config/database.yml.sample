@@ -22,11 +22,11 @@ test:
 staging:
   <<: *default
   database: ark_manager_staging
-  username: <%= ENV['ARK_MANAGER_DATABASE_USER'] %>
-  password: <%= ENV['ARK_MANAGER_DATABASE_PASSWORD'] %>
+  username: <%= ENV.fetch('ARK_MANAGER_DATABASE_USER') { Rails.application.secrets.dig(:postgres, :username) } %>
+  password: <%= ENV.fetch('ARK_MANAGER_DATABASE_PASSWORD') { Rails.application.secrets.dig(:postgres, :password) } %>
 
 production:
   <<: *default
   database: ark_manager_production
-  username: <%= ENV['ARK_MANAGER_DATABASE_USER'] %>
-  password: <%= ENV['ARK_MANAGER_DATABASE_PASSWORD'] %>
+  username: <%= ENV.fetch('ARK_MANAGER_DATABASE_USER') { Rails.application.secrets.dig(:postgres, :username) } %>
+  password: <%= ENV.fetch('ARK_MANAGER_DATABASE_PASSWORD') { Rails.application.secrets.dig(:postgres, :password) } %>

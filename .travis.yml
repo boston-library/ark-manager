@@ -37,5 +37,8 @@ env:
     - CURATOR_SOLR_URL=http://127.0.0.1:8983/solr/curator_development
     - AZURE_DERIVATIVES_URL=http://127.0.0.1:8888/devstoreaccount1/derivatives
     - IIIF_SERVER_URL=https://iiifdev.bpl.org/iiif/2/
+    - ARK_MANAGER_DEFAULT_BASE_URL=https://search-dc3dev.bpl.org
+    - ARK_MANAGER_DEFAULT_NAMESPACE=bpl-dev
+    - ARK_MANAGER_OAI_NAMESPACE=oai-dev
   jobs:
     - "RAILS_VERSION=6.0.3.7"
