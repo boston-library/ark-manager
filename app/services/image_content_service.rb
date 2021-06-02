@@ -46,8 +46,24 @@ class ImageContentService < ApplicationService
   end
 
   def image_url
-    return "#{ENV.fetch('IIIF_SERVER_URL')}#{filestream_ark_id}/full/full/0/default.jpg" if file_suffix == '_full'
+    return "#{iiif_server_url}#{filestream_ark_id}/full/full/0/default.jpg" if file_suffix == '_full'
 
-    "#{ENV.fetch('AZURE_DERIVATIVES_URL')}/#{filestream_key}/#{filestream_attachment_name}.jpg"
+    "#{derivatives_url}/#{filestream_key}/#{filestream_attachment_name}.jpg"
+  end
+
+  def iiif_server_url
+    ret = ENV.fetch('IIIF_SERVER_URL') { Rails.application.secrets.dig(:iiif_server_url) }.to_s
+
+    raise 'No value present for iiif server url' if ret.blank?
+
+    ret
+  end
+
+  def derivatives_url
+    ret = ENV.fetch('AZURE_DERIVATIVES_URL') { Rails.application.secrets.dig(:azure, :derivatives_url) }.to_s
+
+    raise 'No value present for azure deriavtives url' if ret.blank?
+
+    ret
   end
 end

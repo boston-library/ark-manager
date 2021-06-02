@@ -13,6 +13,8 @@ module Scripts
 
     CURATOR_COLLECTION_CLASSES=['Bplmodels::Collection', 'Bplmodels::SystemCollection', 'Bplmodels::OAICollection'].freeze
 
+    ARK_BASE_URL=ENV.fetch('ARK_MANAGER_DEFAULT_BASE_URL') { Rails.application.secrets.dig(:ark, :base_url) || raise('No Value present for base Ark Url') }.freeze
+
     CURATOR_DIGITAL_OBJECT_CLASSES=[
       'Bplmodels::Object',
       'Bplmodels::ObjectBase',
@@ -53,7 +55,7 @@ module Scripts
             Ark.create_or_find_by!(row.slice(:namespace_id, :noid, :local_original_identifier, :local_original_identifier_type, :pid, :parent_pid)) do |ark|
               ark.created_at = row[:created_at]
               ark.namespace_ark = row[:namespace_ark]
-              ark.url_base = ENV.fetch('ARK_MANAGER_DEFAULT_BASE_URL', 'https://search-dc3dev.bpl.org')
+              ark.url_base = ARK_BASE_URL
               ark.model_type = dc3_class_translation(row[:model_type])
               ark.deleted = row[:deleted] || false
               ark.secondary_parent_pids = normalize_secondary_parent_pids(row[:secondary_parent_pids])
