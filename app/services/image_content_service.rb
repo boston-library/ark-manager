@@ -52,7 +52,7 @@ class ImageContentService < ApplicationService
   end
 
   def iiif_server_url
-    ret = ENV.fetch('IIIF_SERVER_URL') { Rails.application.secrets.dig(:iiif_server_url) }.to_s
+    ret = ENV.fetch('IIIF_SERVER_URL') { Rails.application.credentials.dig(:iiif_server_url) }.to_s
 
     raise 'No value present for iiif server url' if ret.blank?
 
@@ -60,7 +60,7 @@ class ImageContentService < ApplicationService
   end
 
   def derivatives_url
-    ret = ENV.fetch('AZURE_DERIVATIVES_URL') { Rails.application.secrets.dig(:azure, :derivatives_url) }.to_s
+    ret = ENV.fetch('AZURE_DERIVATIVES_URL') { Rails.application.credentials.dig(:azure, :derivatives_url) }.to_s
 
     raise 'No value present for azure deriavtives url' if ret.blank?
 

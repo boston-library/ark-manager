@@ -13,7 +13,7 @@ module Scripts
 
     CURATOR_COLLECTION_CLASSES=['Bplmodels::Collection', 'Bplmodels::SystemCollection', 'Bplmodels::OAICollection'].freeze
 
-    ARK_BASE_URL=ENV.fetch('ARK_MANAGER_DEFAULT_BASE_URL') { Rails.application.secrets.dig(:ark, :base_url) || raise('No Value present for base Ark Url') }.freeze
+    ARK_BASE_URL=ENV.fetch('ARK_MANAGER_DEFAULT_BASE_URL') { Rails.application.credentials.dig(:ark, :base_url) || raise('No Value present for base Ark Url') }.freeze
 
     CURATOR_DIGITAL_OBJECT_CLASSES=[
       'Bplmodels::Object',

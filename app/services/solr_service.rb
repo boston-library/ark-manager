@@ -14,7 +14,7 @@ class SolrService < ApplicationService
             end
           end
 
-          RSolr.connect conn, :url => ENV.fetch('CURATOR_SOLR_URL') { Rails.application.secrets.dig(:curator, :solr_url) || raise('No url found for curator solr!') }
+          RSolr.connect conn, :url => ENV.fetch('CURATOR_SOLR_URL') { Rails.application.credentials.dig(:curator, :solr_url) || raise('No url found for curator solr!') }
         end
       end
     end

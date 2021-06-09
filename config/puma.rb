@@ -6,28 +6,28 @@
 # the maximum value specified for Puma. Default is set to 5 threads for minimum
 # and maximum; this matches the default thread size of Active Record.
 #
-workers ENV.fetch('WEB_CONCURRENCY') { 2 }
 
-threads_count = ENV.fetch('RAILS_MAX_THREADS') { 5 }
-threads threads_count, threads_count
-
-# Specifies the `port` that Puma will listen on to receive requests; default is 3000.
-#
-port        ENV.fetch('PORT') { 3000 }
-# Specifies the `environment` that Puma will run in.
-#
-environment ENV.fetch('RAILS_ENV') { 'development' }
-
-stdout_redirect('/dev/stdout', '/dev/stderr', true)
-
+rails_env = ENV.fetch('RAILS_ENV') { 'development' }
+max_threads_count = ENV.fetch('RAILS_MAX_THREADS') { 5 }
+min_threads_count = ENV.fetch('RAILS_MIN_THREADS') { max_threads_count }
 app_dir = File.expand_path('..', __dir__)
 
-bind ENV.fetch('ARK_MANAGER_BIND') { 'tcp://127.0.0.1' }
-pidfile "#{app_dir}/tmp/pids/server.pid"
-state_path "#{app_dir}/tmp/pids/server.state"
+threads min_threads_count, max_threads_count
+workers ENV.fetch('WEB_CONCURRENCY') { 2 }
 
-worker_timeout 3600 if ENV.fetch('RAILS_ENV', 'development') == 'development'
+worker_timeout 3600 if rails_env == 'development'
 
-# Allow puma to be restarted by `rails restart` command.
+environment rails_env
 
-plugin :tmp_restart
+if %w(staging production).member?(rails_env)
+  bind "unix://#{app_dir}/tmp/sockets/ark_manager_puma.sock"
+  stdout_redirect("#{app_dir}/log/puma.stdout.log", "#{app_dir}/log/puma.stderr.log", true)
+  pidfile "#{app_dir}/tmp/pids/ark_manager_server.pid"
+  state_path "#{app_dir}/tmp/pids/ark_manager_server.state"
+else
+  port ENV.fetch('PORT') { 3000 }
+  stdout_redirect('/dev/stdout', '/dev/stderr', true)
+  state_path "#{app_dir}/tmp/pids/server.state"
+  pidfile "#{app_dir}/tmp/pids/server.pid"
+  plugin :tmp_restart
+end
