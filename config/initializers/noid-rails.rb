@@ -17,6 +17,6 @@ Rails.application.reloader.to_prepare do
     config.template = '.reeddeeddk'
     config.namespace = ENV.fetch('ARK_MANAGER_DEFAULT_NAMESPACE') { Rails.application.credentials.dig(:ark, :default_namespace) || raise('no value for default ark namespace found!') }
     config.minter_class = ArkMinter
-    config.identifier_in_use = ->(noid) { Ark.select(:id, :noid).exists?(noid: noid) }
+    config.identifier_in_use = ->(noid, current_arks) { current_arks.exists?(noid: noid) }
   end
 end

@@ -12,20 +12,33 @@ class ArkMinter < Noid::Rails::Minter::Db
     Noid::Rails.config.namespace
   end
 
+  def mint
+    ActiveRecord::Base.connection_pool.with_connection do
+      Mutex.new.synchronize do
+        loop do
+          pid = next_id
+          break pid unless identifier_in_use?(pid)
+        end
+      end
+    end
+  end
+
+  def current_arks
+    @current_arks ||= Ark.select(:noid)
+  end
+
   protected
 
   def next_id
-    # Only want one db connection at a time
-    MinterState.connection_pool.with_connection do
-      locked_inst = instance
-      locked_inst.with_lock do
-        minter = Noid::Minter.new(deserialize(locked_inst))
-        minter.seed(Process.pid)
-        id = minter.mint
-        serialize(locked_inst, minter)
-        break id
-      end
+    id = nil
+    locked_inst = instance
+    locked_inst.with_lock do
+      minter = Noid::Minter.new(deserialize(locked_inst))
+      minter.seed(Process.pid)
+      id = minter.mint
+      serialize(locked_inst, minter)
     end
+    id
   end
 
   def deserialize(inst)
@@ -57,5 +70,11 @@ class ArkMinter < Noid::Rails::Minter::Db
       template: template.to_s
     )
     # rubocop:enable Rails/UnknownEnv
+  end
+
+  private
+
+  def identifier_in_use?(id)
+    Noid::Rails.config.identifier_in_use.call(id, current_arks)
   end
 end
