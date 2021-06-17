@@ -3,7 +3,7 @@ FROM ruby:2.6.7
 MAINTAINER bbarber@bpl.org
 
 ENV LANG=C.UTF-8 \
-    BUNDLER_VERSION=2.2.17
+    BUNDLER_VERSION=2.2.20
 
 RUN apt-get update -qq \
   && DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends \
