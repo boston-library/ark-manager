@@ -19,6 +19,24 @@ module ArkHandler
     config.load_defaults 6.0
     config.api_only = true
     config.middleware.use Rack::Sendfile
+
+    if Rails.env.development?
+      console do
+        require 'pry' unless defined? Pry
+        require 'awesome_print'
+        AwesomePrint.pry!
+        config.console = Pry
+      end
+    end
+
+    config.generators do |g|
+      g.orm :active_record
+      g.api_only = true
+      g.test_framework :rspec, fixture: true
+      g.fixture_replacement :factory_bot
+      g.factory_bot dir: 'spec/factories'
+    end
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading

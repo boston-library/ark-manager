@@ -41,4 +41,4 @@ env:
     - ARK_MANAGER_DEFAULT_NAMESPACE=bpl-dev
     - ARK_MANAGER_OAI_NAMESPACE=oai-dev
   jobs:
-    - "RAILS_VERSION=6.0.3.7"
+    - "RAILS_VERSION=6.0.4"
