@@ -2,6 +2,7 @@
 
 class ArkMinter < Noid::Rails::Minter::Db
   attr_reader :namespace
+  MINTER_MUTEX = Mutex.new
 
   def initialize(template = default_template, namespace = default_namespace)
     @namespace = namespace || default_namespace
@@ -13,14 +14,17 @@ class ArkMinter < Noid::Rails::Minter::Db
   end
 
   def mint
-    ActiveRecord::Base.connection_pool.with_connection do
-      Mutex.new.synchronize do
-        loop do
-          pid = next_id
-          break pid unless identifier_in_use?(pid)
+    Thread.new do
+      Thread.current.report_on_exception = false
+      ActiveRecord::Base.connection_pool.with_connection do
+        MINTER_MUTEX.synchronize do
+          loop do
+            pid = next_id
+            break pid unless identifier_in_use?(pid)
+          end
         end
       end
-    end
+    end.value
   end
 
   def current_arks
