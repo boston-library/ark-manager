@@ -23,6 +23,7 @@ services:
       - cache
   pg_db:
     restart: unless-stopped
+    mem_reservation: 32m
     container_name: ark_manager_db
     image: postgres:12
     environment:
@@ -33,7 +34,11 @@ services:
   cache:
     container_name: ark_manager_cache
     image: redis:latest
-    command: redis-server --maxmemory 16mb --maxmemory-policy allkeys-lfu
+    command: >
+      bash -c "echo 1 > /proc/sys/vm/overcommit_memory &&
+      redis-server --databases 1 --maxmemory 16mb --maxmemory-policy allkeys-lfu"
+    ulimits:
+      nproc: 16384
     sysctls:
       net.core.somaxconn: 1024
 
