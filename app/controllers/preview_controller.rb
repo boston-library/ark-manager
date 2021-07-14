@@ -19,7 +19,7 @@ class PreviewController < ApplicationController
   class PreviewServiceError < StandardError
     attr_reader :status
 
-    def initalize(msg = 'Sever Error', status = :internal_server_error)
+    def initialize(msg = 'Sever Error', status = :internal_server_error)
       @status = status
       super(msg)
     end

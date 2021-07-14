@@ -16,15 +16,18 @@ services:
       - RAILS_LOG_TO_STDOUT=true
       - WEB_CONCURRENCY=0
       - ARK_MANAGER_DATABASE_HOST=pg_db
+      - ARK_MANAGER_DATABASE_PORT=5432
       - ARK_MANAGER_REDIS_CACHE_URL=redis://cache:6379/0
     depends_on:
       - pg_db
       - cache
   pg_db:
+    restart: unless-stopped
     container_name: ark_manager_db
     image: postgres:12
     environment:
       - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
     volumes:
       - postgres-data:/var/lib/postgresql/data
   cache:

@@ -39,6 +39,7 @@ class ApplicationController < ActionController::API
     Rails.logger.error '============================================='
     Rails.logger.error e.class&.name
     Rails.logger.error e&.message
+    Rails.logger.error e&.backtrace&.first(5)
     Rails.logger.error '============================================='
 
     status = case e&.class&.name

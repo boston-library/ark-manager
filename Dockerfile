@@ -1,9 +1,9 @@
-FROM ruby:2.6.7
+FROM ruby:2.7.4
 
 MAINTAINER bbarber@bpl.org
 
 ENV LANG=C.UTF-8 \
-    BUNDLER_VERSION=2.2.21
+    BUNDLER_VERSION=2.2.23
 
 RUN apt-get update -qq \
   && DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends \

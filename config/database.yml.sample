@@ -5,11 +5,11 @@ default: &default
   # http://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch('RAILS_MAX_THREADS') { 5 } %>
   host: <%= ENV.fetch('ARK_MANAGER_DATABASE_HOST', 'localhost') %>
-  port: <%= ENV.fetch('ARK_MANAGER_DATABASE_POST', 5432) %>
+  port: <%= ENV.fetch('ARK_MANAGER_DATABASE_PORT', 5432) %>
 
 development:
   <<: *default
-  database: ark_manager_devlopment
+  database: ark_manager_development
   username: <%= ENV['ARK_MANAGER_DATABASE_USER'] %>
   password: <%= ENV['ARK_MANAGER_DATABASE_PASSWORD'] %>
 
