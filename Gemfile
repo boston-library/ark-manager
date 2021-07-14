@@ -3,20 +3,19 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '>= 2.5.9'
+ruby '>= 2.6.7', '< 3.0.0'
 
 gem 'bootsnap', '>= 1.1.0', require: false
 # Reduces boot times through caching; required in config/boot.rb
 gem 'connection_pool', '~> 2.2'
 gem 'down', '~> 5.2'
-gem 'faraday', '~> 1.4'
-gem 'faraday-net_http_persistent', '~> 1.1'
+gem 'faraday', '~> 1.5'
 gem 'friendly_id', '~> 5.4'
 gem 'hiredis', '~> 0.6'
 gem 'jbuilder', '~> 2.11'
 gem 'net-http-persistent', '>= 3.1'
 gem 'noid-rails', '~> 3.0'
-gem 'oj', '~> 3.11'
+gem 'oj', '~> 3.12'
 gem 'pg', '>= 0.18', '< 2.0'
 # Use postgresql as the database for Active Record
 gem 'puma', '~> 5.3'

@@ -17,3 +17,13 @@ README.md
 .env
 .env.sample
 scratch.rb
+*.key
+*.pdf
+*.db
+*.jar
+*.gz
+*.tar
+*.zip
+*.dll
+*.sqlite
+*.sql
