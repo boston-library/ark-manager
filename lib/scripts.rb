@@ -16,7 +16,7 @@ module Scripts
 
     ARK_BASE_URL=ENV.fetch('ARK_MANAGER_DEFAULT_BASE_URL') { Rails.application.credentials.dig(:ark, :base_url) || raise('No Value present for base Ark Url') }.freeze
 
-    BATCH_SIZE=ENV.fetch('RAILS_MAX_THREADS') { 5 }
+    BATCH_SIZE=ENV.fetch('RAILS_MAX_THREADS', 5).to_i
 
     CURATOR_DIGITAL_OBJECT_CLASSES=[
       'Bplmodels::Object',
