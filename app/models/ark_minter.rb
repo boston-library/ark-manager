@@ -2,7 +2,6 @@
 
 class ArkMinter < Noid::Rails::Minter::Db
   attr_reader :namespace
-  MINTER_MUTEX = Mutex.new
 
   def initialize(template = default_template, namespace = default_namespace)
     @namespace = namespace || default_namespace
@@ -14,21 +13,18 @@ class ArkMinter < Noid::Rails::Minter::Db
   end
 
   def mint
-    Thread.new do
-      Thread.current.report_on_exception = false
+    Fiber.new do
       ActiveRecord::Base.connection_pool.with_connection do
-        MINTER_MUTEX.synchronize do
-          loop do
-            pid = next_id
-            break pid unless identifier_in_use?(pid)
-          end
+        loop do
+          pid = next_id
+          Fiber.yield pid unless identifier_in_use?(pid)
         end
       end
-    end.value
+    end.resume
   end
 
   def current_arks
-    @current_arks ||= Ark.select(:noid)
+    Rails.cache.fetch(['current_arks', Ark.count], expires_in: 5.minutes) { Ark.unscoped.select(:noid).distinct.all }
   end
 
   protected

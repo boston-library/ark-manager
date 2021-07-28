@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'csv'
+require 'monitor'
 
 module Scripts
 
@@ -14,6 +15,8 @@ module Scripts
     CURATOR_COLLECTION_CLASSES=['Bplmodels::Collection', 'Bplmodels::SystemCollection', 'Bplmodels::OAICollection'].freeze
 
     ARK_BASE_URL=ENV.fetch('ARK_MANAGER_DEFAULT_BASE_URL') { Rails.application.credentials.dig(:ark, :base_url) || raise('No Value present for base Ark Url') }.freeze
+
+    BATCH_SIZE=ENV.fetch('RAILS_MAX_THREADS') { 5 }
 
     CURATOR_DIGITAL_OBJECT_CLASSES=[
       'Bplmodels::Object',
@@ -42,38 +45,41 @@ module Scripts
       @csv_path = csv_path
       @import_rows = parse_csv_rows!
       @import_errors = []
+      @import_errors.extend(MonitorMixin)
     end
 
     def run!
       row_count = import_rows.count
-      Ark.connection_pool.with_connection do
-        import_rows.each_with_index do |row, i|
-          puts "Row is #{i + 1}/#{row_count}"
-          begin
-            row[:local_original_identifier_type] = normalize_local_original_identifier_type(row[:local_original_identifier_type])
-
-            Ark.create_or_find_by!(row.slice(:namespace_id, :noid, :local_original_identifier, :local_original_identifier_type, :pid, :parent_pid)) do |ark|
-              ark.created_at = row[:created_at]
-              ark.namespace_ark = row[:namespace_ark]
-              ark.url_base = ARK_BASE_URL
-              ark.model_type = dc3_class_translation(row[:model_type])
-              ark.deleted = row[:deleted] || false
-              ark.secondary_parent_pids = normalize_secondary_parent_pids(row[:secondary_parent_pids])
-            end
-            puts "Row #{i + 1} successfully imported"
-          rescue StandardError => e
-            puts "Error Occured on Row #{i + 1}"
-            puts "Reason #{e.message}"
-            add_error_row!(row, e)
-            next
-          end
-        end
+      batch_count = row_count / BATCH_SIZE
+      puts "Total row count is #{row_count}"
+      puts "Total No of batches #{batch_count}"
+      import_rows.each_slice(BATCH_SIZE).with_index do |ark_batch, batch_i|
+        puts "batch is #{batch_i + 1 }/#{batch_count}"
+        process_batch(ark_batch)
+        puts "Succefully imported batch! #{batch_i + 1 }/#{batch_count}"
       end
     ensure
       output_errors_as_json
     end
 
     protected
+
+    def process_batch(ark_batch)
+      threads = ark_batch.map do |ark_row|
+        Thread.new do
+          Rails.application.executor.wrap do
+            Thread.current.abort_on_exception = true
+            Ark.connection_pool.with_connection do
+              import_row(ark_row)
+            end
+          end
+        end
+      end
+      ActiveSupport::Dependencies.interlock.permit_concurrent_loads do
+        threads.each(&:join)
+      end
+    end
+
 
     def parse_csv_rows!
       parsed_rows = []
@@ -86,14 +92,36 @@ module Scripts
 
     private
 
-    def add_error_row!(row, error)
-      import_errors << {
-        row: row,
-        error: {
-          kind: error.class.name,
-          msg: error.message
+    def import_row(ark_row)
+      begin
+        Ark.transaction(requires_new: true) do
+          Ark.find_or_create_by!(ark_row.slice(:namespace_id, :noid, :local_original_identifier, :pid, :parent_pid)) do |ark|
+            ark.local_original_identifier_type = normalize_local_original_identifier_type(ark_row[:local_original_identifier_type])
+            ark.created_at = ark_row[:created_at]
+            ark.namespace_ark = ark_row[:namespace_ark]
+            ark.url_base = ARK_BASE_URL
+            ark.model_type = dc3_class_translation(ark_row[:model_type])
+            ark.deleted = ark_row[:deleted] || false
+            ark.secondary_parent_pids = normalize_secondary_parent_pids(ark_row[:secondary_parent_pids])
+          end
+        end
+      rescue StandardError => e
+        puts "Error Occured on Row #{ark_row.inspect}"
+        puts "Reason #{e.message}"
+        add_error_row!(ark_row, e)
+      end
+    end
+
+    def add_error_row!(ark_row, error)
+      import_errors.synchronize do
+        import_errors << {
+          row: ark_row,
+          error: {
+            kind: error.class.name,
+            msg: error.message
+          }
         }
-      }
+      end
     end
 
     def dc3_class_translation(old_model_type)
