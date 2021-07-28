@@ -30,3 +30,4 @@ production:
   database: ark_manager_production
   username: <%= ENV.fetch('ARK_MANAGER_DATABASE_USER') { Rails.application.credentials.dig(:postgres, :username) } %>
   password: <%= ENV.fetch('ARK_MANAGER_DATABASE_PASSWORD') { Rails.application.credentials.dig(:postgres, :password) } %>
+  port: <%= ENV.fetch('ARK_MANAGER_DATABASE_PORT') { Rails.application.credentials.dig(:postgres, :port) } %>
