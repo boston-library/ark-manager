@@ -30,7 +30,6 @@ Rails.application.configure do
       'Cache-Control' => "public, max-age=#{1.day.to_i}"
     }
     config.cache_store = :redis_cache_store, {
-      driver: :hiredis,
       url: ENV['ARK_MANAGER_REDIS_CACHE_URL'],
       pool_size: ENV.fetch('RAILS_MAX_THREADS') { 5 },
       pool_timeout: 10,
