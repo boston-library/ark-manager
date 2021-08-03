@@ -10,14 +10,14 @@ default: &default
 development:
   <<: *default
   database: ark_manager_development
-  username: <%= ENV['ARK_MANAGER_DATABASE_USER'] %>
-  password: <%= ENV['ARK_MANAGER_DATABASE_PASSWORD'] %>
+  username: <%= ENV.fetch('ARK_MANAGER_DATABASE_USER') { 'postgres' } %>
+  password: <%= ENV.fetch('ARK_MANAGER_DATABASE_PASSWORD') { 'postgres' } %>
 
 test:
   <<: *default
   database: ark_manager_test
-  username: <%= ENV['ARK_MANAGER_DATABASE_USER'] %>
-  password: <%= ENV['ARK_MANAGER_DATABASE_PASSWORD'] %>
+  username: <%= ENV.fetch('ARK_MANAGER_DATABASE_USER') { 'postgres' } %>
+  password: <%= ENV.fetch('ARK_MANAGER_DATABASE_USER') { 'postgres' } %>
 
 staging:
   <<: *default

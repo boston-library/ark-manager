@@ -44,7 +44,6 @@ Rails.application.configure do
   config.action_controller.perform_caching = true
   config.cache_store = :redis_cache_store,
                        {
-                         driver: :hiredis,
                          url: ENV.fetch('ARK_MANAGER_REDIS_CACHE_URL') { Rails.application.credentials.dig(:redis, :cache_url) },
                          pool_size: ENV.fetch('RAILS_MAX_THREADS') { 5 },
                          pool_timeout: 5,
