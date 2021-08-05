@@ -30,6 +30,7 @@ class Ark < ApplicationRecord
 
   scope :object_in_view, ->(namespace_ark, noid) { active.merge(where(namespace_ark: namespace_ark, noid: noid)) }
 
+  scope :minter_select, -> { select(:noid, :updated_at, :created_at) }
   # NOTE: Need to add this to the callback list due to firendly id also using a before validation
   before_validation :set_noid, on: :create, prepend: true
 
@@ -42,6 +43,12 @@ class Ark < ApplicationRecord
   validates :local_original_identifier_type, presence: true, inclusion: { in: LOCAL_ID_TYPES }
   validates :noid, presence: true, uniqueness: { case_sensitive: false }
   validates :url_base, presence: true, format: { with: URI.regexp(['http', 'https']) }
+
+  def self.current_noids_for_minter
+    Rails.cache.fetch(['current_arks', minter_select], expires_in: 2.hours) do
+      minter_select.pluck(:noid)
+    end
+  end
 
   def to_s
     Oj.dump(as_json, indent: 2)
