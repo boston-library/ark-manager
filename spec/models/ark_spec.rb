@@ -43,6 +43,23 @@ RSpec.describe Ark, type: :model do
     end
   end
 
+  describe 'Class Methods' do
+    subject { described_class }
+
+    it { is_expected.to respond_to(:current_noids_for_minter) }
+
+    let!(:arks) { create_list(:ark, 3) }
+
+    describe '.current_noids_for_minter' do
+      subject { described_class.current_noids_for_minter }
+
+      let(:expected_noids) { arks.pluck(:noid) }
+
+      it { is_expected.to be_a_kind_of(Array) }
+      it { is_expected.to match_array(expected_noids) }
+    end
+  end
+
   describe 'Scopes' do
     let!(:namespace_ark) { 'bpl-dev' }
     let!(:parent_id) { "#{namespace_ark}:3214dde845" }
@@ -50,7 +67,7 @@ RSpec.describe Ark, type: :model do
     let!(:identifier_type) { 'filename' }
     let!(:noid) { '644529e066' }
 
-    specify { expect(described_class).to respond_to(:active) }
+    specify { expect(described_class).to respond_to(:active, :minter_select) }
     specify { expect(described_class).to respond_to(:with_parent).with(1).argument }
     specify { expect(described_class).to respond_to(:with_local_id, :object_in_view).with(2).arguments }
     specify { expect(described_class).to respond_to(:with_parent_and_local_id).with(3).arguments }
@@ -99,6 +116,14 @@ RSpec.describe Ark, type: :model do
       subject { described_class.object_in_view(namespace_ark, noid).to_sql }
 
       let!(:expected_sql) { described_class.active.merge(described_class.where(namespace_ark: namespace_ark, noid: noid)).to_sql }
+
+      it { is_expected.to eq(expected_sql) }
+    end
+
+    describe '#minter_select' do
+      subject { described_class.minter_select.to_sql }
+
+      let!(:expected_sql) { described_class.select(:noid, :updated_at, :created_at).to_sql }
 
       it { is_expected.to eq(expected_sql) }
     end

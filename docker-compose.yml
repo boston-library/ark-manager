@@ -6,6 +6,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: bostonlibrary/ark-manager:dev-latest
     volumes:
        - .:/ark-manager-app
     ports:

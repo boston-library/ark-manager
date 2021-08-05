@@ -3,20 +3,22 @@
 require 'noid-rails'
 
 Rails.application.reloader.to_prepare do
-  module MinterStateSerializePatch
+  module MinterStateOverride
     extend ActiveSupport::Concern
 
     included do
       serialize :counters, Oj
+
+      before_create { self.rand = Marshal.dump(Random.new(Process.pid)) if rand.blank? }
     end
   end
 
-  MinterState.send(:include, MinterStateSerializePatch)
+  MinterState.send(:include, MinterStateOverride)
 
   Noid::Rails.configure do |config|
     config.template = '.reeddeeddk'
     config.namespace = ENV.fetch('ARK_MANAGER_DEFAULT_NAMESPACE') { Rails.application.credentials.dig(:ark, :default_namespace) || raise('no value for default ark namespace found!') }
     config.minter_class = ArkMinter
-    config.identifier_in_use = ->(noid, current_arks) { current_arks.exists?(noid: noid) }
+    config.identifier_in_use = ->(noid) { Ark.current_noids_for_minter.include?(noid) }
   end
 end

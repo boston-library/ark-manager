@@ -23,10 +23,6 @@ class ArkMinter < Noid::Rails::Minter::Db
     end.resume
   end
 
-  def current_arks
-    Rails.cache.fetch(['current_arks', Ark.count], expires_in: 5.minutes) { Ark.unscoped.select(:noid).distinct.all }
-  end
-
   protected
 
   def next_id
@@ -34,7 +30,6 @@ class ArkMinter < Noid::Rails::Minter::Db
     locked_inst = instance
     locked_inst.with_lock do
       minter = Noid::Minter.new(deserialize(locked_inst))
-      minter.seed(Process.pid)
       id = minter.mint
       serialize(locked_inst, minter)
     end
@@ -75,6 +70,6 @@ class ArkMinter < Noid::Rails::Minter::Db
   private
 
   def identifier_in_use?(id)
-    Noid::Rails.config.identifier_in_use.call(id, current_arks)
+    Noid::Rails.config.identifier_in_use.call(id)
   end
 end
