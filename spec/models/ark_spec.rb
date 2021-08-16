@@ -46,12 +46,12 @@ RSpec.describe Ark, type: :model do
   describe 'Class Methods' do
     subject { described_class }
 
-    it { is_expected.to respond_to(:current_noids_for_minter) }
+    it { is_expected.to respond_to(:noid_cache) }
 
     let!(:arks) { create_list(:ark, 3) }
 
-    describe '.current_noids_for_minter' do
-      subject { described_class.current_noids_for_minter }
+    describe '.noid_cache' do
+      subject { described_class.noid_cache }
 
       let(:expected_noids) { arks.pluck(:noid) }
 
@@ -67,7 +67,7 @@ RSpec.describe Ark, type: :model do
     let!(:identifier_type) { 'filename' }
     let!(:noid) { '644529e066' }
 
-    specify { expect(described_class).to respond_to(:active, :minter_select) }
+    specify { expect(described_class).to respond_to(:active, :minter_exists_scope, :noid_cache_scope) }
     specify { expect(described_class).to respond_to(:with_parent).with(1).argument }
     specify { expect(described_class).to respond_to(:with_local_id, :object_in_view).with(2).arguments }
     specify { expect(described_class).to respond_to(:with_parent_and_local_id).with(3).arguments }
@@ -91,7 +91,7 @@ RSpec.describe Ark, type: :model do
     describe '#with_parent' do
       subject { described_class.with_parent(parent_id).to_sql }
 
-      let!(:expected_sql) { described_class.where(parent_pid: parent_id).to_sql }
+      let!(:expected_sql) { described_class.where.not(parent_pid: nil).where(parent_pid: parent_id).to_sql }
 
       it { is_expected.to eq(expected_sql) }
     end
@@ -107,7 +107,7 @@ RSpec.describe Ark, type: :model do
     describe '#with_parent_and_local_id' do
       subject { described_class.with_parent_and_local_id(parent_id, identifier, identifier_type).to_sql }
 
-      let!(:expected_sql) { described_class.with_parent(parent_id).merge(described_class.with_local_id(identifier, identifier_type)).to_sql }
+      let!(:expected_sql) { described_class.with_parent(parent_id).with_local_id(identifier, identifier_type).to_sql }
 
       it { is_expected.to eq(expected_sql) }
     end
@@ -120,10 +120,18 @@ RSpec.describe Ark, type: :model do
       it { is_expected.to eq(expected_sql) }
     end
 
-    describe '#minter_select' do
-      subject { described_class.minter_select.to_sql }
+    describe '#minter_exists_scope' do
+      subject { described_class.minter_exists_scope.to_sql }
 
-      let!(:expected_sql) { described_class.select(:noid, :updated_at, :created_at).to_sql }
+      let!(:expected_sql) { described_class.unscoped.select('DISTINCT noid').order(noid: :desc).to_sql }
+
+      it { is_expected.to eq(expected_sql) }
+    end
+
+    describe '#noid_cache_scope' do
+      subject { described_class.noid_cache_scope.to_sql }
+
+      let!(:expected_sql) { described_class.unscoped.select('DISTINCT ON (noid) noid, updated_at').order(noid: :desc).to_sql }
 
       it { is_expected.to eq(expected_sql) }
     end
