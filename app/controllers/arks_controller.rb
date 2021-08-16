@@ -89,11 +89,11 @@ class ArksController < ApplicationController
     Rails.logger.debug 'Checking for existing Ark...'
     Rails.logger.debug "==== :ark_params are #{ark_params.inspect} ===="
 
-    if ark_params[:parent_id]
-      @ark = Ark.with_parent_and_local_id(ark_params[:parent_pid], ark_params[:local_original_identifier], ark_params[:local_original_identifier_type]).first
-    else
-      @ark = Ark.with_local_id(ark_params[:local_original_identifier], ark_params[:local_original_identifier_type]).first
-    end
+    @ark = if ark_params[:parent_pid]
+             Ark.with_parent_and_local_id(ark_params[:parent_pid], ark_params[:local_original_identifier], ark_params[:local_original_identifier_type]).first
+           else
+             Ark.with_local_id(ark_params[:local_original_identifier], ark_params[:local_original_identifier_type]).first
+           end
   end
 
   def redirect_for_object?

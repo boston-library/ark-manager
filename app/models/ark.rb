@@ -22,15 +22,18 @@ class Ark < ApplicationRecord
 
   scope :active, -> { where(deleted: false) }
 
-  scope :with_parent, ->(parent_pid) { where(parent_pid: parent_pid) }
+  scope :with_parent, ->(parent_pid) { where.not(parent_pid: nil).where(parent_pid: parent_pid) }
 
   scope :with_local_id, ->(identifier, identifier_type) { where(local_original_identifier: identifier, local_original_identifier_type: identifier_type) }
 
-  scope :with_parent_and_local_id, ->(parent_pid, identifier, identifier_type) { with_parent(parent_pid).merge(with_local_id(identifier, identifier_type)) }
+  scope :with_parent_and_local_id, ->(parent_pid, identifier, identifier_type) { with_parent(parent_pid).with_local_id(identifier, identifier_type) }
 
   scope :object_in_view, ->(namespace_ark, noid) { active.merge(where(namespace_ark: namespace_ark, noid: noid)) }
 
-  scope :minter_select, -> { select(:noid, :updated_at, :created_at) }
+  scope :minter_exists_scope, -> { unscoped.select('DISTINCT noid').order(noid: :desc) }
+
+  scope :noid_cache_scope, -> {  unscoped.select('DISTINCT ON (noid) noid, updated_at').order(noid: :desc) }
+
   # NOTE: Need to add this to the callback list due to firendly id also using a before validation
   before_validation :set_noid, on: :create, prepend: true
 
@@ -44,9 +47,10 @@ class Ark < ApplicationRecord
   validates :noid, presence: true, uniqueness: { case_sensitive: false }
   validates :url_base, presence: true, format: { with: URI.regexp(['http', 'https']) }
 
-  def self.current_noids_for_minter
-    Rails.cache.fetch(['current_arks', minter_select], expires_in: 2.hours) do
-      minter_select.pluck(:noid)
+  # NOTE: Decided to keep this but renamed the method. Maybe useful for debugging/ future
+  def self.noid_cache
+    Rails.cache.fetch(['current_arks', noid_cache_scope], expires_in: 2.hours) do
+      noid_cache_scope.pluck(:noid)
     end
   end
 
