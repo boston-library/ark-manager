@@ -35,7 +35,7 @@ Rails.application.configure do
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
-  config.log_level = :error
+  config.log_level = :warn
 
   # Prepend all log lines with the following tags.
   config.log_tags = [:request_id]
@@ -75,7 +75,11 @@ Rails.application.configure do
   else
     shift_age = 'monthly'
     shift_size = 64.megabytes
-    logger = ActiveSupport::Logger.new(config.paths['log'].first, shift_age, shift_size)
+    log_path = config.paths['log'].first
+    dir = File.dirname(log_path)
+    FileUtils.mkdir_p(dir) if !File.directory?(dir)
+
+    logger = ActiveSupport::Logger.new(log_path, shift_age, shift_size)
     logger.formatter = config.log_formatter
     config.logger = ActiveSupport::TaggedLogging.new(logger)
   end
