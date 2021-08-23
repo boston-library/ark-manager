@@ -86,7 +86,7 @@ class PreviewController < ApplicationController
   end
 
   def send_image(filename, file_path)
-    expires_in 4.hours, public: true, 's-maxage': 4.hours, 'no-transform': true
+    expires_in 12.hours, public: true, 's-maxage': 12.hours, 'no-transform': true
 
     send_file file_path,
               :filename => "#{filename}.jpg",

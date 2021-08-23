@@ -20,6 +20,8 @@ module ArkHandler
     config.api_only = true
     config.middleware.use Rack::Sendfile
 
+    config.action_dispatch.default_headers['X-Frame-Options'] = 'DENY'
+
     if Rails.env.development?
       console do
         require 'pry' unless defined? Pry
