@@ -2,11 +2,43 @@
 
 require 'csv'
 require 'monitor'
+require 'fileutils'
 
 module Scripts
 
   def self.run_import(csv_path)
     Import.new(csv_path).run!
+  end
+
+  def self.run_preview_cache_clean!
+    CleanPrieviewCache.new.run!
+  end
+
+  class CleanPrieviewCache
+    PREVIEW_CACHE_IMAGES = Rails.root.join('tmp', 'cache', 'previews', '**', '*.jpg').to_s.freeze
+
+    def initialize
+      @cached_images = Dir[PREVIEW_CACHE_IMAGES]
+    end
+
+    def run!
+      if @cached_images.blank?
+        puts 'No cached preview images detected!'
+        puts 'Exiting'
+        return
+      end
+
+      @cached_images.each do |cached_image_path|
+        begin
+          next if !(File.mtime(cached_image_path) <= 2.weeks.ago)
+          FileUtils.rm_f(cached_image_path)
+        rescue => e
+          puts "Error removing cached file #{cached_image_path}"
+          puts "Reason #{e.message}"
+          next
+        end
+      end
+    end
   end
 
   class Import

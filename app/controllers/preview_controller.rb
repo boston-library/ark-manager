@@ -71,13 +71,13 @@ class PreviewController < ApplicationController
 
     handle_preview_service_error!(image_data_resp) if image_data_resp.failure?
 
-    send_image(filename, image_data_resp.result.path)
+    send_image(filename, image_data_resp.result)
   end
 
   private
 
   def send_icon(filename)
-    expires_in 1.week, public: true, 's-maxage': 1.week, 'no-transform': true
+    expires_in 1.month, public: true, 's-maxage': 1.month, 'no-transform': true
 
     send_file DEFAULT_ICON_FILEPATH,
               :filename => "#{filename}.png",
@@ -86,7 +86,7 @@ class PreviewController < ApplicationController
   end
 
   def send_image(filename, file_path)
-    expires_in 12.hours, public: true, 's-maxage': 12.hours, 'no-transform': true
+    expires_in 2.weeks, public: true, 's-maxage': 2.weeks, 'no-transform': true
 
     send_file file_path,
               :filename => "#{filename}.jpg",

@@ -33,6 +33,7 @@ group :development, :test do
   gem 'factory_bot_rails', '~> 6.2'
   gem 'faker', '~> 2.18'
   gem 'pry', '~> 0.13.1'
+  gem 'pry-rails'
   gem 'rspec-rails', '~> 5.0'
   gem 'rswag-specs', '~> 2.4'
   gem 'rubocop', '~> 0.75.1', require: false

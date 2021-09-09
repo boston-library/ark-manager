@@ -54,6 +54,12 @@ class Ark < ApplicationRecord
     end
   end
 
+  def self.identifier_in_use?(noid)
+    Rails.cache.fetch([minter_exists_scope, noid, 'identifier_in_use'], expires_in: 24.hours) do
+      minter_exists_scope.exists?(noid: noid)
+    end
+  end
+
   def to_s
     Oj.dump(as_json, indent: 2)
   end

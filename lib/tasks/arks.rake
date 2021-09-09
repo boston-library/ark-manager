@@ -13,4 +13,13 @@ namespace :arks do
 
     puts 'Import task complete!'
   end
+
+  desc 'Clean images from Preview Cache'
+  task :preview_cache_purge => :environment do
+    puts 'Staring preview image cache purge!'
+
+    Scripts.run_preview_cache_clean!
+
+    puts 'Cache purge complete!'
+  end
 end
