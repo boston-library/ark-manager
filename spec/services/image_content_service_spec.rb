@@ -11,6 +11,7 @@ RSpec.describe ImageContentService, type: :service do
   let(:file_suffix) {  '_thumbnail' }
 
   specify { expect(described_service_class).to be_const_defined('ApplicationService') }
+  specify { expect(described_service_class).to be_const_defined('IMG_DEST_FOLDER') }
   specify { expect(described_service_class).to respond_to(:call).with(3).arguments }
 
   it_behaves_like 'service_class' do
@@ -23,7 +24,7 @@ RSpec.describe ImageContentService, type: :service do
   describe 'instance' do
     subject { described_service_class.new(filestream_attachment_name, filestream_key, file_suffix) }
 
-    it { is_expected.to respond_to(:filestream_attachment_name, :filestream_key, :file_suffix, :filestream_ark_id) }
+    it { is_expected.to respond_to(:filestream_attachment_name, :filestream_key, :file_suffix, :filestream_ark_id, :destination_path) }
   end
 
   describe 'successful #result' do
@@ -39,7 +40,7 @@ RSpec.describe ImageContentService, type: :service do
     end
 
     it 'Expects the #result to have the correct value' do
-      expect(subject.result).to be_a_kind_of(Tempfile)
+      expect(subject.result).to be_a_kind_of(String)
     end
   end
 

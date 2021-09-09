@@ -22,15 +22,6 @@ module ArkHandler
 
     config.action_dispatch.default_headers['X-Frame-Options'] = 'DENY'
 
-    if Rails.env.development?
-      console do
-        require 'pry' unless defined? Pry
-        require 'awesome_print'
-        AwesomePrint.pry!
-        config.console = Pry
-      end
-    end
-
     config.generators do |g|
       g.orm :active_record
       g.api_only = true
