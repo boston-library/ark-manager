@@ -27,6 +27,8 @@ gem 'redis', '~> 4.4'
 gem 'rsolr', '~> 2.3'
 gem 'rswag-api', '~> 2.4'
 
+gem 'sd_notify', group: [:production, :staging]
+
 group :development, :test do
   gem 'awesome_print', '~> 1.9'
   gem 'dotenv-rails', '~> 2.7'
