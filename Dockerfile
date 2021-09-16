@@ -3,7 +3,7 @@ FROM ruby:2.7.4
 MAINTAINER bbarber@bpl.org
 
 ENV LANG=C.UTF-8 \
-    BUNDLER_VERSION=2.2.24
+    BUNDLER_VERSION=2.2.27
 
 RUN apt-get update -qq \
   && DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends \
@@ -38,6 +38,7 @@ WORKDIR /ark-manager-app
 COPY Gemfile Gemfile.* /ark-manager-app/
 
 RUN bundle config build.nokogiri --use-system-libraries
+RUN bundle config set --global without staging:production
 RUN bundle check || bundle install --jobs 5 --retry 3
 
 COPY . /ark-manager-app
