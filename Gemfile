@@ -9,7 +9,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 # Reduces boot times through caching; required in config/boot.rb
 gem 'connection_pool', '~> 2.2'
 gem 'down', '~> 5.2'
-gem 'faraday', '~> 1.7'
+gem 'faraday', '~> 1.8'
 gem 'friendly_id', '~> 5.4'
 gem 'jbuilder', '~> 2.11'
 gem 'net-http-persistent', '>= 3.1'
@@ -17,13 +17,13 @@ gem 'noid-rails', '~> 3.0'
 gem 'oj', '~> 3.13'
 gem 'pg', '>= 0.18', '< 2.0'
 # Use postgresql as the database for Active Record
-gem 'puma', '~> 5.4'
+gem 'puma', '~> 5.5'
 # Use Puma as the app server
 gem 'rack-cors', '~> 1.1'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rails', '~> 6.0.4.1', '< 6.1'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'redis', '~> 4.4'
+gem 'redis', '~> 4.5'
 gem 'rsolr', '~> 2.3'
 gem 'rswag-api', '~> 2.4'
 
@@ -33,7 +33,7 @@ group :development, :test do
   gem 'awesome_print', '~> 1.9'
   gem 'dotenv-rails', '~> 2.7'
   gem 'factory_bot_rails', '~> 6.2'
-  gem 'faker', '~> 2.18'
+  gem 'faker', '~> 2.19'
   gem 'pry', '~> 0.13.1'
   gem 'pry-rails'
   gem 'rspec-rails', '~> 5.0'
