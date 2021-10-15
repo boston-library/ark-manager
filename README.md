@@ -6,4 +6,8 @@ A lightweight API that manages the creation of ARKs([Archival Resource Keys](htt
 
 # Docker
 
-To use the docker container run `docker-compose up --build -d && docker-compose run app rails db:prepare`
+To use the docker container run simply use `docker-compose up [-d for running in the background]`
+
+The `entrypoint.sh` script will setup the databases for you.
+
+To rebuild the docker container use `docker-compose build --no-cache`
