@@ -3,7 +3,7 @@
 class ApplicationController < ActionController::API
   APP_INFO = {
     app_name: 'ark-manager',
-    author: 'Ben Barber',
+    author: 'Ben Barber Jr.',
     organization: 'Boston Public Library',
     version: '2',
   }.freeze
