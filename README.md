@@ -11,3 +11,5 @@ To use the docker container run simply use `docker-compose up [-d for running in
 The `entrypoint.sh` script will setup the databases for you.
 
 To rebuild the docker container use `docker-compose build --no-cache`
+
+## Daniel
