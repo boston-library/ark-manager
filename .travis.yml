@@ -19,14 +19,14 @@ before_install:
   - sudo cp /etc/postgresql/{9.6,12}/main/pg_hba.conf
   - sudo pg_ctlcluster 12 main restart
   - gem update --system --no-document
-  - gem install bundler:2.2.27 --no-document
+  - gem install bundler:2.2.32 --no-document
 
 before_script:
 - cp config/database.yml.travis config/database.yml
 - bundle exec rails db:prepare
 
 rvm:
-  - 2.7.4
+  - 2.7.5
 
 env:
   global:

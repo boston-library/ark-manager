@@ -13,14 +13,15 @@ class ArkMinter < Noid::Rails::Minter::Db
   end
 
   def mint
-    Fiber.new do
+    Thread.new do
+      Thread.current.report_on_exception = false
       ActiveRecord::Base.connection_pool.with_connection do
         loop do
           pid = next_id
-          Fiber.yield pid unless identifier_in_use?(pid)
+          break pid unless identifier_in_use?(pid)
         end
       end
-    end.resume
+    end.value
   end
 
   protected
