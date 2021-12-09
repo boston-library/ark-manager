@@ -21,12 +21,19 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors, logger: (-> { R
              headers: :any,
              methods: [:get, :head, :post, :options, :delete],
              expose: ['ETag', 'Last-Modified'],
-            max_age: 24.hours
+             max_age: 24.hours
 
     resource '/ark:/:namespace/:noid',
              headers: :any,
              methods: [:get, :post, :head, :options],
              credentials: true
+  end
+
+  allow do
+    origins '*'
+    resource '/ark:/:namespace/:noid',
+             headers: :any,
+             methods: [:get, :post, :head, :options]
 
     resource '/ark:/*/thumbnail',
              headers: :any,
