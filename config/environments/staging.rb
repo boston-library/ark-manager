@@ -73,7 +73,7 @@ Rails.application.configure do
     logger.formatter = config.log_formatter
     config.logger    = ActiveSupport::TaggedLogging.new(logger)
   else
-    shift_age = 'monthly'
+    shift_age = 7
     shift_size = 32.megabytes
     logger = ActiveSupport::Logger.new(config.paths['log'].first, shift_age, shift_size)
     logger.formatter = config.log_formatter
