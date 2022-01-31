@@ -330,7 +330,7 @@ DEPENDENCIES
   rubocop-rails (~> 2.4.2)
   rubocop-rspec
   sd_notify
-  shoulda-matchers (~> 5.0)
+  shoulda-matchers (~> 5.1)
   tzinfo-data
   vcr (~> 6)
   webmock (~> 3.14)

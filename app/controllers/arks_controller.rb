@@ -90,9 +90,9 @@ class ArksController < ApplicationController
     Rails.logger.debug "==== :ark_params are #{ark_params.inspect} ===="
 
     @ark = if ark_params[:parent_pid]
-             Ark.with_parent_and_local_id(ark_params[:parent_pid], ark_params[:local_original_identifier], ark_params[:local_original_identifier_type]).first
+             Ark.with_parent_and_local_id_and_model_type(ark_params[:parent_pid], ark_params[:local_original_identifier], ark_params[:local_original_identifier_type], ark_params[:model_type]).first
            else
-             Ark.with_local_id(ark_params[:local_original_identifier], ark_params[:local_original_identifier_type]).first
+             Ark.without_parent_and_with_local_id_and_model_type(ark_params[:local_original_identifier], ark_params[:local_original_identifier_type], ark_params[:model_type]).first
            end
   end
 
