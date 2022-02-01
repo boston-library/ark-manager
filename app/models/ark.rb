@@ -50,8 +50,8 @@ class Ark < ApplicationRecord
             presence: true
 
   validates :local_original_identifier_type, presence: true, inclusion: { in: LOCAL_ID_TYPES }
-  validates :model_type, uniqueness: { scope: [:local_original_identifier, :local_original_identifier_type] }, if: proc { |a| a.parent_pid.blank? }
-  validates :model_type, uniqueness: { scope: [:local_original_identifier, :local_original_identifier_type, :parent_pid] }, if: proc { |a| a.parent_pid.present? }
+  validates :local_original_identifier, uniqueness: { scope: [:local_original_identifier_type, :model_type] }, if: proc { |a| a.parent_pid.blank? }
+  validates :local_original_identifier, uniqueness: { scope: [:local_original_identifier_type, :model_type, :parent_pid] }, if: proc { |a| a.parent_pid.present? }
   validates :noid, presence: true, uniqueness: { case_sensitive: false }
   validates :url_base, presence: true, format: { with: URI.regexp(['http', 'https']) }
 

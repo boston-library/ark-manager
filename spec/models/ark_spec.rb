@@ -189,13 +189,13 @@ RSpec.describe Ark, type: :model do
       context 'where parent_pid is NOT NULL' do
         subject { ark_with_parent }
 
-        it { is_expected.to validate_uniqueness_of(:model_type).scoped_to([:local_original_identifier, :local_original_identifier_type, :parent_pid]) }
+        it { is_expected.to validate_uniqueness_of(:local_original_identifier).scoped_to([:local_original_identifier_type, :model_type, :parent_pid]) }
       end
 
       context 'where parent_pid is NULL' do
         subject { ark_without_parent }
 
-        it { is_expected.to validate_uniqueness_of(:model_type).scoped_to([:local_original_identifier, :local_original_identifier_type]) }
+        it { is_expected.to validate_uniqueness_of(:local_original_identifier).scoped_to([:local_original_identifier_type, :model_type]) }
       end
     end
   end
