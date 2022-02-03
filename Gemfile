@@ -52,7 +52,7 @@ group :test do
   gem 'coveralls', require: false
   gem 'database_cleaner-active_record', '~> 2'
   gem 'rails-controller-testing', '~> 1.0'
-  gem 'shoulda-matchers', '~> 5.0'
+  gem 'shoulda-matchers', '~> 5.1'
   gem 'vcr', '~> 6'
   gem 'webmock', '~> 3.14'
 end

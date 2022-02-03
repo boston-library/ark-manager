@@ -29,6 +29,10 @@ RSpec.describe Ark, type: :model do
 
       it { is_expected.to have_db_index(:pid).unique(true) }
 
+      it { is_expected.to have_db_index([:local_original_identifier, :local_original_identifier_type, :model_type, :parent_pid]).unique(true) }
+
+      it { is_expected.to have_db_index([:local_original_identifier, :local_original_identifier_type, :model_type]).unique(true) }
+
       it { is_expected.to have_db_index([:local_original_identifier, :local_original_identifier_type]) }
 
       it { is_expected.to have_db_index([:namespace_ark, :noid]) }
@@ -62,15 +66,17 @@ RSpec.describe Ark, type: :model do
 
   describe 'Scopes' do
     let!(:namespace_ark) { 'bpl-dev' }
-    let!(:parent_id) { "#{namespace_ark}:3214dde845" }
-    let!(:identifier) { 'Foo-Bar-002.tif' }
+    let!(:parent_pid) { "#{namespace_ark}:3214dde845" }
+    let!(:identifier) { 'Foo-Bar-002' }
     let!(:identifier_type) { 'filename' }
+    let!(:model_type) { 'Curator::Filestreams::Image' }
     let!(:noid) { '644529e066' }
 
-    specify { expect(described_class).to respond_to(:active, :minter_exists_scope, :noid_cache_scope) }
-    specify { expect(described_class).to respond_to(:with_parent).with(1).argument }
+    specify { expect(described_class).to respond_to(:active, :minter_exists_scope, :noid_cache_scope, :without_parent).with(0).arguments }
+    specify { expect(described_class).to respond_to(:with_parent, :with_model_type).with(1).argument }
     specify { expect(described_class).to respond_to(:with_local_id, :object_in_view).with(2).arguments }
-    specify { expect(described_class).to respond_to(:with_parent_and_local_id).with(3).arguments }
+    specify { expect(described_class).to respond_to(:without_parent_and_with_local_id_and_model_type).with(3).arguments }
+    specify { expect(described_class).to respond_to(:with_parent_and_local_id_and_model_type).with(4).arguments }
 
     describe '#default_scope' do
       subject { described_class.all.to_sql }
@@ -88,10 +94,26 @@ RSpec.describe Ark, type: :model do
       it { is_expected.to eq(expected_sql) }
     end
 
-    describe '#with_parent' do
-      subject { described_class.with_parent(parent_id).to_sql }
+    describe '#without_parent' do
+      subject { described_class.without_parent.to_sql }
 
-      let!(:expected_sql) { described_class.where.not(parent_pid: nil).where(parent_pid: parent_id).to_sql }
+      let!(:expected_sql) { described_class.where(parent_pid: nil).to_sql }
+
+      it { is_expected.to eq(expected_sql) }
+    end
+
+    describe '#with_parent' do
+      subject { described_class.with_parent(parent_pid).to_sql }
+
+      let!(:expected_sql) { described_class.where.not(parent_pid: nil).where(parent_pid: parent_pid).to_sql }
+
+      it { is_expected.to eq(expected_sql) }
+    end
+
+    describe '#with_model_type' do
+      subject { described_class.with_model_type(model_type).to_sql }
+
+      let!(:expected_sql) { described_class.where(model_type: model_type).to_sql }
 
       it { is_expected.to eq(expected_sql) }
     end
@@ -104,10 +126,18 @@ RSpec.describe Ark, type: :model do
       it { is_expected.to eq(expected_sql) }
     end
 
-    describe '#with_parent_and_local_id' do
-      subject { described_class.with_parent_and_local_id(parent_id, identifier, identifier_type).to_sql }
+    describe '#with_parent_and_local_id_and_model_type' do
+      subject { described_class.with_parent_and_local_id_and_model_type(parent_pid, identifier, identifier_type, model_type).to_sql }
 
-      let!(:expected_sql) { described_class.with_parent(parent_id).with_local_id(identifier, identifier_type).to_sql }
+      let!(:expected_sql) { described_class.with_parent(parent_pid).with_local_id(identifier, identifier_type).with_model_type(model_type).to_sql }
+
+      it { is_expected.to eq(expected_sql) }
+    end
+
+    describe '#without_parent_and_with_local_id_and_model_type' do
+      subject { described_class.without_parent_and_with_local_id_and_model_type(identifier, identifier_type, model_type).to_sql }
+
+      let!(:expected_sql) { described_class.without_parent.with_local_id(identifier, identifier_type).with_model_type(model_type).to_sql }
 
       it { is_expected.to eq(expected_sql) }
     end
@@ -151,6 +181,23 @@ RSpec.describe Ark, type: :model do
     it { is_expected.to validate_uniqueness_of(:noid).case_insensitive }
 
     it { is_expected.to validate_inclusion_of(:local_original_identifier_type).in_array(Ark::LOCAL_ID_TYPES) }
+
+    describe 'conditional validations' do
+      let!(:ark_with_parent) { create(:ark, :object_ark) }
+      let!(:ark_without_parent) { create(:ark, :institution_ark) }
+
+      context 'where parent_pid is NOT NULL' do
+        subject { ark_with_parent }
+
+        it { is_expected.to validate_uniqueness_of(:local_original_identifier).scoped_to([:local_original_identifier_type, :model_type, :parent_pid]) }
+      end
+
+      context 'where parent_pid is NULL' do
+        subject { ark_without_parent }
+
+        it { is_expected.to validate_uniqueness_of(:local_original_identifier).scoped_to([:local_original_identifier_type, :model_type]) }
+      end
+    end
   end
 
   describe 'Callbacks' do

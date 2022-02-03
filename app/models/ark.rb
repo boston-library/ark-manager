@@ -24,9 +24,15 @@ class Ark < ApplicationRecord
 
   scope :with_parent, ->(parent_pid) { where.not(parent_pid: nil).where(parent_pid: parent_pid) }
 
+  scope :without_parent, -> { where(parent_pid: nil) }
+
+  scope :with_model_type, ->(model_type) { where(model_type: model_type) }
+
   scope :with_local_id, ->(identifier, identifier_type) { where(local_original_identifier: identifier, local_original_identifier_type: identifier_type) }
 
-  scope :with_parent_and_local_id, ->(parent_pid, identifier, identifier_type) { with_parent(parent_pid).with_local_id(identifier, identifier_type) }
+  scope :without_parent_and_with_local_id_and_model_type, ->(identifier, identifier_type, model_type) { without_parent.with_local_id(identifier, identifier_type).with_model_type(model_type) }
+
+  scope :with_parent_and_local_id_and_model_type, ->(parent_pid, identifier, identifier_type, model_type) { with_parent(parent_pid).with_local_id(identifier, identifier_type).with_model_type(model_type) }
 
   scope :object_in_view, ->(namespace_ark, noid) { active.merge(where(namespace_ark: namespace_ark, noid: noid)) }
 
@@ -44,6 +50,8 @@ class Ark < ApplicationRecord
             presence: true
 
   validates :local_original_identifier_type, presence: true, inclusion: { in: LOCAL_ID_TYPES }
+  validates :local_original_identifier, uniqueness: { scope: [:local_original_identifier_type, :model_type] }, if: proc { |a| a.parent_pid.blank? }
+  validates :local_original_identifier, uniqueness: { scope: [:local_original_identifier_type, :model_type, :parent_pid] }, if: proc { |a| a.parent_pid.present? }
   validates :noid, presence: true, uniqueness: { case_sensitive: false }
   validates :url_base, presence: true, format: { with: URI.regexp(['http', 'https']) }
 
