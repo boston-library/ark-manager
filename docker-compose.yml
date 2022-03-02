@@ -24,7 +24,7 @@ services:
       - cache
   pg_db:
     restart: unless-stopped
-    mem_reservation: 32m
+    #mem_reservation: 32m
     container_name: ark_manager_db
     image: postgres:12
     environment:
