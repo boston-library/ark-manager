@@ -1,9 +1,9 @@
-FROM ruby:2.7.5
+FROM ruby:2.7.6
 
 MAINTAINER bbarber@bpl.org
 
 ENV LANG=C.UTF-8 \
-    BUNDLER_VERSION=2.3.4
+    BUNDLER_VERSION=2.3.11
 
 RUN apt-get update -qq \
   && DEBIAN_FRONTEND=noninteractive apt-get install -qq --no-install-recommends apt-utils
