@@ -3,13 +3,13 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '~> 2.7.5'
+ruby '~> 2.7.6'
 
 gem 'bootsnap', '>= 1.1.0', require: false
 # Reduces boot times through caching; required in config/boot.rb
 gem 'connection_pool', '~> 2.2'
 gem 'down', '~> 5.2'
-gem 'faraday', '~> 1.8'
+gem 'faraday', '~> 1.9', '< 2'
 gem 'friendly_id', '~> 5.4'
 gem 'jbuilder', '~> 2.11'
 gem 'net-http-persistent', '>= 3.1'
@@ -23,8 +23,8 @@ gem 'rack-cors', '~> 1.1'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rails', '~> 6.0.4', '< 6.1'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'redis', '~> 4.5'
-gem 'rsolr', '~> 2.4'
+gem 'redis', '~> 4.6'
+gem 'rsolr', '~> 2.5'
 gem 'rswag-api', '~> 2.4'
 
 gem 'sd_notify', group: [:production, :staging]
