@@ -21,7 +21,7 @@ gem 'puma', '~> 5.6.4'
 # Use Puma as the app server
 gem 'rack-cors', '~> 1.1'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
-gem 'rails', '>= 6.0.5', '< 6.1'
+gem 'rails', '>= 6.0.5.1', '< 6.1'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'redis', '~> 4.6'
 gem 'rsolr', '~> 2.5'
