@@ -4,11 +4,11 @@ module ArkErrorHelper
   def all_ark_errors
     ark = Ark.new
     ark.valid?
-    errors = ark.errors.reduce([]) do |r, (attr, msg)|
+    errors = ark.errors.messages.reduce([]) do |r, (attr, msg)|
       r << {
         title: 'Unprocessable Entity',
               status: 422,
-              detail: msg,
+              detail: msg.join(','),
               source: { pointer: "/data/attributes/#{attr}" }
       }.as_json
     end

@@ -1,9 +1,9 @@
-FROM ruby:2.7.6
+FROM ruby:3.0.4
 
 MAINTAINER bbarber@bpl.org
 
 ENV LANG=C.UTF-8 \
-    BUNDLER_VERSION=2.3.11
+    BUNDLER_VERSION=2.3.12
 
 RUN apt-get update -qq \
   && DEBIAN_FRONTEND=noninteractive apt-get install -qq --no-install-recommends apt-utils

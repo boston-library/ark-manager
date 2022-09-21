@@ -26,7 +26,7 @@ before_script:
 - bundle exec rails db:prepare
 
 rvm:
-  - 2.7.6
+  - 3.0.4
 
 env:
   global:
@@ -40,4 +40,4 @@ env:
     - ARK_MANAGER_DEFAULT_NAMESPACE=bpl-dev
     - ARK_MANAGER_OAI_NAMESPACE=oai-dev
   jobs:
-    - "RAILS_VERSION=6.0.4.7"
+    - "RAILS_VERSION=6.1.7"

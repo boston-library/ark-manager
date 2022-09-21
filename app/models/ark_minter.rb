@@ -57,7 +57,7 @@ class ArkMinter < Noid::Rails::Minter::Db
       template: template.to_s
     )
   rescue ActiveRecord::RecordNotFound => e
-    # NOTE In production we want to control the Creation/Existence of MinterState objects in the seeds task. Creating them on the fly is ok in dev/test. So if the MinterState doesn't exist in production it will re raise the exception.
+    # NOTE: In production we want to control the Creation/Existence of MinterState objects in the seeds task. Creating them on the fly is ok in dev/test. So if the MinterState doesn't exist in production it will re raise the exception.
     # rubocop:disable Rails/UnknownEnv
     raise e if Rails.env.production? || Rails.env.staging?
 
