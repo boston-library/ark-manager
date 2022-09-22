@@ -16,7 +16,7 @@ Bundler.require(*Rails.groups)
 module ArkHandler
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.0
+    config.load_defaults 6.1
     config.api_only = true
     config.middleware.use Rack::Sendfile
 

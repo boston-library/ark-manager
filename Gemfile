@@ -3,12 +3,12 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '~> 2.7.6'
+ruby '~> 3.0.4'
 
 gem 'bootsnap', '>= 1.1.0', require: false
 # Reduces boot times through caching; required in config/boot.rb
-gem 'connection_pool', '~> 2.2'
-gem 'down', '~> 5.2'
+gem 'connection_pool', '~> 2.3'
+gem 'down', '~> 5.3'
 gem 'faraday', '~> 1.9', '< 2'
 gem 'friendly_id', '~> 5.4'
 gem 'jbuilder', '~> 2.11'
@@ -17,30 +17,30 @@ gem 'noid-rails', '~> 3.0'
 gem 'oj', '~> 3.13'
 gem 'pg', '>= 0.18', '< 2.0'
 # Use postgresql as the database for Active Record
-gem 'puma', '~> 5.6.4'
+gem 'puma', '~> 5.6.5'
 # Use Puma as the app server
 gem 'rack-cors', '~> 1.1'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
-gem 'rails', '>= 6.0.5.1', '< 6.1'
+gem 'rails', '~> 6.1.7', '< 7'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'redis', '~> 4.6'
 gem 'rsolr', '~> 2.5'
-gem 'rswag-api', '~> 2.4'
+gem 'rswag-api', '~> 2.6'
 
 gem 'sd_notify', group: [:production, :staging]
 
 group :development, :test do
   gem 'awesome_print', '~> 1.9'
-  gem 'dotenv-rails', '~> 2.7'
+  gem 'dotenv-rails', '~> 2.8'
   gem 'factory_bot_rails', '~> 6.2'
-  gem 'faker', '~> 2.19'
+  gem 'faker', '~> 2.23'
   gem 'pry', '~> 0.13.1'
   gem 'pry-rails'
-  gem 'rspec-rails', '~> 5.0'
-  gem 'rswag-specs', '~> 2.4'
-  gem 'rubocop', '~> 0.75.1', require: false
-  gem 'rubocop-performance', '~> 1.5', require: false
-  gem 'rubocop-rails', '~> 2.4.2', require: false
+  gem 'rspec-rails', '~> 5.1'
+  gem 'rswag-specs', '~> 2.6'
+  gem 'rubocop', '~> 1.36', require: false
+  gem 'rubocop-performance', '~> 1.15', require: false
+  gem 'rubocop-rails', '~> 2.16', require: false
   gem 'rubocop-rspec', require: false
 end
 
@@ -52,9 +52,9 @@ group :test do
   gem 'coveralls', require: false
   gem 'database_cleaner-active_record', '~> 2'
   gem 'rails-controller-testing', '~> 1.0'
-  gem 'shoulda-matchers', '~> 5.1'
-  gem 'vcr', '~> 6'
-  gem 'webmock', '~> 3.14'
+  gem 'shoulda-matchers', '~> 5.2'
+  gem 'vcr', '~> 6.1'
+  gem 'webmock', '~> 3.18'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

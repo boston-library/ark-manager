@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class IdOrPidConstraint
-  ID_REGEX = /\d+/.freeze
-  PID_REGEX = /\A[a-z]+.*[a-z]*:{1}[a-z0-9]{9}\z/.freeze
+  ID_REGEX = /\d+/
+  PID_REGEX = /\A[a-z]+.*[a-z]*:{1}[a-z0-9]{9}\z/
 
   attr_reader :pattern
 

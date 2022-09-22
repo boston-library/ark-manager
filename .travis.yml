@@ -19,14 +19,14 @@ before_install:
   - sudo cp /etc/postgresql/{9.6,12}/main/pg_hba.conf
   - sudo pg_ctlcluster 12 main restart
   - gem update --system --no-document
-  - gem install bundler:2.3.11 --no-document
+  - gem install bundler:2.3.12 --no-document
 
 before_script:
 - cp config/database.yml.travis config/database.yml
 - bundle exec rails db:prepare
 
 rvm:
-  - 2.7.6
+  - 3.0.4
 
 env:
   global:
@@ -40,4 +40,4 @@ env:
     - ARK_MANAGER_DEFAULT_NAMESPACE=bpl-dev
     - ARK_MANAGER_OAI_NAMESPACE=oai-dev
   jobs:
-    - "RAILS_VERSION=6.0.4.7"
+    - "RAILS_VERSION=6.1.7"

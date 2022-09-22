@@ -35,7 +35,7 @@ class ArksController < ApplicationController
     Rails.logger.error 'Ark failed to save!'
     Rails.logger.error @ark.errors.full_messages.join("\n")
 
-    @errors = build_ark_errors(@ark.errors)
+    @errors = build_ark_errors(@ark.errors.messages)
     render status: :unprocessable_entity
   end
 
@@ -43,7 +43,7 @@ class ArksController < ApplicationController
     @ark.deleted = true
     head :no_content and return if @ark.save
 
-    errors = build_ark_errors(@ark.errors)
+    errors = build_ark_errors(@ark.errors.messages)
     render json: { errors: errors }, status: :unprocessable_entity
   end
 
@@ -122,7 +122,7 @@ class ArksController < ApplicationController
       r << {
         title: 'Unprocessable Entity',
               status: 422,
-              detail: msg,
+              detail: msg.join(','),
               source: { pointer: "/data/attributes/#{attr}" }
       }
     end
