@@ -14,12 +14,15 @@ class ArkMinter < Noid::Rails::Minter::Db
 
   def mint
     Thread.new do
-      Thread.current.report_on_exception = false
-      ActiveRecord::Base.connection_pool.with_connection do
-        loop do
-          pid = next_id
-          break pid unless identifier_in_use?(pid)
-        end
+      Rails.application.reloader.wrap do
+        Thread.current.report_on_exception = false
+        Thread.current[:pid] = nil
+        Fiber.new do
+          loop do
+            pid = next_id
+            Fiber.yield pid unless identifier_in_use?(pid)
+          end
+        end.resume
       end
     end.value
   end
@@ -27,14 +30,15 @@ class ArkMinter < Noid::Rails::Minter::Db
   protected
 
   def next_id
-    id = nil
-    locked_inst = instance
-    locked_inst.with_lock do
-      minter = Noid::Minter.new(deserialize(locked_inst))
-      id = minter.mint
-      serialize(locked_inst, minter)
+    MinterState.connection_pool.with_connection do
+      locked_inst = instance
+      locked_inst.with_lock('FOR UPDATE NOWAIT') do
+        minter = Noid::Minter.new(deserialize(locked_inst))
+        Thread.current[:pid] = minter.mint
+        serialize(locked_inst, minter)
+      end
     end
-    id
+    Thread.current[:pid]
   end
 
   def deserialize(inst)
