@@ -4,6 +4,7 @@ require File.expand_path('./environment', __dir__)
 
 set :application, "ark-manager"
 set :repo_url, "https://github.com/boston-library/#{fetch(:application)}.git"
+set :user, Rails.application.credentials.dig(:deploy_testing, :user)
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
