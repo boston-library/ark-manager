@@ -72,9 +72,9 @@ namespace :boston_library do
   end
 end
 
-before :'rvm:check', :'boston_library:rvm_install_ruby'
-after :'boston_library:gem_update', :'boston_library:install_bundler'
-before :'bundler:install', :'boston_library:gem_update'
-after :'deploy:cleanup', :'boston_library:binstubs_bundler'
-after :'boston_library:binstubs_bundler', :'boston_library:restart_ark_manager_puma'
+after :'bundler:config', :'boston_library:gem_update'
+after :'boston_library:gem_update', :'boston_library:rvm_install_ruby'
+after :'boston_library:rvm_install_ruby', :'boston_library:install_bundler'
+before :'deploy:cleanup', :'boston_library:binstubs_bundler'
+after :'deploy:cleanup', :'boston_library:restart_ark_manager_puma'
 after :'boston_library:restart_ark_manager_puma', :'boston_library:restart_nginx'
