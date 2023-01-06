@@ -19,7 +19,7 @@ set :pty, true
 # Default value for linked_dirs is []
 # append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "tmp/webpacker", "public/system", "vendor", "storage"
 append :linked_files, 'config/database.yml', 'config/credentials/staging.key', 'config/environments/staging.rb'
-append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'bundle'
+append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets'
 
 # Default value for keep_releases is 5
 set :keep_releases, 5
@@ -75,6 +75,6 @@ end
 after :'bundler:config', :'boston_library:gem_update'
 after :'boston_library:gem_update', :'boston_library:rvm_install_ruby'
 after :'boston_library:rvm_install_ruby', :'boston_library:install_bundler'
-before :'deploy:finishing', :'boston_library:binstubs_bundler'
+# before :'deploy:finishing', :'boston_library:binstubs_bundler'
 after :'deploy:cleanup', :'boston_library:restart_ark_manager_puma'
 after :'boston_library:restart_ark_manager_puma', :'boston_library:restart_nginx'
