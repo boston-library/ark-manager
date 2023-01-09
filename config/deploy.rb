@@ -49,10 +49,10 @@ namespace :boston_library do
     end
   end
 
-  desc 'ark-manager restarts ark_manager_puma service'
-  task :restart_ark_manager_puma do
+  desc "#{fetch(:application)} restarts #{fetch(:application)}_puma service"
+  task :"restart_#{fetch(:application)}_puma" do
     on roles(:app), in: :sequence, wait: 5 do
-      execute 'sudo /bin/systemctl restart ark_manager_puma.socket ark_manager_puma.service'
+      execute "sudo /bin/systemctl restart #{fetch(:application)}_puma.service"
       sleep(5)
     end
   end
@@ -68,5 +68,5 @@ end
 after :'bundler:config', :'boston_library:gem_update'
 after :'boston_library:gem_update', :'boston_library:rvm_install_ruby'
 after :'boston_library:rvm_install_ruby', :'boston_library:install_bundler'
-after :'deploy:cleanup', :'boston_library:restart_ark_manager_puma'
-after :'boston_library:restart_ark_manager_puma', :'boston_library:restart_nginx'
+after :'deploy:cleanup', :"boston_library:restart_#{fetch(:application)}_puma"
+after :"boston_library:restart_#{fetch(:application)}_puma", :'boston_library:restart_nginx'
