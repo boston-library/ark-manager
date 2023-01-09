@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 # config valid for current version and patch releases of Capistrano
-lock "~> 3.17.1"
+lock '~> 3.17.1'
 require File.expand_path('./environment', __dir__)
 
-set :application, "ark-manager"
+set :application, 'ark-manager'
 set :repo_url, "https://github.com/boston-library/#{fetch(:application)}.git"
 set :user, Rails.application.credentials.dig(:deploy_testing, :user)
 
