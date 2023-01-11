@@ -4,9 +4,15 @@
 lock '~> 3.17.1'
 require File.expand_path('./environment', __dir__)
 
+
+# If staging_case is set to "testing", capistrano deploys app to testing server.
+# switch :stage_case to "staging" when moving to staging enviroment
+# set :stage_case, 'staging'
+set :stage_case, 'testing'
+
 set :application, 'ark-manager'
 set :repo_url, "https://github.com/boston-library/#{fetch(:application)}.git"
-set :user, Rails.application.credentials.dig(:deploy_testing, :user)
+set :user, Rails.application.credentials.dig("deploy_#{fetch(:stage_case)}".to_sym, :user)
 
 ## Make user home path dynamic.
 set :deploy_to, "/home/deployer/#{fetch(:application)}"
