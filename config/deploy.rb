@@ -4,6 +4,7 @@
 lock '~> 3.17.1'
 require File.expand_path('./environment', __dir__)
 
+set :use_sudo, false
 
 # If staging_case is set to "testing", capistrano deploys app to testing server.
 # switch :stage_case to "staging" when moving to staging enviroment
