@@ -46,7 +46,8 @@ namespace :boston_library do
   task :uptime do
     on roles(:all) do |host|
       # execute :any_command, "with args", :here, "and here"
-      info "Host #{host} (#{host.roles.to_a.join(', ')}):\t#{capture(:uptime)}"
+      # info "Host #{host} (#{host.roles.to_a.join(', ')}):\t#{capture(:uptime)}"
+      info "Daniel Miao #{fetch(:rvm_bundle_version)}"
     end
   end
 
