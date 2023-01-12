@@ -42,6 +42,14 @@ namespace :boston_library do
     end
   end
 
+  desc "Report Uptimes"
+  task :uptime do
+    on roles(:all) do |host|
+      # execute :any_command, "with args", :here, "and here"
+      info "Host #{host} (#{host.roles.to_a.join(', ')}):\t#{capture(:uptime)}"
+    end
+  end
+
   desc 'Install new ruby if ruby-version is required'
   task :rvm_install_ruby do
     on roles(:app) do
@@ -74,6 +82,8 @@ namespace :boston_library do
   end
 end
 
+
+before :'bundler:config', :'boston_library:uptime'
 after :'bundler:config', :'boston_library:gem_update'
 after :'boston_library:gem_update', :'boston_library:rvm_install_ruby'
 after :'boston_library:rvm_install_ruby', :'boston_library:install_bundler'
