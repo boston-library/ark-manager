@@ -26,7 +26,6 @@ set :rvm_bundle_version, File.read(File.expand_path('./Gemfile.lock'))[-10..-1].
 set :pty, true
 
 # Default value for linked_dirs is []
-# append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "tmp/webpacker", "public/system", "vendor", "storage"
 append :linked_files, 'config/database.yml', 'config/credentials/staging.key', 'config/environments/staging.rb'
 append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'bundle'
 
