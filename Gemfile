@@ -8,8 +8,8 @@ ruby '~> 3.0.5'
 gem 'bootsnap', '>= 1.1.0', require: false
 # Reduces boot times through caching; required in config/boot.rb
 gem 'connection_pool', '~> 2.3'
-gem 'down', '~> 5.3'
-gem 'faraday', '~> 1.9', '< 2'
+gem 'down', '~> 5.4'
+gem 'faraday', '~> 1.10', '< 2'
 gem 'friendly_id', '~> 5.4'
 gem 'jbuilder', '~> 2.11'
 gem 'net-http-persistent', '>= 3.1'
@@ -21,9 +21,9 @@ gem 'puma', '~> 5.6.5'
 # Use Puma as the app server
 gem 'rack-cors', '~> 1.1'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
-gem 'rails', '~> 6.1.7', '< 7'
+gem 'rails', '~> 6.1.7.1', '< 7'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'redis', '~> 4.6'
+gem 'redis', '~> 4.8'
 gem 'rsolr', '~> 2.5'
 gem 'rswag-api', '~> 2.6'
 
