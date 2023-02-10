@@ -2,7 +2,6 @@
 
 # config valid for current version and patch releases of Capistrano
 lock '~> 3.17.1'
-require File.expand_path('./environment', __dir__)
 
 set :use_sudo, false
 
