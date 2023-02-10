@@ -6,17 +6,15 @@ require File.expand_path('./environment', __dir__)
 
 set :use_sudo, false
 
-# If staging_case is set to "testing", capistrano deploys app to testing server.
-# switch :stage_case to "staging" when moving to staging enviroment
-set :stage_case, 'staging'
-# set :stage_case, 'testing'
+## STAGE_NAME is a paramter from Jenkins job: "staging", "qc", and "testing"
+set :stage_case, ENV['STAGE_NAME']
 
 set :application, 'ark-manager'
 set :repo_url, "https://github.com/boston-library/#{fetch(:application)}.git"
-set :user, Rails.application.credentials.dig("deploy_#{fetch(:stage_case)}".to_sym, :user)
+set :user, ENV['DEPLOY_USER']
 
-## Make user home path dynamic.
-set :deploy_to, "/home/deployer/#{fetch(:application)}"
+###### Make user home path dynamic.
+set :deploy_to, "/home/#{fetch(:user)}/railsApps/#{fetch(:application)}"
 
 set :rvm_installed, "/home/#{fetch(:user)}/.rvm/bin/rvm"
 set :rvm_ruby_version, File.read(File.expand_path('./../.ruby-version', __dir__)).strip
