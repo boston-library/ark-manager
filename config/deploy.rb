@@ -68,6 +68,13 @@ namespace :boston_library do
       execute 'sudo /bin/systemctl reload nginx.service'
     end
   end
+
+  desc 'List current releases'
+  task :list_releases do
+    on roles(:app) do
+      execute "ls -alt #{fetch(:deploy_to)}/releases"
+    end
+  end
 end
 
 after :'bundler:config', :'boston_library:gem_update'
@@ -75,3 +82,4 @@ after :'boston_library:gem_update', :'boston_library:rvm_install_ruby'
 after :'boston_library:rvm_install_ruby', :'boston_library:install_bundler'
 after :'deploy:cleanup', :"boston_library:restart_#{fetch(:application)}_puma"
 after :"boston_library:restart_#{fetch(:application)}_puma", :'boston_library:restart_nginx'
+after :'boston_library:restart_nginx', :'boston_library:list_releases'
