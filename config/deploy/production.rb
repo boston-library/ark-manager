@@ -2,6 +2,7 @@
 
 # server-based syntax
 # ======================
+
 set :server_ip, ENV['SERVER_IP']
 set :ssh_key, ENV['SSH_KEY']
 
