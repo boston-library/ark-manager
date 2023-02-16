@@ -12,7 +12,7 @@ set :application, 'ark-manager'
 set :repo_url, "https://github.com/boston-library/#{fetch(:application)}.git"
 set :user, ENV['DEPLOY_USER']
 
-###### Make user home path dynamic.
+## Make user home path dynamic.
 set :deploy_to, "/home/#{fetch(:user)}/railsApps/#{fetch(:application)}"
 
 set :rvm_installed, "/home/#{fetch(:user)}/.rvm/bin/rvm"

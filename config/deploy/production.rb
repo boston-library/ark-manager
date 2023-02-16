@@ -5,12 +5,10 @@
 
 set :server_ip, ENV['SERVER_IP']
 set :ssh_key, ENV['SSH_KEY']
-
 set :branch, ENV['BRANCH_NAME']
 
 # role-based syntax
 # ==================
-
 role :app, ["#{fetch(:user)}@#{fetch(:server_ip)}"]
 role :web, ["#{fetch(:user)}@#{fetch(:server_ip)}"]
 role :db,  ["#{fetch(:user)}@#{fetch(:server_ip)}"]
