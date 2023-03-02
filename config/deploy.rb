@@ -67,7 +67,7 @@ namespace :boston_library do
               sudo /bin/systemctl daemon-reload")
     end
   end
-  
+
   desc "#{fetch(:application)} restarts #{fetch(:application)}_puma service"
   task :"restart_#{fetch(:application)}_puma" do
     on roles(:app), in: :sequence, wait: 5 do
