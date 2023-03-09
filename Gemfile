@@ -14,7 +14,7 @@ gem 'friendly_id', '~> 5.4'
 gem 'jbuilder', '~> 2.11'
 gem 'net-http-persistent', '>= 3.1'
 gem 'noid-rails', '~> 3.0'
-gem 'oj', '~> 3.13'
+gem 'oj', '~> 3.14'
 gem 'pg', '>= 0.18', '< 2.0'
 # Use postgresql as the database for Active Record
 gem 'puma', '~> 5.6.5'
