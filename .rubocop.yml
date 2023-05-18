@@ -519,6 +519,7 @@ Rails/Output:
   Exclude:
     - 'db/seeds.rb'
     - 'lib/bpldc/lc_vocab_utilities.rb'
+    - 'config/deploy.rb'
 
 Rails/ReflectionClassName:
   Enabled: false
