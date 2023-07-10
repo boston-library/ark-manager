@@ -7,14 +7,14 @@ ruby '~> 3.0.6'
 
 gem 'bootsnap', '>= 1.1.0', require: false
 # Reduces boot times through caching; required in config/boot.rb
-gem 'connection_pool', '~> 2.3'
+gem 'connection_pool', '~> 2.4'
 gem 'down', '~> 5.4'
 gem 'faraday', '~> 1.10', '< 2'
 gem 'friendly_id', '~> 5.4'
 gem 'jbuilder', '~> 2.11'
 gem 'net-http-persistent', '>= 3.1'
 gem 'noid-rails', '~> 3.0'
-gem 'oj', '~> 3.14'
+gem 'oj', '~> 3.15'
 gem 'pg', '>= 0.18', '< 2.0'
 # Use postgresql as the database for Active Record
 gem 'puma', '~> 5.6.5'
@@ -32,7 +32,7 @@ gem 'sd_notify', group: [:production, :staging]
 group :development, :test do
   gem 'awesome_print', '~> 1.9'
   gem 'capistrano', '~> 3.17', require: false
-  gem 'capistrano3-puma'
+  gem 'capistrano3-puma', ' ~> 5.1'
   gem 'capistrano-rails', '~> 1.4', require: false
   gem 'capistrano-rvm'
   gem 'dotenv-rails', '~> 2.8'

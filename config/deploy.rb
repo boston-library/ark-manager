@@ -68,7 +68,7 @@ namespace :boston_library do
     end
   end
 
-  # rubocop:disable Metrics/LineLength
+  # rubocop:disable Layout/LineLength
   desc 'Run a console command to test -rails console-'
   task :rails_console_runner do
     on roles(:app), in: :sequence, wait: 5 do
@@ -79,7 +79,7 @@ namespace :boston_library do
       end
     end
   end
-  # rubocop:enable Metrics/LineLength
+  # rubocop:enable Layout/LineLength
 
   desc "#{fetch(:application)} restarts #{fetch(:application)}_puma service"
   task :"restart_#{fetch(:application)}_puma" do
