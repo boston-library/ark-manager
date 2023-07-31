@@ -5,7 +5,7 @@ lock '~> 3.17.1'
 
 set :use_sudo, false
 
-## STAGE_NAME is a paramter from Jenkins job: "staging", "qc", and "testing"
+## STAGE_NAME is a paramter from Jenkins job: "staging", "qc", and "testing", or "production"
 set :stage_case, ENV['STAGE_NAME']
 
 set :application, 'ark-manager'
@@ -74,7 +74,7 @@ namespace :boston_library do
     on roles(:app), in: :sequence, wait: 5 do
       as fetch(:user) do
         within release_path do
-          puts capture("cd #{release_path}; #{fetch(:rvm_installed)} #{fetch(:rvm_ruby_version)} do #{release_path}/bin/rails runner -e staging \"puts 'rails console works'\"")
+          puts capture("cd #{release_path}; #{fetch(:rvm_installed)} #{fetch(:rvm_ruby_version)} do #{release_path}/bin/rails runner -e #{fetch(:stage_case)} \"puts 'rails console works'\"")
         end
       end
     end
