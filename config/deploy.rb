@@ -114,4 +114,3 @@ after :'boston_library:rails_console_runner', :'boston_library:update_service_ru
 after :'boston_library:update_service_ruby', :"boston_library:restart_#{fetch(:application)}_puma"
 after :"boston_library:restart_#{fetch(:application)}_puma", :'boston_library:restart_nginx'
 after :'boston_library:restart_nginx', :'boston_library:list_releases'
-# after :'boston_library:update_service_ruby', :'boston_library:list_releases'
