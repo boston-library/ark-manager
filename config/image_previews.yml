@@ -1,0 +1,14 @@
+default: &default
+  cache_folder: <%= ENV.fetch('PREVIEW_CACHE_FOLDER', Rails.root.join('tmp', 'cache', 'previews').to_s) %>
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+staging:
+  cache_folder: <%= Rails.application.credentials[:preview_cache_folder] %>
+
+production:
+  cache_folder: <%= Rails.application.credentials[:preview_cache_folder] %>

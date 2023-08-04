@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ImageContentService < ApplicationService
-  IMG_DEST_FOLDER = Rails.root.join('tmp', 'cache', 'previews').to_s.freeze
+  IMG_DEST_FOLDER = Rails.application.config_for('image_previews')[:cache_folder]
 
   attr_reader :filestream_attachment_name, :filestream_key, :file_suffix
 
