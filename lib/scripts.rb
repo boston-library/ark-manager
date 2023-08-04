@@ -15,7 +15,7 @@ module Scripts
   end
 
   class CleanPrieviewCache
-    PREVIEW_CACHE_IMAGES = Rails.root.join('tmp', 'cache', 'previews', '**', '*.jpg').to_s.freeze
+    PREVIEW_CACHE_IMAGES = File.join(Rails.application.config_for('image_previews')[:cache_folder], '**', '*.jpg').to_s
 
     def initialize
       @cached_images = Dir[PREVIEW_CACHE_IMAGES]
