@@ -16,10 +16,10 @@ Bundler.require(*Rails.groups)
 module ArkHandler
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.1
+    config.load_defaults 7.0
     config.api_only = true
     config.middleware.use Rack::Sendfile
-
+    config.action_controller.raise_on_open_redirects = false # Needed for ths app since open redirects now raises and error
     config.action_dispatch.default_headers['X-Frame-Options'] = 'DENY'
 
     config.generators do |g|

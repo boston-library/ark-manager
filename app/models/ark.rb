@@ -63,7 +63,7 @@ class Ark < ApplicationRecord
   end
 
   def self.identifier_in_use?(noid)
-    Rails.cache.fetch([minter_exists_scope, noid, 'identifier_in_use'], expires_in: 24.hours, race_condition_ttl: 10.seconds, raw: true) do
+    Rails.cache.fetch([minter_exists_scope, noid, 'identifier_in_use'], expires_in: 7.days, race_condition_ttl: 10.seconds, raw: true) do
       minter_exists_scope.exists?(noid: noid) ? true : nil
     end.present?
   end
@@ -89,11 +89,9 @@ class Ark < ApplicationRecord
     return unless namespace_id.present? && noid.blank?
 
     minter_service = MinterService.call(namespace_id)
-    if minter_service.successful?
-      self.noid = minter_service.result
-    else
-      Rails.logger.error 'Failed to mint noid for ark!'
-      Rails.logger.error "Reasons Given #{minter_service.errors.full_messages.join('\n')}"
-    end
+    return self.noid = minter_service.result if minter_service.successful?
+
+    Rails.logger.error 'Failed to mint noid for ark!'
+    Rails.logger.error "Reasons Given #{minter_service.errors.full_messages.join('\n')}"
   end
 end
