@@ -37,6 +37,7 @@ class ArkMinter < Noid::Rails::Minter::Db
         Thread.current[:pid] = minter.mint
         serialize(locked_inst, minter)
       end
+      synchronize_states!(locked_inst)
     end
     Thread.current[:pid]
   end
@@ -73,6 +74,16 @@ class ArkMinter < Noid::Rails::Minter::Db
   end
 
   private
+
+  def synchronize_states!(current_inst)
+    other_inst = MinterState.where.not(namespace: current_inst.namespace).first
+
+    return if other_inst.blank?
+
+    other_inst.with_lock('FOR UPDATE NOWAIT') do
+      other_inst.update!(rand: current_inst.rand, seq: current_inst.seq, counters: current_inst.counters)
+    end
+  end
 
   def identifier_in_use?(id)
     Noid::Rails.config.identifier_in_use.call(id)

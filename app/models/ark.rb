@@ -36,7 +36,7 @@ class Ark < ApplicationRecord
 
   scope :object_in_view, ->(namespace_ark, noid) { active.merge(where(namespace_ark: namespace_ark, noid: noid)) }
 
-  scope :minter_exists_scope, -> { unscoped.select('DISTINCT noid').order(noid: :desc) }
+  scope :minter_exists_scope, -> { unscoped.select('DISTINCT ON(noid) noid, id, updated_at') }
 
   scope :noid_cache_scope, -> {  unscoped.select('DISTINCT ON (noid) noid, updated_at').order(noid: :desc) }
 
@@ -63,8 +63,10 @@ class Ark < ApplicationRecord
   end
 
   def self.identifier_in_use?(noid)
-    Rails.cache.fetch([minter_exists_scope, noid, 'identifier_in_use'], expires_in: 7.days, race_condition_ttl: 10.seconds, raw: true) do
-      minter_exists_scope.exists?(noid: noid) ? true : nil
+    Rails.cache.fetch([noid, 'identifier_in_use'], expires_in: 2.days, race_condition_ttl: 10.seconds, skip_nil: true) do
+      minter_exists_scope.in_batches(of: 100_000) do |ark_batch|
+        break true if ark_batch.exists?(noid: noid)
+      end
     end.present?
   end
 

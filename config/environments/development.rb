@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'active_support/core_ext/integer/time'
+require 'active_support/core_ext/numeric/bytes'
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -25,7 +26,7 @@ Rails.application.configure do
   if Rails.root.join('tmp', 'caching-dev.txt').exist?
     config.action_controller.perform_caching = true
 
-    config.cache_store = :memory_store
+    config.cache_store = :memory_store, { size: 64.megabytes }
     config.public_file_server.headers = {
       'Cache-Control' => "public, max-age=#{2.days.to_i}"
     }
