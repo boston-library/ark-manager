@@ -52,7 +52,7 @@ group :development do
 end
 
 group :test do
-  gem 'coveralls_reborn', '~> 0.25.0', require: false
+  gem 'coveralls_reborn', '~> 0.28.0', require: false
   gem 'database_cleaner-active_record', '~> 2.1'
   gem 'rails-controller-testing', '~> 1.0'
   gem 'shoulda-matchers', '~> 5.3'
