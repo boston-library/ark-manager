@@ -13,7 +13,19 @@
 # a separate helper file that requires the additional dependencies and performs
 # the additional setup, and require it from the spec files that actually need
 # it.
-#
+
+require 'simplecov'
+require 'coveralls'
+
+Coveralls.wear!('rails')
+
+SimpleCov.formatter = Coveralls::SimpleCov::Formatter
+SimpleCov.start do
+  add_filter '/spec/'
+  add_filter '/lib/scripts.rb.ignore'
+  add_filter '/app/controllers/preview_controller.rb'
+  add_filter '/app/models/application_record.rb'
+end
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate

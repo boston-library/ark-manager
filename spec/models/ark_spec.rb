@@ -153,7 +153,7 @@ RSpec.describe Ark, type: :model do
     describe '#minter_exists_scope' do
       subject { described_class.minter_exists_scope.to_sql }
 
-      let!(:expected_sql) { described_class.unscoped.select('DISTINCT noid').order(noid: :desc).to_sql }
+      let!(:expected_sql) { described_class.unscoped.select(:noid).order(noid: :desc).to_sql }
 
       it { is_expected.to eq(expected_sql) }
     end
@@ -161,7 +161,7 @@ RSpec.describe Ark, type: :model do
     describe '#noid_cache_scope' do
       subject { described_class.noid_cache_scope.to_sql }
 
-      let!(:expected_sql) { described_class.unscoped.select('DISTINCT ON (noid) noid, updated_at').order(noid: :desc).to_sql }
+      let!(:expected_sql) { described_class.unscoped.select('DISTINCT ON (noid) noid, id, updated_at').to_sql }
 
       it { is_expected.to eq(expected_sql) }
     end
