@@ -11,14 +11,12 @@ abort('The Rails environment is running in production mode!') if Rails.env.produ
 
 require 'simplecov'
 require 'coveralls'
-Coveralls.wear!('rails')
-
-SimpleCov.formatter = Coveralls::SimpleCov::Formatter
-SimpleCov.start do
+Coveralls.wear!('rails') do
   add_filter '/spec/'
   add_filter '/lib/scripts.rb.ignore'
   add_filter '/app/controllers/preview_controller.rb'
   add_filter '/app/models/application_record.rb'
+  formatter(Coveralls::SimpleCov::Formatter)
 end
 
 require 'rspec/rails'
