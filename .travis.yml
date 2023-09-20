@@ -42,6 +42,6 @@ env:
     - ARK_MANAGER_DEFAULT_BASE_URL=https://search-dc3dev.bpl.org
     - ARK_MANAGER_DEFAULT_NAMESPACE=bpl-dev
     - ARK_MANAGER_OAI_NAMESPACE=oai-dev
-    - COVERALLS_NOISY = true
+    - COVERALLS_NOISY=true
   jobs:
     - "RAILS_VERSION=7.0.8"
