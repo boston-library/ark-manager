@@ -32,7 +32,7 @@ class ArkMinter < Noid::Rails::Minter::Db
   def next_id
     MinterState.connection_pool.with_connection do
       locked_inst = instance
-      locked_inst.with_lock('FOR UPDATE NOWAIT') do
+      locked_inst.with_lock('FOR UPDATE NOWAIT', requires_new: true) do
         minter = Noid::Minter.new(deserialize(locked_inst))
         Thread.current[:pid] = minter.mint
         serialize(locked_inst, minter)
@@ -76,12 +76,10 @@ class ArkMinter < Noid::Rails::Minter::Db
   private
 
   def synchronize_states!(current_inst)
-    other_inst = MinterState.where.not(namespace: current_inst.namespace).first
-
-    return if other_inst.blank?
-
-    other_inst.with_lock('FOR UPDATE NOWAIT') do
-      other_inst.update!(rand: current_inst.rand, seq: current_inst.seq, counters: current_inst.counters)
+    MinterState.where.not(namespace: current_inst.namespace).find_each do |other_inst|
+      other_inst.with_lock('FOR UPDATE NOWAIT', requires_new: true) do
+        other_inst.update!(rand: current_inst.rand, seq: current_inst.seq, counters: current_inst.counters)
+      end
     end
   end
 

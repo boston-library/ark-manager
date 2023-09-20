@@ -36,9 +36,9 @@ class Ark < ApplicationRecord
 
   scope :object_in_view, ->(namespace_ark, noid) { active.merge(where(namespace_ark: namespace_ark, noid: noid)) }
 
-  scope :minter_exists_scope, -> { unscoped.select('DISTINCT ON(noid) noid, id, updated_at') }
+  scope :minter_exists_scope, -> { unscoped.select(:noid).order(noid: :desc) }
 
-  scope :noid_cache_scope, -> {  unscoped.select('DISTINCT ON (noid) noid, updated_at').order(noid: :desc) }
+  scope :noid_cache_scope, -> {  unscoped.select('DISTINCT ON (noid) noid, id, updated_at') }
 
   # NOTE: Need to add this to the callback list due to firendly id also using a before validation
   before_validation :set_noid, on: :create, prepend: true
@@ -57,16 +57,20 @@ class Ark < ApplicationRecord
 
   # NOTE: Decided to keep this but renamed the method. Maybe useful for debugging/ future
   def self.noid_cache
-    Rails.cache.fetch(['current_arks', noid_cache_scope], expires_in: 2.hours) do
-      noid_cache_scope.pluck(:noid)
+    current_noids = []
+    Rails.cache.fetch([noid_cache_scope, 'current_noids'], expires_in: 12.hours, race_condition_ttl: 10.seconds, skip_nil: true) do
+      noid_cache_scope.in_batches(of: 100_000) do |noid_batch|
+        Rails.cache.fetch([noid_batch, 'noids'], expires_in: 8.hours, race_condition_ttl: 10.seconds, skip_nil: true, force: true) do
+          current_noids += noid_batch.pluck(:noid)
+        end
+      end
     end
+    current_noids
   end
 
   def self.identifier_in_use?(noid)
     Rails.cache.fetch([noid, 'identifier_in_use'], expires_in: 2.days, race_condition_ttl: 10.seconds, skip_nil: true) do
-      minter_exists_scope.in_batches(of: 100_000) do |ark_batch|
-        break true if ark_batch.exists?(noid: noid)
-      end
+      minter_exists_scope.exists?(noid: noid) ? true : nil
     end.present?
   end
 
