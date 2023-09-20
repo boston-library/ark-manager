@@ -9,16 +9,6 @@ require File.expand_path('../config/environment', __dir__)
 # Prevent database truncation if the environment is production
 abort('The Rails environment is running in production mode!') if Rails.env.production?
 
-require 'simplecov'
-require 'coveralls'
-Coveralls.wear!('rails') do
-  add_filter '/spec/'
-  add_filter '/lib/scripts.rb.ignore'
-  add_filter '/app/controllers/preview_controller.rb'
-  add_filter '/app/models/application_record.rb'
-  formatter(Coveralls::SimpleCov::Formatter)
-end
-
 require 'rspec/rails'
 require 'database_cleaner/active_record'
 require 'factory_bot_rails'
