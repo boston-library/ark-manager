@@ -1,6 +1,6 @@
 language: ruby
 os: linux
-dist: bionic
+dist: focal
 
 cache:
   bundler: true
@@ -16,7 +16,11 @@ addons:
 
 before_install:
   - sudo sed -i 's/port = 5433/port = 5432/' /etc/postgresql/12/main/postgresql.conf
-  - sudo cp /etc/postgresql/{9.6,12}/main/pg_hba.conf
+  - >-
+    sudo sed -i
+    -e '/local.*peer/s/postgres/all/'
+    -e 's/peer\|md5/trust/g'
+    /etc/postgresql/12/main/pg_hba.conf
   - sudo pg_ctlcluster 12 main restart
   - gem update --system --no-document
   - gem install bundler:2.4.19 --no-document
