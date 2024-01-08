@@ -17,7 +17,7 @@ gem 'noid-rails', '~> 3.0'
 gem 'oj', '~> 3.16'
 gem 'pg', '>= 0.18', '< 2.0'
 # Use postgresql as the database for Active Record
-gem 'puma', '~> 5.6.7'
+gem 'puma', '~> 5.6.8'
 # Use Puma as the app server
 gem 'rack-cors', '~> 1.1'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
