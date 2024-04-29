@@ -1,9 +1,9 @@
-FROM ruby:3.1.4
+FROM ruby:3.1.5
 
 MAINTAINER bbarber@bpl.org
 
 ENV LANG=C.UTF-8 \
-    BUNDLER_VERSION=2.4.19
+    BUNDLER_VERSION=2.5.9
 
 RUN apt-get update -qq \
   && apt-get install -y build-essential apt-utils postgresql-client libpq-dev
