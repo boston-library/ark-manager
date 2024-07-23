@@ -7,21 +7,21 @@ cache:
   apt: true
 
 addons:
-  postgresql: "12"
+  postgresql: "15"
   apt:
     update: true
     packages:
-      - postgresql-12
-      - postgresql-client-12
+      - postgresql-15
+      - postgresql-client-15
 
 before_install:
-  - sudo sed -i 's/port = 5433/port = 5432/' /etc/postgresql/12/main/postgresql.conf
+  - sudo sed -i 's/port = 5433/port = 5432/' /etc/postgresql/15/main/postgresql.conf
   - >-
     sudo sed -i
     -e '/local.*peer/s/postgres/all/'
     -e 's/peer\|md5/trust/g'
-    /etc/postgresql/12/main/pg_hba.conf
-  - sudo pg_ctlcluster 12 main restart
+    /etc/postgresql/15/main/pg_hba.conf
+  - sudo pg_ctlcluster 15 main restart
   - gem update --system --no-document
   - gem install bundler:2.5.9 --no-document
 
@@ -33,11 +33,11 @@ script:
   - RAILS_ENV=test bundle exec rake ci
 
 rvm:
-  - 3.1.5
+  - 3.1.6
 
 env:
   global:
-    - PGVER=12
+    - PGVER=15
     - PGPORT=5432
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
     - CURATOR_SOLR_URL=http://127.0.0.1:8983/solr/curator_development
@@ -47,4 +47,4 @@ env:
     - ARK_MANAGER_DEFAULT_NAMESPACE=bpl-dev
     - ARK_MANAGER_OAI_NAMESPACE=oai-dev
   jobs:
-    - "RAILS_VERSION=7.0.8"
+    - "RAILS_VERSION=7.0.8.4"
