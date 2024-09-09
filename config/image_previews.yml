@@ -1,5 +1,5 @@
 default: &default
-  cache_folder: <%= ENV.fetch('PREVIEW_CACHE_FOLDER', Rails.root.join('tmp', 'cache', 'previews').to_s) %>
+  cache_folder: <%= ENV.fetch('PREVIEW_CACHE_FOLDER', Rails.root.join('tmp/cache/previews').to_s) %>
 
 development:
   <<: *default

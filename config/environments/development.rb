@@ -10,7 +10,7 @@ Rails.application.configure do
   # every request. This slows down response time but is perfect for development
   # it changes. This slows down response time but is perfect for development
   config.cache_classes = false
-
+  config.enable_reloading = true
   # Do not eager load code on boot.
   config.eager_load = false
 
@@ -23,7 +23,7 @@ Rails.application.configure do
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.
 
-  if Rails.root.join('tmp', 'caching-dev.txt').exist?
+  if Rails.root.join('tmp/caching-dev.txt').exist?
     config.action_controller.perform_caching = true
 
     config.cache_store = :memory_store, { size: 64.megabytes }

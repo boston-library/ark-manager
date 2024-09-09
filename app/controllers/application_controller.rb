@@ -11,7 +11,8 @@ class ApplicationController < ActionController::API
   NOT_FOUND_ERROR_CLASSES = [
     'ActiveRecord::RecordNotFound',
     'ActionController::RoutingError',
-    'PreviewController::ImageNotFound'
+    'PreviewController::ImageNotFound',
+    'TextController::TextNotFound'
   ].freeze
 
   UNPROCESSABLE_ENTITY_CLASSES = [

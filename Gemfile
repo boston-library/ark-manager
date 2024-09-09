@@ -39,10 +39,11 @@ group :development, :test do
   gem 'faker', '~> 3.2'
   gem 'rspec-rails', '~> 6.0'
   gem 'rswag-specs', '~> 2.6'
-  gem 'rubocop', '~> 1.52', require: false
-  gem 'rubocop-performance', '~> 1.18', require: false
-  gem 'rubocop-rails', '~> 2.20', require: false
-  gem 'rubocop-rspec', '~> 2.22', require: false
+  gem 'rubocop', '~> 1.66.1', require: false
+  gem 'rubocop-factory_bot', '~> 2.24.0', require: false
+  gem 'rubocop-performance', '~> 1.21.1', require: false
+  gem 'rubocop-rails', '~> 2.26.1', require: false
+  gem 'rubocop-rspec', '~> 2.31.0', require: false
 end
 
 group :development do
