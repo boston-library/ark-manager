@@ -344,7 +344,7 @@ RSpec.describe ArksController, type: :controller do
 
       it 'returns a 422(unprocessible_entity) json_response' do
         post :create, params: params
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.content_type).to eq(expected_content_type)
         expect(json_response).not_to be_empty
       end

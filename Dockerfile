@@ -1,4 +1,4 @@
-FROM ruby:3.1.6
+FROM ruby:3.2.5
 
 MAINTAINER bbarber@bpl.org
 

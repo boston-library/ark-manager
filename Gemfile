@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '~> 3.1.6'
+ruby '3.2.5'
 
 gem 'bootsnap', '>= 1.1.0', require: false
 # Reduces boot times through caching; required in config/boot.rb
@@ -13,26 +13,24 @@ gem 'faraday', '~> 1.10', '< 2'
 gem 'friendly_id', '~> 5.5'
 gem 'jbuilder', '~> 2.11'
 gem 'net-http-persistent', '>= 3.1'
-gem 'noid-rails', '~> 3.0'
+gem 'noid-rails', '~> 3.2'
 gem 'oj', '~> 3.16'
 gem 'pg', '>= 0.18', '< 2.0'
 # Use postgresql as the database for Active Record
-gem 'puma', '~> 5.6.8'
+gem 'puma', '~> 6.4'
 # Use Puma as the app server
 gem 'rack-cors', '~> 1.1'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
-gem 'rails', '~> 7.0.8'
+gem 'rails', '~> 7.1'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'redis', '~> 4.8'
+gem 'redis', '~> 5'
 gem 'rsolr', '~> 2.5'
 gem 'rswag-api', '~> 2.10'
-
-gem 'sd_notify', group: [:production, :staging]
 
 group :development, :test do
   gem 'awesome_print', '~> 1.9'
   gem 'capistrano', '~> 3.17', require: false
-  gem 'capistrano3-puma', ' ~> 5.1'
+  gem 'capistrano3-puma'
   gem 'capistrano-rails', '~> 1.4', require: false
   gem 'capistrano-rvm'
   gem 'debug', platforms: %i(mri mingw x64_mingw)
@@ -55,7 +53,7 @@ group :test do
   gem 'coveralls_reborn', '~> 0.28.0', require: false
   gem 'database_cleaner-active_record', '~> 2.1'
   gem 'rails-controller-testing', '~> 1.0'
-  gem 'shoulda-matchers', '~> 5.3'
+  gem 'shoulda-matchers', '~> 6.4'
   gem 'vcr', '~> 6.2'
   gem 'webmock', '~> 3.19'
 end
