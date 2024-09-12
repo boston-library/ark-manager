@@ -26,7 +26,7 @@ preload_app!
 
 # Best Practice is to reconnect any Non Active Record Connections on boot in clustered mode
 on_worker_boot do
-
+  ActiveRecord::Base.establish_connection
 end
 
 if %w(staging production).member?(rails_env)
