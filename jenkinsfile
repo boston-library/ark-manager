@@ -17,12 +17,22 @@ pipeline {
     
     stages {
 
-        stage('CheckoutCode') {
+        stage('GetCode') {
             steps {
                 script {  
                     echo "bpl_tool is ${bpl_tool}"
                     echo "In Jenkinsfile phase: Checkout Source Code" 
-                    bpl_tool.CheckoutCode() 
+                    // bpl_tool.CheckoutCode()
+                    def srcType    = 'Git' 
+                    def branchName = params.BRANCH_NAME
+                    def gitHttpURL = 'https://github.com/boston-library/ark-manager.git'
+                    def credentialsId = 'bplwebmaster'
+                    echo "srcType is ${srcType}"
+                    echo "branchName is ${branchName}"
+                    echo "gitHttpURL is ${gitHttpURL}"
+                    echo "credentialsId is ${credentialsId}"
+
+                    bpl_tool.GetCode(srcType,branchName,gitHttpURL,credentialsId)
                 }
             }
         }
