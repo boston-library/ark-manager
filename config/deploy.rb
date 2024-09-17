@@ -75,7 +75,7 @@ namespace :boston_library do
     on roles(:app), in: :sequence, wait: 5 do
       as fetch(:user) do
         within release_path do
-          puts capture("cd #{release_path}; #{fetch(:rvm_installed)} #{fetch(:rvm_ruby_version)} do #{release_path}/bin/rails runner -e #{fetch(:stage_case)} \"puts 'rails console works'\"")
+          puts capture("cd #{release_path}; #{fetch(:rvm_installed)} #{fetch(:rvm_ruby_version)} do #{release_path}/bin/rails runner -e #{fetch(:deploy_env)} \"puts 'rails console works'\"")
         end
       end
     end
