@@ -5,8 +5,9 @@ lock '~> 3.17.1'
 
 set :use_sudo, false
 
-## STAGE_NAME is a paramter from Jenkins job: "staging", "qc", and "testing", or "production"
-set :stage_case, ENV['STAGE_NAME']
+## deploy_env is a parameter from Jenkins job: "staging", "qc", and "testing", or "production"
+set :deploy_env, ENV['deploy_env']
+set :user, ENV['DEPLOY_USER']
 
 set :application, 'ark-manager'
 set :repo_url, "https://github.com/boston-library/#{fetch(:application)}.git"
