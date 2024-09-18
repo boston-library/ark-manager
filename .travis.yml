@@ -23,7 +23,7 @@ before_install:
     /etc/postgresql/15/main/pg_hba.conf
   - sudo pg_ctlcluster 15 main restart
   - gem update --system --no-document
-  - gem install bundler:2.5.9 --no-document
+  - gem install bundler:2.5.18 --no-document
 
 before_script:
 - cp config/database.yml.travis config/database.yml
@@ -33,7 +33,7 @@ script:
   - RAILS_ENV=test bundle exec rake ci
 
 rvm:
-  - 3.1.6
+  - 3.2.5
 
 env:
   global:
@@ -47,4 +47,4 @@ env:
     - ARK_MANAGER_DEFAULT_NAMESPACE=bpl-dev
     - ARK_MANAGER_OAI_NAMESPACE=oai-dev
   jobs:
-    - "RAILS_VERSION=7.0.8.4"
+    - "RAILS_VERSION=7.1.4"
