@@ -3,6 +3,7 @@
 class TextController < ApplicationController
   include ActionController::DataStreaming
   class TextNotFound < StandardError; end
+
   class TextPlainServiceError < StandardError
     attr_reader :status
 

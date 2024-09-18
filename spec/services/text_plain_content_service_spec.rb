@@ -5,7 +5,7 @@ require_relative './shared/service_class'
 
 RSpec.describe TextPlainContentService do
   let(:described_service_class) { described_class }
-  let(:valid_ark_id) { 'bpl-dev:8c97kq405'}
+  let(:valid_ark_id) { 'bpl-dev:8c97kq405' }
   let(:valid_filestream_key) { "texts/#{valid_ark_id}" }
 
   specify { expect(described_service_class).to be_const_defined('ApplicationService') }

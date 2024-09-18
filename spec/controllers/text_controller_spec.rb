@@ -36,7 +36,7 @@ RSpec.describe TextController, type: :controller do
     context 'invalid :noid' do
       let!(:invalid_params) { { ark: 'ark:', namespace: digital_object_ark.namespace_ark, noid: 'nonexistent' } }
 
-      around(:each) { |spec| VCR.use_cassette("controllers/text/nonexistent/show", &spec) }
+      around(:each) { |spec| VCR.use_cassette('controllers/text/nonexistent/show', &spec) }
 
       it 'expects to get a 404 response' do
         get :show, params: invalid_params

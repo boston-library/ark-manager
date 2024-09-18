@@ -2,7 +2,7 @@
 
 require 'swagger_helper'
 
-RSpec.describe "Full Text File Endpoint", type: :request, swagger_doc: 'full_text.json' do
+RSpec.describe 'Full Text File Endpoint', type: :request, swagger_doc: 'full_text.json' do
   let!(:valid_ark_param) { 'ark:' }
   let!(:valid_namespace_param) { '50959' }
   let!(:valid_ark) { create(:ark, noid: 'js956f80d') }
