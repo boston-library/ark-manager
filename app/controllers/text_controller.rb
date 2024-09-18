@@ -24,6 +24,7 @@ class TextController < ApplicationController
   protected
 
   def fetch_plain_text_data
+    model_type = @ark.model_type
     solr_resp = SolrService.call(@ark.pid)
 
     handle_text_plain_service_error!(solr_resp) if solr_resp.failure?

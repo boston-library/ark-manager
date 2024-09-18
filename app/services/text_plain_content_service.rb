@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 class TextPlainContentService < ApplicationService
-  attr_reader :file_stream_key
-  def initialize(file_stream_key)
-    @file_stream_key = file_stream_key
+  attr_reader :filestream_key
+  def initialize(filestream_key)
+    @filestream_key = filestream_key
   end
 
   def call
     begin
-      return Rails.cache.fetch([file_stream_key, 'text_plain_content'], expires_in: 1.week) do
+      return Rails.cache.fetch([filestream_key, 'text_plain_content'], expires_in: 1.week) do
         retrieve_file
       end
     rescue Down::NotFound => e
@@ -31,7 +31,6 @@ class TextPlainContentService < ApplicationService
   private
 
   def retrieve_file
-    puts text_plain_url
     begin
       io = Down.download(text_plain_url, headers: { 'User-Agent' => 'BPL-Ark-Manager/2' })
       io.read
@@ -51,7 +50,7 @@ class TextPlainContentService < ApplicationService
   end
 
   def text_plain_url
-    "#{derivatives_url}/#{file_stream_key}/text_plain.txt"
+    "#{derivatives_url}/#{filestream_key}/text_plain.txt"
   end
 
   def derivatives_url

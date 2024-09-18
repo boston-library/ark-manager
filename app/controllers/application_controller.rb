@@ -50,7 +50,7 @@ class ApplicationController < ActionController::API
                :not_acceptable
              when *NOT_FOUND_ERROR_CLASSES
                :not_found
-             when *UNPROCESSABLE_ENTITY_CLASSES
+             when *UNPROCESSABLE_CONTENT_CLASSES
                :unprocessable_entity
              else
                :internal_server_error

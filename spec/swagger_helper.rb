@@ -119,6 +119,25 @@ RSpec.configure do |config|
           }
         }
       ]
+    },
+    'full_text.json' => {
+      openapi: '3.0.1',
+      info: {
+        title: 'Full Text',
+        description: 'Endpoint for getting OCR plain text for Ark'
+      },
+      paths: {},
+      components: {},
+      servers: [
+        {
+          url: 'http://{defaultHost}',
+          variables: {
+            defaultHost: {
+              default: '127.0.0.1:3000'
+            }
+          }
+        }
+      ]
     }
   }
 

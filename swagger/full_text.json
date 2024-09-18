@@ -1,0 +1,61 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Full Text",
+    "description": "Endpoint for getting OCR plain text for Ark"
+  },
+  "paths": {
+    "/{ark}/{namespace}/{noid}/text": {
+      "get": {
+        "summary": "Ark OCR Text File",
+        "tags": [
+          "Arks",
+          "Text",
+          "OCR"
+        ],
+        "parameters": [
+          {
+            "name": "ark",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "namespace",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "noid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Ark Not Found"
+          }
+        }
+      }
+    }
+  },
+  "components": {},
+  "servers": [
+    {
+      "url": "http://{defaultHost}",
+      "variables": {
+        "defaultHost": {
+          "default": "127.0.0.1:3000"
+        }
+      }
+    }
+  ]
+}

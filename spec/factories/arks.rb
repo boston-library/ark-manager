@@ -39,5 +39,12 @@ FactoryBot.define do
       model_type { 'Curator::Filestreams::Image' }
       parent_pid { nil }
     end
+
+    trait :filestream_text_ark do
+      local_original_identifier { Faker::File.file_name(dir: '', ext: 'txt') }
+      local_original_identifier_type { 'filename' }
+      model_type { 'Curator::Filestreams::Text' }
+      parent_pid { nil }
+    end
   end
 end
