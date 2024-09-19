@@ -92,6 +92,7 @@ pipeline {
         stage('Create Docker Image'){
             steps {
                 script {
+                    echo "Miao, RAILS_ENV is ${env.RAILS_ENV}"
                     if ( env.RAILS_ENV == 'test') {
                         echo "creating docker image"
                                 // bpl_tool.CreateBpldcAuthorityDockerImages()
