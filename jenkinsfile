@@ -93,8 +93,8 @@ pipeline {
             steps {
                 script {
                     if ( env.RAILS_ENV == 'test') {
-                        echo "creating docker images"
-                        // bpl_tool.CreateBpldcAuthorityDockerImages()
+                        echo "creating docker image"
+                                // bpl_tool.CreateBpldcAuthorityDockerImages()
                         bpl_tool.CreateDockerImage('ark-manager')
                     }else{
                         echo "No need create docker images. Skipping... "
