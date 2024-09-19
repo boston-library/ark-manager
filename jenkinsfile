@@ -94,7 +94,7 @@ pipeline {
                 script {
                     echo "Miao, RAILS_ENV is ${env.deploy_env}"
                     // if ( env.RAILS_ENV == 'test') {
-                    if ( (env.deploy_env != 'staging') ||  ( env.deploy_env != 'production'))  {
+                    if ( (env.deploy_env != 'staging') &&  ( env.deploy_env != 'production'))  {
                         echo "creating docker image"
                                 // bpl_tool.CreateBpldcAuthorityDockerImages()
                         bpl_tool.CreateDockerImage('ark-manager')
