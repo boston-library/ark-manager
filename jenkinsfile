@@ -1,5 +1,7 @@
 #!groovy
 @Library("bpldc_jenkinsfile@main") _
+// Above jenkinsfile shared library can be found here: 
+// https://github.com/boston-library/jenkinsfile_shared_library
 
 def bpl_tool = new org.bpl.bpl_tools()
 
