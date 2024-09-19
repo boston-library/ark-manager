@@ -88,6 +88,21 @@ pipeline {
         //     }
         // }
 
+
+        stage('Create Docker Image'){
+            steps {
+                script {
+                    if ( env.RAILS_ENV == 'test') {
+                        echo "creating docker images"
+                        // bpl_tool.CreateBpldcAuthorityDockerImages()
+                        bpl_tool.CreateDockerImage('ark-manager')
+                    }else{
+                        echo "No need create docker images. Skipping... "
+                    }
+                }
+            }
+        }
+
         stage("Deploy application to target servers") {
             steps {
                 script {
