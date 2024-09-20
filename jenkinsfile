@@ -24,7 +24,7 @@ pipeline {
                 script {  
                     echo "bpl_tool is ${bpl_tool}"
                     echo "In Jenkinsfile phase: Checkout Source Code" 
-                    // bpl_tool.CheckoutCode()
+
                     def srcType    = 'Git' 
                     def branchName = params.BRANCH_NAME
                     def gitHttpURL = 'https://github.com/boston-library/ark-manager.git'
@@ -68,26 +68,6 @@ pipeline {
                 }
             }
         }
-
-        // stage ('DB preparation'){
-        //     steps {
-        //         script {  
-        //             echo "In Jenkins phase: DB preparation " 
-        //             railsEnv = env.RAILS_ENV                
-        //             bpl_tool.RunDBpreparation(railsEnv) 
-        //         }
-        //     }
-        // }
-
-        // stage('CI') {
-        //     steps {
-        //         script {  
-        //             echo "In Jenkins phase: running CI testing "                   
-        //             bpl_tool.RunCI() 
-        //         }
-        //     }
-        // }
-
 
         stage('Create Docker Image'){
             steps {
