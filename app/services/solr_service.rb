@@ -48,4 +48,8 @@ class SolrService < ApplicationService
   def explicit?
     result['flagged_content_ssi'] == 'explicit'
   end
+
+  def has_text?
+    result['has_transcription_bsi'].presence || result['has_ocr_text_bsi'].presence
+  end
 end

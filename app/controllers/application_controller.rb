@@ -11,10 +11,11 @@ class ApplicationController < ActionController::API
   NOT_FOUND_ERROR_CLASSES = [
     'ActiveRecord::RecordNotFound',
     'ActionController::RoutingError',
-    'PreviewController::ImageNotFound'
+    'PreviewController::ImageNotFound',
+    'TextController::TextNotFound'
   ].freeze
 
-  UNPROCESSABLE_ENTITY_CLASSES = [
+  UNPROCESSABLE_CONTENT_CLASSES = [
     'ActiveRecord::RecordInvalid',
     'ActiveRecord::RecordNotSaved'
   ].freeze
@@ -43,13 +44,13 @@ class ApplicationController < ActionController::API
     Rails.logger.error '============================================='
 
     status = case e&.class&.name
-             when 'PreviewController::PreviewServiceError'
+             when 'PreviewController::PreviewServiceError', 'TextController::TextPlainServiceError'
                e&.status || :internal_server_error
              when 'ActionController::UnknownFormat'
                :not_acceptable
              when *NOT_FOUND_ERROR_CLASSES
                :not_found
-             when *UNPROCESSABLE_ENTITY_CLASSES
+             when *UNPROCESSABLE_CONTENT_CLASSES
                :unprocessable_entity
              else
                :internal_server_error

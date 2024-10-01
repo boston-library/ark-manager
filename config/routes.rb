@@ -35,6 +35,10 @@ Rails.application.routes.draw do
         get '/large_image', action: 'large_image', as: 'large_image'
       end
 
+      controller 'text' do
+        get '/text', action: 'show', as: 'text'
+      end
+
       match '*path' => 'application#route_not_found', via: [:all]
     end
   end

@@ -59,7 +59,7 @@ class ImageContentService < ApplicationService
   end
 
   def check_dest_directory_exists!
-    FileUtils.mkdir_p(IMG_DEST_FOLDER) if !File.directory?(IMG_DEST_FOLDER)
+    FileUtils.mkdir_p(IMG_DEST_FOLDER) unless File.directory?(IMG_DEST_FOLDER)
   end
 
   def get_status_symbol(code = nil)

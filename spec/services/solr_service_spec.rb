@@ -45,10 +45,16 @@ RSpec.describe SolrService, type: :service do
     end
   end
 
-  describe '#explicit' do
+  describe '#explicit?' do
     subject { described_service_class.new(valid_ark_id) }
 
     it { is_expected.to respond_to(:explicit?) }
+  end
+
+  describe '#has_text?' do
+    subject { described_service_class.new(valid_ark_id) }
+
+    it { is_expected.to respond_to(:has_text?) }
   end
 
   describe 'successful #result' do

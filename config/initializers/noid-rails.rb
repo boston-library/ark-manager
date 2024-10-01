@@ -7,7 +7,7 @@ Rails.application.reloader.to_prepare do
     extend ActiveSupport::Concern
 
     included do
-      serialize :counters, Oj
+      serialize :counters, coder: Oj
 
       before_create { self.rand = Marshal.dump(Random.new(Process.pid)) if rand.blank? }
     end
