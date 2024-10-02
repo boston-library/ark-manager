@@ -29,7 +29,7 @@ gem 'rswag-api', '~> 2.10'
 
 group :development, :test do
   gem 'awesome_print', '~> 1.9'
-  gem 'capistrano', '~> 3.17', require: false
+  gem 'capistrano', '~> 3.17.3', require: false
   gem 'capistrano3-puma'
   gem 'capistrano-rails', '~> 1.4', require: false
   gem 'capistrano-rvm'
