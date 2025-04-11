@@ -23,7 +23,7 @@ before_install:
     /etc/postgresql/15/main/pg_hba.conf
   - sudo pg_ctlcluster 15 main restart
   - gem update --system --no-document
-  - gem install bundler:2.5.18 --no-document
+  - gem install bundler:2.6.7 --no-document
 
 before_script:
 - cp config/database.yml.travis config/database.yml
@@ -33,7 +33,7 @@ script:
   - RAILS_ENV=test bundle exec rake ci
 
 rvm:
-  - 3.2.5
+  - 3.2.8
 
 env:
   global:
