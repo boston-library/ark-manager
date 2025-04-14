@@ -14,7 +14,7 @@ AllCops:
     - 'app/controllers/preview_controller.rb'
   DisplayCopNames: true
   DisabledByDefault: true
-  TargetRubyVersion: 3.2
+  TargetRubyVersion: 3.3
 
 ####################### BUNDLER/GEMSPEC ###############################
 Bundler/OrderedGems:

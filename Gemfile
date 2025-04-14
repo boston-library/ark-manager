@@ -3,11 +3,12 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.2.5'
+ruby '3.3.8'
 
 gem 'bootsnap', '>= 1.1.0', require: false
 # Reduces boot times through caching; required in config/boot.rb
 gem 'connection_pool', '~> 2.4'
+gem 'csv'
 gem 'down', '~> 5.4'
 gem 'faraday', '~> 1.10', '< 2'
 gem 'friendly_id', '~> 5.5'
@@ -17,7 +18,7 @@ gem 'noid-rails', '~> 3.2'
 gem 'oj', '~> 3.16'
 gem 'pg', '>= 0.18', '< 2.0'
 # Use postgresql as the database for Active Record
-gem 'puma', '~> 6.4'
+gem 'puma', '~> 6.6'
 # Use Puma as the app server
 gem 'rack-cors', '~> 1.1'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
@@ -30,7 +31,6 @@ gem 'rswag-api', '~> 2.10'
 group :development, :test do
   gem 'awesome_print', '~> 1.9'
   gem 'capistrano', '~> 3.17.3', require: false
-  gem 'capistrano3-puma'
   gem 'capistrano-rails', '~> 1.4', require: false
   gem 'capistrano-rvm'
   gem 'debug', platforms: %i(mri mingw x64_mingw)
