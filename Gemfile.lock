@@ -114,6 +114,7 @@ GEM
       bigdecimal
       rexml
     crass (1.0.6)
+    csv (3.3.4)
     database_cleaner-active_record (2.2.0)
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
@@ -411,6 +412,7 @@ DEPENDENCIES
   capistrano-rvm
   connection_pool (~> 2.4)
   coveralls_reborn (~> 0.28.0)
+  csv
   database_cleaner-active_record (~> 2.1)
   debug
   dotenv-rails (~> 2.8)
@@ -445,7 +447,7 @@ DEPENDENCIES
   webmock (~> 3.19)
 
 RUBY VERSION
-   ruby 3.2.8p263
+   ruby 3.3.8p144
 
 BUNDLED WITH
    2.6.8

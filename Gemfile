@@ -3,11 +3,12 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.2.8'
+ruby '3.3.8'
 
 gem 'bootsnap', '>= 1.1.0', require: false
 # Reduces boot times through caching; required in config/boot.rb
 gem 'connection_pool', '~> 2.4'
+gem 'csv'
 gem 'down', '~> 5.4'
 gem 'faraday', '~> 1.10', '< 2'
 gem 'friendly_id', '~> 5.5'
