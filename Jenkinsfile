@@ -75,19 +75,20 @@ pipeline {
             }
         }
 
-        // stage('Create Docker Image'){
-        //     steps {
-        //         script {
-        //             if ( (env.deploy_env != 'staging') &&  ( env.deploy_env != 'production'))  {
-        //                 echo "creating docker image"
-        //                         // bpl_tool.CreateBpldcAuthorityDockerImages()
-        //                 bpl_tool.CreateDockerImage('ark-manager')
-        //             }else{
-        //                 echo "No need create docker images. Skipping... "
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Create Docker Image'){
+            steps {
+                script {
+                    // staging/production doesn't need to create docker image
+                    if ( (env.DEPLOY_ENV != 'staging') &&  ( env.DEPLOY_ENV != 'production')) {
+                        echo "creating docker image"
+                                // bpl_tool.CreateBpldcAuthorityDockerImages()
+                        bpl_tool.CreateDockerImage('ark-manager')
+                    }else{
+                        echo "No need create docker images. Skipping... "
+                    }
+                }
+            }
+        }
 
         // stage("Deploy application to target servers") {
         //     steps {
