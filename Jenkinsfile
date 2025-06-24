@@ -90,16 +90,31 @@ pipeline {
             }
         }
 
-        // stage("Deploy application to target servers") {
-        //     steps {
-        //         script {
-        //             echo "In Jenkins phase: Capistrano deploying "
-        //             railsEnv    = env.deploy_env
+        stage("Deploy application to target servers") {
+            // When branch is 'JFK_Capis', skip this stage
+            // All other branches do deployment, for example 'master'
+            // when {
+            //     branch 'JFK_Capis'
+            // }
 
-        //             bpl_tool.RunDeployment(railsEnv)                
-        //         }
-        //     }
-        // }
+            when {
+                expression {
+                    return env.DEPLOY_OR_NOT == 'True' || env.DEPLOY_OR_NOT == 'true'
+                }
+            }
+            
+            steps {
+                script {
+                    echo "In Jenkins phase: Capistrano deploying "
+                    def RAILS_ENV = env.DEPLOY_ENV
+                    echo "In Jenkinsfile, RAILS_ENV is ${RAILS_ENV}"
+                    
+                    //work bpl_tool.RunDeployment(env.RAILS_ENV) 
+                    bpl_tool.RunDeployment(RAILS_ENV) 
+                    // bpl_tool.RunDeployment()                 
+                }
+            }
+        }
 
     }
 
