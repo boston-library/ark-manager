@@ -66,7 +66,7 @@ pipeline {
             }
         }
 
-        stage ('Bundle Install'){
+        stage ('\033[42m\033[97D Bundle Install\033[0m'){
             steps {
                 script {  
                     echo "In Jenkins phase: bundle install "                    
