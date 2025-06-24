@@ -66,10 +66,10 @@ pipeline {
             }
         }
 
-        stage ('\033[42m\033[97D Bundle Install\033[0m'){
+        stage ('Bundle Install'){
             steps {
                 script {  
-                    echo "In Jenkins phase: bundle install "                    
+                    echo "\033[42m\033[97D In Jenkins phase: bundle install \033[0m"                    
                     bpl_tool.RunBundleInstall() 
                 }
             }
