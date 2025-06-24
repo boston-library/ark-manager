@@ -6,12 +6,18 @@
 def bpl_tool = new org.bpl.bpl_tools()
 
 pipeline {
-    agent any
+    agent {
+        node {
+            label 'BPL_DAN'
+            customWorkspace "/var/lib/jenkins/workspace/${env.JOB_NAME.replace('/', '-')}"
+        }
+    }
 
-    environment {
-        RAILS_ENV = 'test'
-        // RAILS_ENV = 'staging'
-    } 
+
+                // environment {
+                //     RAILS_ENV = 'test'
+                //     // RAILS_ENV = 'staging'
+                // } 
 
     options {
         ansiColor('xterm')
@@ -69,30 +75,30 @@ pipeline {
             }
         }
 
-        stage('Create Docker Image'){
-            steps {
-                script {
-                    if ( (env.deploy_env != 'staging') &&  ( env.deploy_env != 'production'))  {
-                        echo "creating docker image"
-                                // bpl_tool.CreateBpldcAuthorityDockerImages()
-                        bpl_tool.CreateDockerImage('ark-manager')
-                    }else{
-                        echo "No need create docker images. Skipping... "
-                    }
-                }
-            }
-        }
+        // stage('Create Docker Image'){
+        //     steps {
+        //         script {
+        //             if ( (env.deploy_env != 'staging') &&  ( env.deploy_env != 'production'))  {
+        //                 echo "creating docker image"
+        //                         // bpl_tool.CreateBpldcAuthorityDockerImages()
+        //                 bpl_tool.CreateDockerImage('ark-manager')
+        //             }else{
+        //                 echo "No need create docker images. Skipping... "
+        //             }
+        //         }
+        //     }
+        // }
 
-        stage("Deploy application to target servers") {
-            steps {
-                script {
-                    echo "In Jenkins phase: Capistrano deploying "
-                    railsEnv    = env.deploy_env
+        // stage("Deploy application to target servers") {
+        //     steps {
+        //         script {
+        //             echo "In Jenkins phase: Capistrano deploying "
+        //             railsEnv    = env.deploy_env
 
-                    bpl_tool.RunDeployment(railsEnv)                
-                }
-            }
-        }
+        //             bpl_tool.RunDeployment(railsEnv)                
+        //         }
+        //     }
+        // }
 
     }
 
