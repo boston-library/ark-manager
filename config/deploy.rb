@@ -5,8 +5,12 @@ lock '~> 3.17.1'
 
 set :use_sudo, false
 
+## DEPLOY_ENV is a paramter from Jenkins job: "staging", "qc", and "testing", or "production"
+## It is used by Cap method :rails_console_runner
+set :stage_console, ENV['DEPLOY_ENV']
+
 ## deploy_env is a parameter from Jenkins job: "staging", "qc", and "testing", or "production"
-set :deploy_env, ENV['deploy_env']
+## set :deploy_env, ENV['deploy_env']
 set :user, ENV['DEPLOY_USER']
 
 set :application, 'ark-manager'
