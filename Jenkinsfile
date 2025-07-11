@@ -70,9 +70,8 @@ pipeline {
             steps {
                 script {  
                     echo "\033[42m\033[97D In Jenkins phase: bundle install \033[0m"                    
-                    // Test for failure pipeline and send email from pipeline   
-                    bpl_tool.RunBundleInstal()
-                    // good ! // bpl_tool.RunBundleInstall() 
+                    
+                    bpl_tool.RunBundleInstall() 
                 }
             }
         }
