@@ -116,18 +116,33 @@ pipeline {
             }
         }
 
-        // It turns out to trigger another jobs endlessly, becauase it builds `JKF_Capis`
-        // How to stop it?
+        // If job_name has "deploy" inside, it will not trigger downstream deployment!
+        // For example, if "deploy_prod" job, it will stop trigger other project
         //
-        stage('Trigger Downstream') {
-            when {
-                expression {
-                    // Only trigger if JOB_NAME contains "trigger-me"
-                    return !env.JOB_NAME.contains('deploy')
-                }
-            }
-            steps {
-                script {
+        // stage('Trigger Downstream') {
+        //     when {
+        //         expression {
+        //             // Only trigger if JOB_NAME contains "trigger-me"
+        //             return !env.JOB_NAME.contains('deploy')
+        //         }
+        //     }
+        //     steps {
+        //         script {
+        //             echo 'Triggering other projects...'
+        //             build job: 'ark_manager_jenkinsfile_deploy_test_capistrano', wait: false
+        //             build job: 'ark_manager_jenkinsfile_deploy_staging_capistrano', wait: false
+        //         }
+        //     }
+        // }
+
+    }
+
+    post {
+        // If job_name has "deploy" inside, it will not trigger downstream deployment!
+        // For example, if "deploy_prod" job, it will stop trigger other project
+        success {
+            script {
+                if (!env.JOB_NAME.contains('deploy')) {
                     echo 'Triggering other projects...'
                     build job: 'ark_manager_jenkinsfile_deploy_test_capistrano', wait: false
                     build job: 'ark_manager_jenkinsfile_deploy_staging_capistrano', wait: false
@@ -135,9 +150,6 @@ pipeline {
             }
         }
 
-    }
-
-    post {
         failure {
             emailext (
                 subject: "Build failed in Jenkins: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
