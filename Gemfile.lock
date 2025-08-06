@@ -86,7 +86,7 @@ GEM
     awesome_print (1.9.2)
     base64 (0.2.0)
     benchmark (0.4.0)
-    bigdecimal (3.1.9)
+    bigdecimal (3.2.2)
     bootsnap (1.18.4)
       msgpack (~> 1.2)
     builder (3.3.0)
@@ -217,7 +217,7 @@ GEM
     net-smtp (0.5.0)
       net-protocol
     net-ssh (7.3.0)
-    nio4r (2.7.3)
+    nio4r (2.7.4)
     noid (0.9.0)
     noid-rails (3.2.0)
       actionpack (>= 5.0.0, < 8)
@@ -226,19 +226,20 @@ GEM
       racc (~> 1.4)
     nokogiri (1.18.9-x86_64-linux-gnu)
       racc (~> 1.4)
-    oj (3.16.10)
+    oj (3.16.11)
       bigdecimal (>= 3.0)
       ostruct (>= 0.2)
-    ostruct (0.6.1)
+    ostruct (0.6.3)
     parallel (1.26.3)
     parser (3.3.5.0)
       ast (~> 2.4.1)
       racc
-    pg (1.5.8)
+    pg (1.6.1-x86_64-darwin)
+    pg (1.6.1-x86_64-linux)
     psych (5.1.2)
       stringio
     public_suffix (6.0.1)
-    puma (6.6.0)
+    puma (6.6.1)
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (3.1.16)
@@ -447,7 +448,7 @@ DEPENDENCIES
   webmock (~> 3.19)
 
 RUBY VERSION
-   ruby 3.3.8p144
+   ruby 3.3.9p170
 
 BUNDLED WITH
-   2.6.8
+   2.7.1
