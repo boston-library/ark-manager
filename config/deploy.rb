@@ -41,7 +41,7 @@ namespace :boston_library do
   desc 'Install new ruby if ruby-version is required'
   task :rvm_install_ruby do
     on roles(:app) do
-      execute("#{fetch(:rvm_installed)} install #{fetch(:rvm_ruby_version)} -C --with-jemalloc --enable-yjit")
+      execute("#{fetch(:rvm_installed)} install #{fetch(:rvm_ruby_version)} -C --with-jemalloc --with-gmp --enable-yjit")
       execute("#{fetch(:rvm_installed)} use #{fetch(:rvm_ruby_version)}")
     end
   end
