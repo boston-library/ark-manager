@@ -400,7 +400,7 @@ RSpec.describe ArksController, type: :controller do
           errors: [{
             title: 'Not found',
             status: Rack::Utils.status_code(:not_found),
-            detail: "Couldn't find Ark with 'id'=#{invalid_params[:id]} [WHERE \"arks\".\"deleted\" = $1]",
+            detail: "Couldn't find Ark with 'id'=\"#{invalid_params[:id]}\" [WHERE \"arks\".\"deleted\" = $1]",
             source: {
               pointer: "/api/v2/arks/#{invalid_params[:id]}"
             }
