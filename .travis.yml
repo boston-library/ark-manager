@@ -14,7 +14,6 @@ before_install:
   - gem install bundler:2.7.1 --no-document
 
 before_script:
-  - sudo pg_ctlcluster 15 main restart
   - cp config/database.yml.travis config/database.yml
   - bundle exec rails db:prepare
 
