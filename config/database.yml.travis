@@ -11,4 +11,4 @@ test:
   <<: *default
   database: ark_manager_travis
   username: <%= ENV.fetch('ARK_MANAGER_DATABASE_USER', 'postgres') %>
-  password: <%= ENV.fetch('ARK_MANAGER_DATABASE_PASSWORD', 'postgres') %>
+  password: <%= ENV.fetch('ARK_MANAGER_DATABASE_PASSWORD', '') %>
