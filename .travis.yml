@@ -11,7 +11,7 @@ services:
 
 before_install:
   - gem update --system --no-document
-  - gem install bundler:2.7.1 --no-document
+  - gem install bundler:2.7.2 --no-document
 
 before_script:
   - cp config/database.yml.travis config/database.yml
@@ -21,7 +21,7 @@ script:
   - RAILS_ENV=test bundle exec rake ci
 
 rvm:
-  - 3.3.9
+  - 3.3.10
 
 env:
   global:
