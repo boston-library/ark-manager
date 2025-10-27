@@ -3,18 +3,18 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.3.9'
+ruby '3.3.10'
 
 gem 'bootsnap', '>= 1.1.0', require: false
 # Reduces boot times through caching; required in config/boot.rb
-gem 'connection_pool', '~> 2.4'
+gem 'connection_pool', '~> 2.5'
 gem 'csv'
 gem 'down', '~> 5.4'
 gem 'faraday', '~> 1.10', '< 2'
 gem 'friendly_id', '~> 5.5'
-gem 'jbuilder', '~> 2.11'
+gem 'jbuilder', '~> 2.14'
 gem 'net-http-persistent', '>= 3.1'
-gem 'noid-rails', '~> 3.2'
+gem 'noid-rails', '~> 3.3'
 gem 'oj', '~> 3.16'
 gem 'pg', '>= 0.18', '< 2.0'
 # Use postgresql as the database for Active Record
@@ -22,7 +22,7 @@ gem 'puma', '~> 6.6'
 # Use Puma as the app server
 gem 'rack-cors', '~> 1.1'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
-gem 'rails', '~> 7.1.4'
+gem 'rails', '~> 7.1.5'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'redis', '~> 5'
 gem 'rsolr', '~> 2.5'
@@ -37,7 +37,7 @@ group :development, :test do
   gem 'dotenv-rails', '~> 2.8'
   gem 'factory_bot_rails', '~> 6.2'
   gem 'faker', '~> 3.2'
-  gem 'rspec-rails', '~> 6.0'
+  gem 'rspec-rails', '~> 7.1'
   gem 'rswag-specs', '~> 2.6'
   gem 'rubocop', '~> 1.66.1', require: false
   gem 'rubocop-factory_bot', '~> 2.24.0', require: false

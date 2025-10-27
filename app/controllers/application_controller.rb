@@ -51,7 +51,7 @@ class ApplicationController < ActionController::API
              when *NOT_FOUND_ERROR_CLASSES
                :not_found
              when *UNPROCESSABLE_CONTENT_CLASSES
-               :unprocessable_entity
+               :unprocessable_content
              else
                :internal_server_error
              end

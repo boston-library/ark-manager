@@ -36,7 +36,7 @@ class ArksController < ApplicationController
     Rails.logger.error @ark.errors.full_messages.join("\n")
 
     @errors = build_ark_errors(@ark.errors.messages)
-    render status: :unprocessable_entity
+    render status: :unprocessable_content
   end
 
   def destroy
@@ -44,7 +44,7 @@ class ArksController < ApplicationController
     head :no_content and return if @ark.save
 
     errors = build_ark_errors(@ark.errors.messages)
-    render json: { errors: errors }, status: :unprocessable_entity
+    render json: { errors: errors }, status: :unprocessable_content
   end
 
   def iiif_manifest
@@ -130,7 +130,7 @@ class ArksController < ApplicationController
 
   def default_ark_error
     [{
-      title: 'Unprocessable Entity',
+      title: 'Unprocessable Content',
       status: 422,
       detail: 'Unknown Errors caused Ark to fail saving! Check the logs!',
       source: { pointer: '/data/attributes/:unknown' }
