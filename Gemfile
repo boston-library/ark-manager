@@ -11,7 +11,7 @@ gem 'connection_pool', '~> 2.5'
 gem 'csv'
 gem 'down', '~> 5.4'
 gem 'faraday', '~> 1.10', '< 2'
-gem 'friendly_id', '~> 5.5'
+gem 'friendly_id', '~> 5.6'
 gem 'jbuilder', '~> 2.14'
 gem 'net-http-persistent', '>= 3.1'
 gem 'noid-rails', '~> 3.3'
@@ -22,14 +22,13 @@ gem 'puma', '~> 6.6'
 # Use Puma as the app server
 gem 'rack-cors', '~> 1.1'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
-gem 'rails', '~> 7.1.5'
+gem 'rails', '~> 7.2.3'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'redis', '~> 5'
+gem 'redis', '~> 5.4'
 gem 'rsolr', '~> 2.5'
-gem 'rswag-api', '~> 2.10'
+gem 'rswag-api', '~> 2.17'
 
 group :development, :test do
-  gem 'awesome_print', '~> 1.9'
   gem 'capistrano', '~> 3.19.2', require: false
   gem 'capistrano-rails', '~> 1.4', require: false
   gem 'capistrano-rvm'
@@ -38,7 +37,7 @@ group :development, :test do
   gem 'factory_bot_rails', '~> 6.2'
   gem 'faker', '~> 3.2'
   gem 'rspec-rails', '~> 7.1'
-  gem 'rswag-specs', '~> 2.6'
+  gem 'rswag-specs', '~> 2.17'
   gem 'rubocop', '~> 1.66.1', require: false
   gem 'rubocop-factory_bot', '~> 2.24.0', require: false
   gem 'rubocop-performance', '~> 1.21.1', require: false
@@ -52,11 +51,11 @@ end
 
 group :test do
   gem 'coveralls_reborn', '~> 0.28.0', require: false
-  gem 'database_cleaner-active_record', '~> 2.1'
+  gem 'database_cleaner-active_record', '~> 2.2'
   gem 'rails-controller-testing', '~> 1.0'
   gem 'shoulda-matchers', '~> 6.4'
-  gem 'vcr', '~> 6.2'
-  gem 'webmock', '~> 3.19'
+  gem 'vcr', '~> 6.3'
+  gem 'webmock', '~> 3.26'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
