@@ -16,7 +16,7 @@ Bundler.require(*Rails.groups)
 module ArkHandler
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.1
+    config.load_defaults 7.2
 
     config.api_only = true
     config.middleware.use Rack::Sendfile
@@ -26,7 +26,7 @@ module ArkHandler
     config.action_controller.raise_on_open_redirects = false
     config.action_dispatch.default_headers['X-Frame-Options'] = 'DENY'
     config.active_support.cache_format_version = 7.1
-    config.autoload_lib(ignore: %w(tasks))
+    config.autoload_lib(ignore: %w(assets tasks))
 
     config.generators do |g|
       g.orm :active_record
