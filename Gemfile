@@ -10,7 +10,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'connection_pool', '~> 2.5'
 gem 'csv'
 gem 'down', '~> 5.4'
-gem 'faraday', '~> 1.10', '< 2'
+gem 'faraday', '~> 2.14'
 gem 'friendly_id', '~> 5.6'
 gem 'jbuilder', '~> 2.14'
 gem 'net-http-persistent', '>= 3.1'
