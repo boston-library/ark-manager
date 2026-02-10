@@ -143,6 +143,9 @@ GEM
       logger
     faraday-net_http (3.4.2)
       net-http (~> 0.5)
+    faraday-net_http_persistent (2.3.1)
+      faraday (~> 2.5)
+      net-http-persistent (>= 4.0.4, < 5)
     ffi (1.17.2-x86_64-darwin)
     ffi (1.17.2-x86_64-linux-gnu)
     friendly_id (5.6.0)
@@ -414,6 +417,7 @@ DEPENDENCIES
   factory_bot_rails (~> 6.2)
   faker (~> 3.2)
   faraday (~> 2.14)
+  faraday-net_http_persistent (~> 2.3)
   friendly_id (~> 5.6)
   jbuilder (~> 2.14)
   listen (~> 3.2)
