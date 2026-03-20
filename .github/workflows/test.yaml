@@ -45,8 +45,6 @@ jobs:
         run: cp config/database.yml.travis config/database.yml 
 
       - name: Connect and test
-        env:
-          PGPASSWORD: postgres
         run: |
           psql -h localhost -U postgres -d ark-manager -c "SELECT 1;"
 
