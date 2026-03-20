@@ -1,0 +1,32 @@
+name: Test CI with github Actions
+
+on: 
+  push: 
+    branches:
+      - action-ci
+
+jobs:
+  test:
+    name:  first test
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3.10
+          bundler-cache: true
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install packages
+        run: bundle install
+      - name: Create test database
+        run: RAILS_ENV=test bundle exec rails db:test:prepare
+      - name: Run linter and tests
+        run: bundle exec rake ci
+                        
