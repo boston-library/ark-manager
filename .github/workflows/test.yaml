@@ -60,7 +60,7 @@ jobs:
           IIIF_SERVER_URL: https://iiifdev.bpl.org/iiif/2/
         run: |
           RAILS_ENV=test bundle exec rails db:prepare
-          RAILS_ENV=test bundle exec rails db:migrate
+      ##    RAILS_ENV=test bundle exec rails db:migrate
       
       ## - name: Run linter and tests
       ##   run: bundle exec rake ci
