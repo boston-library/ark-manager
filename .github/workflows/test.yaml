@@ -9,6 +9,17 @@ jobs:
   test:
     name:  first test
     runs-on: ubuntu-22.04
+
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+
     steps:
       - uses: actions/checkout@v4
 
@@ -31,7 +42,7 @@ jobs:
 
       - name: rename database.yaml
         run: cp config/database.yml.travis config/database.yml 
-        
+
       - name: Create test database
         env:
           GEONAMES_USERNAME: ${{ secrets.GEONAMES_USERNAME }}
