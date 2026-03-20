@@ -29,6 +29,9 @@ jobs:
       - name: Install packages
         run: bundle install
 
+      - name: rename database.yaml
+        run: cp config/database.yml.travis config/database.yml 
+        
       - name: Create test database
         env:
           GEONAMES_USERNAME: ${{ secrets.GEONAMES_USERNAME }}
