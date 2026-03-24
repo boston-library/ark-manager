@@ -81,7 +81,6 @@ jobs:
           pwd
           ls -altr
           cp config/database.yml.sample config/database.yml
-          ls -altr config
           cat config/database.yml
           echo "finished copying database.yml"
 
