@@ -56,7 +56,7 @@ jobs:
           echo "BPLDC_REDIS_CACHE_URL=" >> .env
           echo "ARK_MANAGER_DATABASE_USER=postgres" >> .env
           echo "ARK_MANAGER_DATABASE_PASSWORD=postgres" >> .env
-          echo "ARK_MANAGER_DATABASE_HOST=postgres_host" >> .env
+          echo "ARK_MANAGER_DATABASE_HOST=localhost" >> .env
           echo "ARK_MANAGER_REDIS_CACHE_URL=redis_cache_url" >> .env
           echo "ARK_MANAGER_DEFAULT_BASE_URL=https://search-dc3dev.bpl.org" >> .env
           echo "ARK_MANAGER_DEFAULT_NAMESPACE=bpl-dev" >> .env
