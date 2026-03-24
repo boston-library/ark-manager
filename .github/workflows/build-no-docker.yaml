@@ -81,6 +81,9 @@ jobs:
           pwd
           ls -altr
           cp config/database.yml.sample config/database.yml
+          ls -altr config
+          cat config/database.yaml
+          echo "finished copying database.yaml"
 
       # - name: Create .env file
       #   run: |
