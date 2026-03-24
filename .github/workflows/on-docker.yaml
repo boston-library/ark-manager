@@ -4,6 +4,8 @@ on:
   push: 
     branches:
       - action-ci
+    paths:
+      - '.github/workflows/on-docker.yaml'
 
 jobs:
   build-on-docker:

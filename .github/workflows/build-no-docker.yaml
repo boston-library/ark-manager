@@ -1,0 +1,20 @@
+name: Test CI with github Actions
+
+on: 
+  push: 
+    branches:
+      - action-ci
+    paths:
+      - '.github/workflows/build-no-docker.yaml'
+
+jobs:
+
+  build-no-docker:
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Use secret
+        run: |
+          echo "GEONAMES Username is ${{ secrets.GEONAMES_USERNAME }}"
+          echo "Google Map API Key is ${{ secrets.GOOGLE_MAPS_API_KEY }}"
