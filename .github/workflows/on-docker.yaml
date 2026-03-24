@@ -16,7 +16,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Use secret
-        run: echo "Google Map API Key is ${{ secrets.GOOGLE_MAPS_API_KEY }}"
+        run: |
+          echo "GEONAMES Username is ${{ secrets.GEONAMES_USERNAME }}"
+          echo "Google Map API Key is ${{ secrets.GOOGLE_MAPS_API_KEY }}"
 
       - name: Create .env file
         run: |
