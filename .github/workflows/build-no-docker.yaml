@@ -85,12 +85,6 @@ jobs:
           cat config/database.yml
           echo "finished copying database.yml"
 
-      # - name: Create .env file
-      #   run: |
-      #     echo "GEONAMES_USERNAME=${{ secrets.GEONAME_USERNAME }}" > .env
-      #     echo "GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_KEY }}" >> .env
-      #     echo "BPLDC_REDIS_CACHE_URL=" >> .env
-
       - name: Database Setup
         run: |
           bundle exec rails db:test:prepare
