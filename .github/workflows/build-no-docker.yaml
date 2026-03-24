@@ -87,8 +87,8 @@ jobs:
 
       - name: Database Setup
         run: |
-          bundle exec rails db:test:prepare
-          bundle exec rails db:test:migrate
+          RAILS_ENV=test bundle exec rails db:test:prepare
+          RAILS_ENV=test bundle exec rails db:test:migrate
 
       - name: Run Tests
         run: bundle exec rake
