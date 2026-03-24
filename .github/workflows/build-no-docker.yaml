@@ -61,7 +61,7 @@ jobs:
         run: |
           pwd
           ls -altr
-          copy config/database.yml.sample config/database.yml
+          cp config/database.yml.sample config/database.yml
 
       - name: Create .env file
         run: |
