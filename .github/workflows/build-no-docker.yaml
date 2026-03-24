@@ -82,11 +82,11 @@ jobs:
           ls -altr
           cp config/database.yml.sample config/database.yml
 
-      - name: Create .env file
-        run: |
-          echo "GEONAMES_USERNAME=${{ secrets.GEONAME_USERNAME }}" > .env
-          echo "GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_KEY }}" >> .env
-          echo "BPLDC_REDIS_CACHE_URL=" >> .env
+      # - name: Create .env file
+      #   run: |
+      #     echo "GEONAMES_USERNAME=${{ secrets.GEONAME_USERNAME }}" > .env
+      #     echo "GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_KEY }}" >> .env
+      #     echo "BPLDC_REDIS_CACHE_URL=" >> .env
 
       - name: Database Setup
         run: |
