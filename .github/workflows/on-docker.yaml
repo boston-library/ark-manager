@@ -6,7 +6,7 @@ on:
       - action-ci
 
 jobs:
-  build-and-test:
+  build-on-docker:
 
     runs-on: ubuntu-22.04
 
