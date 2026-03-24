@@ -6,91 +6,45 @@ on:
       - action-ci
 
 jobs:
-  test:
-    name:  first test
+  build-and-test:
+
     runs-on: ubuntu-22.04
 
 
-    services:
-      postgres:
-        image: postgres:15
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: mydb
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd="pg_isready -U myuser"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
-
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Install psql client
-        run: sudo apt-get update && sudo apt-get install -y postgresql-client
-
-      - name: Wait for Postgres
-        run: |
-          until pg_isready -h localhost -U myuser; do
-            echo "Waiting for database..."
-            sleep 2
-          done
-
-      - name: Connect and test
-        env:
-          PGPASSWORD: postgres
-        run: |
-          psql -h localhost -U postgres -d mydb -c "SELECT 1;"
-
-      - name: Set up ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.3.10
-          bundler-cache: true
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Use secret
         run: echo "Google Map API Key is ${{ secrets.GOOGLE_MAPS_API_KEY }}"
 
-      - name: Install packages
-        run: bundle install
+      - name: Create .env file
+        run: |
+          echo "GEONAMES_USERNAME=boston_library" > .env
+          echo "GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }}" >> .env
+          echo "BPLDC_REDIS_CACHE_URL=" >> .env
+          echo "ARK_MANAGER_DATABASE_USER=postgres" >> .env
+          echo "ARK_MANAGER_DATABASE_PASSWORD=postgres" >> .env
+          echo "ARK_MANAGER_DATABASE_HOST=postgres_host" >> .env
+          echo "ARK_MANAGER_REDIS_CACHE_URL=redis_cache_url" >> .env
+          echo "ARK_MANAGER_DEFAULT_BASE_URL=https://search-dc3dev.bpl.org" >> .env
+          echo "ARK_MANAGER_DEFAULT_NAMESPACE=bpl-dev" >> .env
+          echo "ARK_MANAGER_OAI_NAMESPACE=oai-dev" >> .env
+          echo "CURATOR_SOLR_URL=http://127.0.0.1:8983/solr/curator_development" >> .env
+          echo "AZURE_DERIVATIVES_URL=http://127.0.0.1:8888/devstoreaccount1/derivatives" >> .env
+          echo "IIIF_SERVER_URL=https://iiifdev.bpl.org/iiif/2/" >> .env
+          
+          # Debugging: Print .env (Note: Secrets will be masked as ***)
+          cat .env
 
-      # - name: rename database.yaml
-      #   run: cp config/database.yml.travis config/database.yml 
+      - name: Build Docker Compose
+        run: docker compose build
 
-      # - name: Connect and test
-      #   run: |
-      #     psql -h localhost -U postgres -d ark-manager -c "SELECT 1;"
+      - name: Run Tests
+        run: docker compose run app bundle exec rake --verbose
 
+      - name: Shutdown Containers
+        if: always() 
+        run: docker compose down
 
-
-
-      ## - name: Create test database
-      ##   env:
-      ##     GEONAMES_USERNAME: ${{ secrets.GEONAMES_USERNAME }}
-      ##     GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
-      ##     BPLDC_REDIS_CACHE_URL: bpldc_redis_cache_url
-      ##     ARK_MANAGER_DATABASE_USER: postgres
-      ##     ARK_MANAGER_DATABASE_PASSWORD: postgres
-      ##     ARK_MANAGER_DATABASE_HOST: postgres_host
-      ##     ARK_MANAGER_REDIS_CACHE_URL: redis_cache_url
-      ##     ARK_MANAGER_DEFAULT_BASE_URL: https://search-dc3dev.bpl.org
-      ##     ARK_MANAGER_DEFAULT_NAMESPACE: bpl-dev
-      ##     ARK_MANAGER_OAI_NAMESPACE: oai-dev
-      ##     CURATOR_SOLR_URL: http://127.0.0.1:8983/solr/curator_development
-      ##     AZURE_DERIVATIVES_URL: http://127.0.0.1:8888/devstoreaccount1/derivatives
-      ##     IIIF_SERVER_URL: https://iiifdev.bpl.org/iiif/2/
-      ##   run: |
-      ##     RAILS_ENV=test bundle exec rails db:prepare
-      ##no-need    RAILS_ENV=test bundle exec rails db:migrate
-      
-      ## - name: Run linter and tests
-      ##   run: bundle exec rake ci
                         
