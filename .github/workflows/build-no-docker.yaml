@@ -9,7 +9,7 @@ on:
 
 jobs:
 
-  build-no-docker:
+  build-without-docker:
 
     runs-on: ubuntu-22.04
 
