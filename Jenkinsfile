@@ -145,8 +145,10 @@ pipeline {
             script {
                 if (!env.JOB_NAME.contains('deploy')) {
                     echo 'Triggering other projects...'
-                    build job: 'ark_manager_jenkinsfile_deploy_test_capistrano', wait: false
-                    build job: 'ark_manager_jenkinsfile_deploy_staging_capistrano', wait: false
+                    // build job: 'ark_manager_jenkinsfile_deploy_test_capistrano', wait: false
+                    // build job: 'ark_manager_jenkinsfile_deploy_staging_capistrano', wait: false
+                    build job: 'ark_manager_jenkinsfile_testing', wait: false
+                    build job: 'ark_manager_jenkinsfile_staging', wait: false
                 }
             }
         }
