@@ -16,7 +16,6 @@ jobs:
       PGPASSWORD: postgres
       PGPORT: 5432
       NOKOGIRI_USE_SYSTEM_LIBRARIES: true
-      RAILS_VERSION: 6.0.5
 
     # Services start sidecar containers (Postgres) automatically
     services:
