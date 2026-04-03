@@ -1,11 +1,13 @@
 name: Build without docker 
 
-on: 
-  push: 
-    branches:
-      - action-ci
-    paths:
-      - '.github/workflows/build-no-docker.yaml'
+on: [push, pull_request]
+
+# on: 
+#   push: 
+#     branches:
+#       - action-ci
+#     paths:
+#       - '.github/workflows/build-no-docker.yaml'
 
 jobs:
 
