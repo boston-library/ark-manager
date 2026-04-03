@@ -1,4 +1,4 @@
-![CI Workflow](https://github.com/boston-library/ark-manager/actions/workflows/build-no-docker.yaml)![Build Status](https://github.com/boston-library/ark-manager/actions/workflows/build-no-docker.yaml/badge.svg)
+![CI Workflow](https://github.com/boston-library/ark-manager/actions/workflows/build-no-docker.yaml)  ![Build Status](https://github.com/boston-library/ark-manager/actions/workflows/build-no-docker.yaml/badge.svg)
 
 ## Ark Manager Version 2
 
