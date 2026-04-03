@@ -4,23 +4,15 @@ on:
   push: 
     branches:
       - action-ci
-    paths:
-      - '.github/workflows/on-docker.yaml'
 
 jobs:
   build-on-docker:
 
     runs-on: ubuntu-22.04
 
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Use secret
-        run: |
-          echo "GEONAMES Username is ${{ secrets.GEONAMES_USERNAME }}"
-          echo "Google Map API Key is ${{ secrets.GOOGLE_MAPS_API_KEY }}"
 
       - name: Create .env file
         run: |
@@ -38,9 +30,6 @@ jobs:
           echo "AZURE_DERIVATIVES_URL=http://127.0.0.1:8888/devstoreaccount1/derivatives" >> .env
           echo "IIIF_SERVER_URL=https://iiifdev.bpl.org/iiif/2/" >> .env
           
-          # Debugging: Print .env (Note: Secrets will be masked as ***)
-          cat .env
-
       - name: Build Docker Compose
         run: docker compose build
 
