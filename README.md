@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/boston-library/ark-manager.svg?branch=master)](https://travis-ci.com/boston-library/ark-manager)[![Coverage Status](https://coveralls.io/repos/github/boston-library/ark-manager/badge.svg?branch=master)](https://coveralls.io/github/boston-library/ark-manager?branch=master)
+![CI Workflow](https://github.com/boston-library/ark-manager/actions/workflows/build-no-docker.yaml)![Build Status](https://github.com/boston-library/ark-manager/actions/workflows/build-no-docker.yaml/badge.svg)
 
 ## Ark Manager Version 2
 
