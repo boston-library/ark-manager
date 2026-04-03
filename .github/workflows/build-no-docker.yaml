@@ -72,16 +72,12 @@ jobs:
 
       - name: copy database.yaml
         run: |
-          pwd
-          ls -altr
           cp config/database.yml.sample config/database.yml
-          cat config/database.yml
           echo "finished copying database.yml"
 
       - name: Database Setup
         run: |
           RAILS_ENV=test bundle exec rails db:prepare
-          RAILS_ENV=test bundle exec rails db:migrate
 
       - name: Run Tests
         run: bundle exec rake
