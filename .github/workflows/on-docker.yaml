@@ -1,0 +1,37 @@
+name: Build with docker
+
+on: [push, pull_request]
+
+jobs:
+  build-on-docker:
+
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create .env file
+        run: |
+          echo "ARK_MANAGER_DATABASE_USER=postgres" >> .env
+          echo "ARK_MANAGER_DATABASE_PASSWORD=postgres" >> .env
+          echo "ARK_MANAGER_DATABASE_HOST=postgres_host" >> .env
+          echo "ARK_MANAGER_REDIS_CACHE_URL=redis_cache_url" >> .env
+          echo "ARK_MANAGER_DEFAULT_BASE_URL=https://search-dc3dev.bpl.org" >> .env
+          echo "ARK_MANAGER_DEFAULT_NAMESPACE=bpl-dev" >> .env
+          echo "ARK_MANAGER_OAI_NAMESPACE=oai-dev" >> .env
+          echo "CURATOR_SOLR_URL=http://127.0.0.1:8983/solr/curator_development" >> .env
+          echo "AZURE_DERIVATIVES_URL=http://127.0.0.1:8888/devstoreaccount1/derivatives" >> .env
+          echo "IIIF_SERVER_URL=https://iiifdev.bpl.org/iiif/2/" >> .env
+          
+      - name: Build Docker Compose
+        run: docker compose build
+
+      - name: Run Tests
+        run: docker compose run app bundle exec rake --verbose
+
+      - name: Shutdown Containers
+        if: always() 
+        run: docker compose down
+
+                        
