@@ -5,8 +5,13 @@ lock '~> 3.19.2'
 
 set :use_sudo, false
 
-## STAGE_NAME is a paramter from Jenkins job: "staging", "qc", and "testing", or "production"
-set :stage_case, ENV['STAGE_NAME']
+## DEPLOY_ENV is a paramter from Jenkins job: "staging", "qc", and "testing", or "production"
+## It is used by Cap method :rails_console_runner
+set :stage_console, ENV['DEPLOY_ENV']
+
+## deploy_env is a parameter from Jenkins job: "staging", "qc", and "testing", or "production"
+## set :deploy_env, ENV['deploy_env']
+set :user, ENV['DEPLOY_USER']
 
 set :application, 'ark-manager'
 set :repo_url, "https://github.com/boston-library/#{fetch(:application)}.git"
@@ -74,7 +79,7 @@ namespace :boston_library do
     on roles(:app), in: :sequence, wait: 5 do
       as fetch(:user) do
         within release_path do
-          puts capture("cd #{release_path}; #{fetch(:rvm_installed)} #{fetch(:rvm_ruby_version)} do #{release_path}/bin/rails runner -e #{fetch(:stage_case)} \"puts 'rails console works'\"")
+          puts capture("cd #{release_path}; #{fetch(:rvm_installed)} #{fetch(:rvm_ruby_version)} do #{release_path}/bin/rails runner -e #{fetch(:stage_console)} \"puts 'rails console works'\"")
         end
       end
     end
