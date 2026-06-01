@@ -33,39 +33,34 @@ set :keep_releases, 5
 namespace :boston_library do
   desc 'Gem update'
   task :gem_update do
-    on roles(:app) do
-      execute("#{fetch(:rvm_installed)} #{fetch(:rvm_ruby_version)} do gem update --system --no-document")
-    end
+    puts 'Skipping this. Do this on the server before deployment if needed instead'
+    # on roles(:app) do
+    #   execute("#{fetch(:rvm_installed)} #{fetch(:rvm_ruby_version)} do gem update --system --no-document")
+    # end
   end
 
   desc 'Install new ruby if ruby-version is required'
   task :rvm_install_ruby do
-    on roles(:app) do
-      execute("#{fetch(:rvm_installed)} install #{fetch(:rvm_ruby_version)} -C --with-jemalloc --with-gmp --enable-yjit")
-      execute("#{fetch(:rvm_installed)} use #{fetch(:rvm_ruby_version)}")
-    end
-  end
-
-  # desc 'Install bundler 2.3.26'
-  desc "Install bundler #{fetch(:rvm_bundle_version)}"
-  task :install_bundler do
-    on roles(:app) do
-      execute("#{fetch(:rvm_installed)} #{fetch(:rvm_ruby_version)} do gem install bundler:#{fetch(:rvm_bundle_version)}")
-    end
+    puts 'Skipping this. Do this on the server before deployment if needed instead'
+    # on roles(:app) do
+    #   execute("#{fetch(:rvm_installed)} install #{fetch(:rvm_ruby_version)} -C --with-jemalloc --with-gmp --enable-yjit")
+    #   execute("#{fetch(:rvm_installed)} use #{fetch(:rvm_ruby_version)}")
+    # end
   end
 
   ## Update ruby version for systemd service
   desc 'Update ruby version for systemd service'
   task :update_service_ruby do
-    on roles(:app) do
-      execute("sudo rm /etc/systemd/system/\"#{fetch(:application)}\"_puma.service.d/override.conf | true
-              SERVICE_RUBY_VERSION=`cat /home/\"#{fetch(:user)}\"/railsApps/\"#{fetch(:application)}\"/current/.ruby-version`
-              echo \"SERVICE_RUBY_VERSION IS: \" ${SERVICE_RUBY_VERSION}
-              echo '[Service]' > override.conf
-              echo \"Environment=SERVICE_RUBY_VERSION=${SERVICE_RUBY_VERSION}\" >> override.conf
-              sudo mv override.conf /etc/systemd/system/\"#{fetch(:application)}\"_puma.service.d/override.conf
-              sudo /bin/systemctl daemon-reload")
-    end
+    puts 'Skipping this. Do this on the server before deployment if needed instead'
+    # on roles(:app) do
+    #   execute("sudo rm /etc/systemd/system/\"#{fetch(:application)}\"_puma.service.d/override.conf | true
+    #           SERVICE_RUBY_VERSION=`cat /home/\"#{fetch(:user)}\"/railsApps/\"#{fetch(:application)}\"/current/.ruby-version`
+    #           echo \"SERVICE_RUBY_VERSION IS: \" ${SERVICE_RUBY_VERSION}
+    #           echo '[Service]' > override.conf
+    #           echo \"Environment=SERVICE_RUBY_VERSION=${SERVICE_RUBY_VERSION}\" >> override.conf
+    #           sudo mv override.conf /etc/systemd/system/\"#{fetch(:application)}\"_puma.service.d/override.conf
+    #           sudo /bin/systemctl daemon-reload")
+    # end
   end
 
   # rubocop:disable Layout/LineLength
