@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.3.10'
+ruby '3.3.11'
 
 gem 'bootsnap', '>= 1.1.0', require: false
 # Reduces boot times through caching; required in config/boot.rb
@@ -13,10 +13,10 @@ gem 'down', '~> 5.4'
 gem 'faraday', '~> 2.14'
 gem 'faraday-net_http_persistent', '~> 2.3'
 gem 'friendly_id', '~> 5.6'
-gem 'jbuilder', '~> 2.14'
+gem 'jbuilder', '~> 2.15'
 gem 'net-http-persistent', '>= 3.1'
 gem 'noid-rails', '~> 3.3'
-gem 'oj', '~> 3.16'
+gem 'oj', '~> 3.17'
 gem 'pg', '>= 0.18', '< 2.0'
 # Use postgresql as the database for Active Record
 gem 'puma', '~> 6.6'

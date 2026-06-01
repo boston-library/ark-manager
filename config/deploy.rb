@@ -33,25 +33,19 @@ set :keep_releases, 5
 namespace :boston_library do
   desc 'Gem update'
   task :gem_update do
-    on roles(:app) do
-      execute("#{fetch(:rvm_installed)} #{fetch(:rvm_ruby_version)} do gem update --system --no-document")
-    end
+    puts 'Skipping this. Do this on the server before deployment if needed instead'
+    # on roles(:app) do
+    #   execute("#{fetch(:rvm_installed)} #{fetch(:rvm_ruby_version)} do gem update --system --no-document")
+    # end
   end
 
   desc 'Install new ruby if ruby-version is required'
   task :rvm_install_ruby do
-    on roles(:app) do
-      execute("#{fetch(:rvm_installed)} install #{fetch(:rvm_ruby_version)} -C --with-jemalloc --with-gmp --enable-yjit")
-      execute("#{fetch(:rvm_installed)} use #{fetch(:rvm_ruby_version)}")
-    end
-  end
-
-  # desc 'Install bundler 2.3.26'
-  desc "Install bundler #{fetch(:rvm_bundle_version)}"
-  task :install_bundler do
-    on roles(:app) do
-      execute("#{fetch(:rvm_installed)} #{fetch(:rvm_ruby_version)} do gem install bundler:#{fetch(:rvm_bundle_version)}")
-    end
+    puts 'Skipping this. Do this on the server before deployment if needed instead'
+    # on roles(:app) do
+    #   execute("#{fetch(:rvm_installed)} install #{fetch(:rvm_ruby_version)} -C --with-jemalloc --with-gmp --enable-yjit")
+    #   execute("#{fetch(:rvm_installed)} use #{fetch(:rvm_ruby_version)}")
+    # end
   end
 
   ## Update ruby version for systemd service
