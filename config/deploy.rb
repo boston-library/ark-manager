@@ -100,8 +100,7 @@ end
 
 after :'deploy:updating', :'boston_library:gem_update'
 after :'boston_library:gem_update', :'boston_library:rvm_install_ruby'
-after :'boston_library:rvm_install_ruby', :'boston_library:install_bundler'
-after :'boston_library:install_bundler', :'bundler:config'
+after :'boston_library:rvm_install_ruby', :'bundler:config'
 after :'bundler:config', :'bundler:install'
 after :'deploy:cleanup', :'boston_library:rails_console_runner'
 after :'boston_library:rails_console_runner', :'boston_library:update_service_ruby'
