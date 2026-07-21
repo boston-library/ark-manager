@@ -1,9 +1,9 @@
-FROM ruby:3.3.11
+FROM ruby:3.3.12
 
 MAINTAINER bbarber@bpl.org
 
 ENV LANG=C.UTF-8 \
-    BUNDLER_VERSION=4.0.12
+    BUNDLER_VERSION=4.0.16
 
 RUN apt-get update -qq \
   && apt-get install -y build-essential apt-utils postgresql-client libpq-dev
