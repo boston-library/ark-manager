@@ -229,7 +229,7 @@ GEM
       date
       stringio
     public_suffix (7.0.5)
-    puma (7.2.1)
+    puma (7.2.3)
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (3.2.8)
@@ -448,4 +448,4 @@ RUBY VERSION
   ruby 3.3.13
 
 BUNDLED WITH
-  4.0.23
+  4.0.24
